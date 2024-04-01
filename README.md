@@ -14,6 +14,12 @@ At present, the project is in the very early prototyping stages, figuring out th
 4. Reduce further to nanoscale
 5. Take over the world
 
+
+## Files
+The interesting part is deltacontrol.py which uses the Zelle portable python graphics library. Just copy graphics.py into the same directory. This drives a GRBL CNC using xyz steppers and uses them to control an OpenFlexure microscope delta stage. I've modified my GRBL config to home x, y and z simultaneously. The GRBL setup I've used is included.
+
+3D model files start here https://www.printables.com/model/827788-probe-arm-and-endstop-switch-feet-for-openflexure
+
 ## Contributing
 Please do join in. We need everything. Coders, makers, nanoscience experts, materials scientists, 3D printing experts, manual writers, graphics artists, dancers, the works. Well, maybe not the dancers.
 
