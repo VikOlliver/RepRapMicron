@@ -5,10 +5,10 @@ import time
 import math
 import numpy as np
 import os
-from dcserial import *
+import dcserial
 from graphics import *
 # This bit contains the stage configuration of you need to fiddle with that
-from dcstage import *
+import dcstage
 
 # Units by which manual controls on the panel move.
 step_size = 0.1
@@ -16,7 +16,7 @@ step_size = 0.1
 
 # Open the default port. Put there so it's all in one place.
 def open_port():
-    return dcserial_initialize_with_retry(115200,'/dev/ttyACM1')
+    return dcserial.initialize_with_retry(115200,'/dev/ttyACM1')
 
 
 
@@ -25,8 +25,7 @@ def move_to(location):
   x, y, z = location
   # Format GRBL G0 command
   GRBL_command = f"G0 X{x:.5f} Y{y:.5f} Z{z:.5f}\n"
-  print(GRBL_command, end="")
-  ser.write(GRBL_command.encode())
+  dcserial.send_GRBL_command_ok(ser,GRBL_command)
   
 
 def draw_axis_location(win, x, y, z):
@@ -71,15 +70,14 @@ def replace_xyz_from_gcode(gcode_line, x, y, z):
     
     return x, y, z
 
-"""
-Opens a file dialog for selecting a file from the specified directory.
 
-Args:
-directory (str): The directory to open the file dialog in. Default is the current directory.
-
-Returns:
-str: The path to the selected file, or None if no file is selected.
-"""
+# Opens a file dialog for selecting a file from the specified directory.
+#
+# Args:
+# directory (str): The directory to open the file dialog in. Default is the current directory.
+#
+# Returns:
+# str: The path to the selected file, or None if no file is selected.
 def get_gcode_file(directory="."):
     # Use tkinter file dialog
     try:
@@ -109,17 +107,17 @@ if __name__ == "__main__":
     ser = open_port();
     # Display incoming characters
     print("Starting...")
-    dcserial_wait_for_data_pause(ser)
+    dcserial.wait_for_data_pause(ser)
 
     # Issue GRBL G92 command to set the current work axes to (0,0,0)
     # This assumes the machine *was* zeroed, which is an iffy thing to do.
-    dcserial_send_GRBL_command(ser,"G92 X0 Y0 Z0\n")
+    dcserial.send_GRBL_command(ser,"G92 X0 Y0 Z0\n")
 
     # Initialize axis positions
     x_position, y_position, z_position = 0, 0, 0
     # Find out where the virtual towers are when the TCP is at (0,0,0)
     # This is subtraced from any positioning so movement is relative to (0,0,0)
-    tower_zero_offset=dcstage_calculate_joint_positions((0,0,0))
+    tower_zero_offset=dcstage.calculate_joint_positions((0,0,0))
     print("Tower zero offset: ",tower_zero_offset)
 
 
@@ -258,13 +256,13 @@ if __name__ == "__main__":
                 # Unlock the CNC driver from fault state. DANGER DANGER!
                 # Because we don't know what will happen, we just wait for data to
                 # cease being sent to us by GRBL rather than look for "ok"
-                dcserial_send_GRBL_command(ser,"$X\n")
+                dcserial.send_GRBL_command(ser,"$X\n")
                 # Set current position as workplace zero coordinates.
-                dcserial_send_GRBL_command_ok(ser,"G92 X0 Y0 Z0\n")
+                dcserial.send_GRBL_command_ok(ser,"G92 X0 Y0 Z0\n")
                 # Display the machine position and error state on text window
                 # Because we don't know what will happen, we just wait for data to
                 # cease being sent to us by GRBL rather than look for "ok"
-                dcserial_send_GRBL_command(ser,"?\n")
+                dcserial.send_GRBL_command(ser,"?\n")
             elif is_clicked(click_point, rehome_button):
                 # Seek and rehome the CNC driver, move up a bit, and set zero
                 message_win = GraphWin("Message", 300, 100)
@@ -273,17 +271,17 @@ if __name__ == "__main__":
                 # Update the window to finish drawing because we'll be busy...
                 message_win.update()
                 # Issue GRBL home axes command and wait for the OK
-                dcserial_send_GRBL_command_ok(ser,"$H\n")
+                dcserial.send_GRBL_command_ok(ser,"$H\n")
                 # Set current position as workplace zero coordinates
                 # before we move up for elbow room.
-                dcserial_send_GRBL_command_ok(ser,"G92 X0 Y0 Z0\n")
+                dcserial.send_GRBL_command_ok(ser,"G92 X0 Y0 Z0\n")
                 # Move up a bit on the Z axis to give arms room to manoeuvre
-                dcserial_send_GRBL_command_ok(ser,"G0 X2 Y2 Z2\n")
+                dcserial.send_GRBL_command_ok(ser,"G0 X2 Y2 Z2\n")
                 # Set current position as workplace zero coordinates.
-                dcserial_send_GRBL_command_ok(ser,"G92 X0 Y0 Z0\n")
+                dcserial.send_GRBL_command_ok(ser,"G92 X0 Y0 Z0\n")
                 message_win.close()
                 ## Display on the console what the CNC thinks it is doing
-                dcserial_send_GRBL_command(ser,"?\n")
+                dcserial.send_GRBL_command(ser,"?\n")
             elif is_clicked(click_point, stop_button):
                 # Close the serial port and open it. This resets the Arduino
                 ser.close()
@@ -315,7 +313,7 @@ if __name__ == "__main__":
         if x_last != x_position or y_last != y_position or z_last != z_position:
             # Figure out the new XYZ for the tower positions
             # Note: Y is inverted in this hardware, so we flip it.
-            tower_new_position=dcstage_calculate_joint_positions((x_position, -y_position, z_position))
+            tower_new_position=dcstage.calculate_joint_positions((x_position, -y_position, z_position))
             # Subtract the zero offset from each axis. This should not do anything.
             # However, I have misconfigured things before and it has saved my bacon.
             shifted_tower_position=(tower_new_position[0]-tower_zero_offset[0], tower_new_position[1]-tower_zero_offset[1], tower_new_position[2]-tower_zero_offset[2])
