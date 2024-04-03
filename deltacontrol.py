@@ -1,220 +1,24 @@
 # deltacontrol.py - Prototyping control panel for driving a micro delta stage that uses GRBL
 # Released under GPL3 or later by vik@diamondage.co.nz 2024
-# Uses the free Zelle portable graphics library
-import serial
-import serial.tools.list_ports
+# Uses the free Zelle portable graphics library, which requires TkInter
 import time
 import math
 import numpy as np
+import os
+from dcserial import *
 from graphics import *
-
-# Define the parameters of the delta platform
-stage_radius = 35  # mm (radius of the equilateral triangle around TCP)
-stage_height = 70  # 75mm TCP's height above the base. Well default TCP is (0,0,0) so technically the base is below etc.
-lever_length = 35   # distance from hinge to pivot.
-arm_length = math.sqrt(lever_length**2+stage_height**2) # Distance from driven pivot to stage
-base_radius = 35    # mm (base radius, happens to be the same on OpenFlexure Delta)
+# This bit contains the stage configuration of you need to fiddle with that
+from dcstage import *
 
 # Units by which manual controls on the panel move.
 step_size = 0.1
 
 
-def initialize_serial_with_retry(baudrate, suggested_port=None):
-    if suggested_port:
-        try:
-            ser = serial.Serial(suggested_port, baudrate)
-            return ser
-        except serial.SerialException:
-            pass
-
-    while True:
-        # Get available serial ports
-        available_ports = serial.tools.list_ports.comports()
-        port_names = [port.device for port in available_ports]
-
-        # Create a window to select serial port
-        serial_win = GraphWin("Select Serial Port", 300, 200)
-        serial_win.setCoords(0, 0, 3, len(port_names) + 1)
-
-        # Display available ports
-        port_texts = []
-        for i, port_name in enumerate(port_names):
-            port_texts.append(Text(Point(1, len(port_names) - i), port_name))
-            port_texts[-1].draw(serial_win)
-
-        # Allow user to select a port
-        while True:
-            click_point = serial_win.checkMouse()
-            if click_point:
-                for i, port_text in enumerate(port_texts):
-                    if (port_text.getAnchor().getY() - 0.5) < click_point.getY() < (port_text.getAnchor().getY() + 0.5):
-                        selected_port = port_names[i]
-                        serial_win.close()
-                        break
-                else:
-                    continue
-                break
-
-        # Attempt to initialize serial port
-        try:
-            ser = serial.Serial(selected_port, baudrate)
-            return ser
-        except serial.SerialException:
-            # Notify user and retry
-            error_text = Text(Point(1.5, 0.5), "Failed to initialize serial port.")
-            error_text.draw(serial_win)
-            time.sleep(2)
-            error_text.undraw()
-
-            # Close serial window before retrying
-            serial_win.close()
-
 # Open the default port. Put there so it's all in one place.
 def open_port():
-    return initialize_serial_with_retry(115200,'/dev/ttyACM1')
-
-def send_command(ser, command):
-    ser.write(command.encode('ascii'))
-    time.sleep(0.1)  # Adjust delay as needed
-
-def receive_response(ser):
-    ser.timeout = 10
-    response = ser.readline().decode('ascii').strip()
-    return response
-
-def wait_for_ok_response(ser):
-    while True:
-        response = receive_response(ser)
-        print("Wait for OK", response)
-        if response == "ok":
-            break
-
-def wait_show_response(ser):
-    start_time = time.time()
-    while True:
-        if ser.in_waiting > 0:
-          response = receive_response(ser)
-          print(": ", response)
-          start_time = time.time()
-
-        # Wait until no data has been received for a bit
-        # This lets the initialisation data scroll past
-        time.sleep(0.1)
-        if time.time() - start_time >= 2:
-          break
+    return dcserial_initialize_with_retry(115200,'/dev/ttyACM1')
 
 
-# Calculate the angles for each corner of the equilateral triangle given
-# a central xyz coordinate
-def calculate_triangle_points(coordinate,radius):
-    angles = [0, 2 * math.pi / 3, 4 * math.pi / 3]
-
-    # Calculate the coordinates of T[ABC]
-    triangle_points = []
-    for angle in angles:
-        x = coordinate[0] + radius * math.cos(angle)
-        y = coordinate[1] + radius * math.sin(angle)
-        z = coordinate[2]
-        triangle_points.append((x, y, z))
-
-    return tuple(triangle_points)
-
-# Duplicated code, can't be arsed to sort it right now.
-def calculate_base_points():
-    # Calculate the angles for each corner of the equilateral triangle
-    angles = [0, 2 * math.pi / 3, 4 * math.pi / 3]
-
-    # Calculate the coordinates of B[ABC]
-    base_points = []
-    for angle in angles:
-        x = base_radius * math.cos(angle)
-        y = base_radius * math.sin(angle)
-        z = -stage_height
-        base_points.append((x, y, z))
-
-    return tuple(base_points)
-
-# Calculate the distances between corresponding points of the TCP platform and the base.
-# Args:
-#   - T_ABC (tuple): Tuple containing the coordinates of points on the TCP platform.
-#   - B_ABC (tuple): Tuple containing the coordinates of points on the base.
-# Returns:
-#  - tuple: Tuple containing the distances between corresponding points.
-def calculate_distances(T_ABC, B_ABC):
-
-    # Calculate the distances between corresponding points
-    distances = []
-    for t_point, b_point in zip(T_ABC, B_ABC):
-        distance=math.sqrt((t_point[0] - b_point[0])**2 + (t_point[1] - b_point[1])**2 + (t_point[2] - b_point[2])**2)
-        distances.append(distance)
-    return tuple(distances)
-
-# Knowing the distance between the base hinge and the TCP hinge, we know one side
-# of a triangle. The other two sides are the lever length and the stage height.
-# Given the height (z) of the TCP is a known constraint, we can calculate the displacement
-# of the stage/lever on the Z axis.
-#
-# l         Distance from base pivot to TCP pivot
-# d_tx      Distance in XY plane between base pivot and TCP pivot
-# tcp_coord Coordinates of TCP pivot
-# base_coord Coordinates of the base pivot.
-def lever_displacement(l, d_tx, tcp_coord,base_coord):
-    # Calculate the "alpha" angle at vertex A - the base pivot - using the Law of Cosines
-    # Top half of Law of Cosines
-    upper=(l**2 + lever_length**2 - arm_length**2)
-    # Bottom half
-    lower=(2 * l * lever_length)
-    # Do the division now I've debugged it...
-    # Note: Returns value in *radians*
-    alpha = math.acos(upper / lower)
-    # Now we know what the angle of the hinged joint should be, we can add that
-    # to the angle between the Z axis and the TCP. We can use trig to calculate
-    # the angle to the Z axis, and add that to the angle between l and lever.
-    # Use the remaining pivot angle to calculate the displacement needed at the bottom of
-    # the arm. Whew!
-    # Note that the TCP when at (0,0,0) is located stage_height above the base, so we add that on.
-    theta=alpha+math.atan(d_tx/(tcp_coord[2]+stage_height))
-    return lever_length*math.cos(theta)
-    
-
-
-# Process all three of the stage arms in one function.
-def calculate_displacements(T_ABC, B_ABC, L_ABC):
-    # Initialize an empty list to store the displacements
-    D_ABC = []
-    
-    # Iterate over the TCP coordinates and corresponding L values
-    for tcp_coord, base_coord, l_value in zip(T_ABC, B_ABC, L_ABC):
-        # Calculate distance in XY plane,TCP pivot minus base pivot
-        # Subtract distance from origin, so this can be -ve
-        d_tx=math.sqrt(tcp_coord[0]**2+tcp_coord[1]**2)-math.sqrt(base_coord[0]**2+base_coord[1]**2)
-        # Calculate the displacement of point c along the z-axis using lever_displacement function
-        displacement_c = lever_displacement(l_value, d_tx, tcp_coord, base_coord)
-        
-        # Append the displacement to the list D_ABC
-        D_ABC.append(displacement_c)
-    
-    return D_ABC
-
-
-# Function to Calculate Tower Joint Positions:
-# - calculate_tower_joint_positions calculates the displacements needed for the bottoms of the arms based
-#   on the given TCP location.
-# - It utilizes inverse kinematics to determine the distance needed between the TCP joints and the base joints,
-#   then shortens the lever arms by bending them.
-# - The function takes a TCP location tuple (x, y, z) as input and returns a list of arm displacements.
-def calculate_tower_joint_positions(tcp_location):
-    # Calculate where the base joints are TBA this should only be called once on initialization.
-    B_ABC = calculate_base_points()
-    # Calculate the positions of the joints around the TCP stage   
-    T_ABC = calculate_triangle_points(tcp_location,stage_radius)
-    # Calculate the distance from the TCP to each tower base
-    L_ABC=calculate_distances(T_ABC,B_ABC)
-    print("Distances: ",L_ABC)
-    # Finally, calculate the displacement needed at the bottom of the arms to achieve that distance.
-    D_ABC=calculate_displacements(T_ABC, B_ABC, L_ABC);
-    print("Displacements: ",D_ABC)
-    return D_ABC
 
 # Move the print head to these coordinates, using whatever method
 def move_to(location):
@@ -234,35 +38,93 @@ def draw_axis_location(win, x, y, z):
     win.axis_text = Text(Point(win.getWidth() - 180, 20),axis_location_text)
     win.axis_text.draw(win)
 
+# Figures out if the point supplied is inside a specific button
 def is_clicked(point, button):
     return button.getP1().getX() < point.getX() < button.getP2().getX() and \
            button.getP1().getY() < point.getY() < button.getP2().getY()
+
+
+# Replace the variables x, y, and z in a G-code line with provided values.
+# Args:
+# gcode_line (str): The G-code line containing variables x, y, and z.
+# x (float): Value to replace x variable.
+# y (float): Value to replace y variable.
+# z (float): Value to replace z variable.
+# Returns:
+# tuple: Tuple containing the modified x, y, and z values.
+def replace_xyz_from_gcode(gcode_line, x, y, z):
+    # Regular expression pattern to match x, y, and z values
+    pattern = r'([XYZ])([-+]?\d*\.?\d+)'
+    
+    # Find all matches of x, y, and z values in the G-code line
+    matches = re.findall(pattern, gcode_line)
+    
+    # Replace x, y, and z values with provided arguments
+    for variable, value in matches:
+        value = float(value)
+        if variable == 'X':
+            x = value
+        elif variable == 'Y':
+            y = value
+        elif variable == 'Z':
+            z = value
+    
+    return x, y, z
+
+"""
+Opens a file dialog for selecting a file from the specified directory.
+
+Args:
+directory (str): The directory to open the file dialog in. Default is the current directory.
+
+Returns:
+str: The path to the selected file, or None if no file is selected.
+"""
+def get_gcode_file(directory="."):
+    # Use tkinter file dialog
+    try:
+        import tkinter as tk
+        from tkinter import filedialog
+    except ImportError:
+        raise ImportError("Tkinter is required for file dialogs.")
+
+    root = tk.Tk()
+    root.withdraw()  # Hide the main window
+
+    # Open file dialog
+    file_path = filedialog.askopenfilename(initialdir=directory, title="Select .gcode file", filetypes=[("G-code files", "*.gcode")])
+
+    return file_path
+
+#    # Example usage
+#    selected_file = select_gcode_file()
+#    if selected_file:
+#        print("Selected file:", selected_file)
+#    else:
+#        print("No file selected.")
+
 
 if __name__ == "__main__":
     # Initialize serial port
     ser = open_port();
     # Display incoming characters
     print("Starting...")
-    wait_show_response(ser)
+    dcserial_wait_for_data_pause(ser)
 
     # Issue GRBL G92 command to set the current work axes to (0,0,0)
     # This assumes the machine *was* zeroed, which is an iffy thing to do.
-    GRBL_command = "G92 X0 Y0 Z0\n"
-    print(GRBL_command, end="")
-    ser.write(GRBL_command.encode())
-    wait_show_response(ser)
-
+    dcserial_send_GRBL_command(ser,"G92 X0 Y0 Z0\n")
 
     # Initialize axis positions
     x_position, y_position, z_position = 0, 0, 0
     # Find out where the virtual towers are when the TCP is at (0,0,0)
     # This is subtraced from any positioning so movement is relative to (0,0,0)
-    tower_zero_offset=calculate_tower_joint_positions((0,0,0))
+    tower_zero_offset=dcstage_calculate_joint_positions((0,0,0))
     print("Tower zero offset: ",tower_zero_offset)
 
 
     # Initialize window
-    win = GraphWin("Probe Control", 600, 300)
+    win = GraphWin("Probe Control V0.01", 600, 300)
     
    
     # Draw control buttons
@@ -394,19 +256,15 @@ if __name__ == "__main__":
                 update_status=True
             elif is_clicked(click_point, unlock_button):
                 # Unlock the CNC driver from fault state. DANGER DANGER!
-                GRBL_command = "$X\n"
-                print(GRBL_command, end="")
-                ser.write(GRBL_command.encode())
-                wait_show_response(ser)
+                # Because we don't know what will happen, we just wait for data to
+                # cease being sent to us by GRBL rather than look for "ok"
+                dcserial_send_GRBL_command(ser,"$X\n")
                 # Set current position as workplace zero coordinates.
-                GRBL_command = "G92 X0 Y0 Z0\n"
-                print(GRBL_command, end="")
-                ser.write(GRBL_command.encode())
-                wait_for_ok_response(ser)
+                dcserial_send_GRBL_command_ok(ser,"G92 X0 Y0 Z0\n")
                 # Display the machine position and error state on text window
-                GRBL_command = "?\n"
-                ser.write(GRBL_command.encode())
-                wait_show_response(ser)
+                # Because we don't know what will happen, we just wait for data to
+                # cease being sent to us by GRBL rather than look for "ok"
+                dcserial_send_GRBL_command(ser,"?\n")
             elif is_clicked(click_point, rehome_button):
                 # Seek and rehome the CNC driver, move up a bit, and set zero
                 message_win = GraphWin("Message", 300, 100)
@@ -415,31 +273,17 @@ if __name__ == "__main__":
                 # Update the window to finish drawing because we'll be busy...
                 message_win.update()
                 # Issue GRBL home axes command and wait for the OK
-                GRBL_command = "$H\n"
-                print(GRBL_command, end="")
-                ser.write(GRBL_command.encode())
-                wait_for_ok_response(ser)
+                dcserial_send_GRBL_command_ok(ser,"$H\n")
                 # Set current position as workplace zero coordinates
                 # before we move up for elbow room.
-                GRBL_command = "G92 X0 Y0 Z0\n"
-                print(GRBL_command, end="")
-                ser.write(GRBL_command.encode())
-                wait_for_ok_response(ser)
+                dcserial_send_GRBL_command_ok(ser,"G92 X0 Y0 Z0\n")
                 # Move up a bit on the Z axis to give arms room to manoeuvre
-                GRBL_command = "G0 X2 Y2 Z2\n"
-                print(GRBL_command, end="")
-                ser.write(GRBL_command.encode())
-                wait_for_ok_response(ser)
+                dcserial_send_GRBL_command_ok(ser,"G0 X2 Y2 Z2\n")
                 # Set current position as workplace zero coordinates.
-                GRBL_command = "G92 X0 Y0 Z0\n"
-                print(GRBL_command, end="")
-                ser.write(GRBL_command.encode())
-                wait_for_ok_response(ser)
+                dcserial_send_GRBL_command_ok(ser,"G92 X0 Y0 Z0\n")
                 message_win.close()
                 ## Display on the console what the CNC thinks it is doing
-                GRBL_command = "?\n"
-                ser.write(GRBL_command.encode())
-                wait_show_response(ser)
+                dcserial_send_GRBL_command(ser,"?\n")
             elif is_clicked(click_point, stop_button):
                 # Close the serial port and open it. This resets the Arduino
                 ser.close()
@@ -471,7 +315,7 @@ if __name__ == "__main__":
         if x_last != x_position or y_last != y_position or z_last != z_position:
             # Figure out the new XYZ for the tower positions
             # Note: Y is inverted in this hardware, so we flip it.
-            tower_new_position=calculate_tower_joint_positions((x_position, -y_position, z_position))
+            tower_new_position=dcstage_calculate_joint_positions((x_position, -y_position, z_position))
             # Subtract the zero offset from each axis. This should not do anything.
             # However, I have misconfigured things before and it has saved my bacon.
             shifted_tower_position=(tower_new_position[0]-tower_zero_offset[0], tower_new_position[1]-tower_zero_offset[1], tower_new_position[2]-tower_zero_offset[2])
