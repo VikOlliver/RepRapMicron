@@ -16,7 +16,7 @@ base_radius = 35    # mm (base radius, happens to be the same on OpenFlexure Del
 
 # Calculate the points for each centre joint of the equilateral triangle of the
 # stage given a central xyz coordinate
-def dcstage_calculate_stage_points(coordinate,radius):
+def calculate_stage_points(coordinate,radius):
     angles = [0, 2 * math.pi / 3, 4 * math.pi / 3]
 
     # Calculate the coordinates of T[ABC]
@@ -31,7 +31,7 @@ def dcstage_calculate_stage_points(coordinate,radius):
 
 # Calculate the position for each centre of the base joints.
 # Yes this is a lot of duplicated code, can't be arsed to sort it right now.
-def dcstage_calculate_base_points():
+def calculate_base_points():
     # Calculate the angles for each corner of the equilateral triangle
     angles = [0, 2 * math.pi / 3, 4 * math.pi / 3]
 
@@ -51,7 +51,7 @@ def dcstage_calculate_base_points():
 #   - B_ABC (tuple): Tuple containing the coordinates of points on the base.
 # Returns:
 #  - tuple: Tuple containing the distances between corresponding points.
-def dcstage_calculate_distances(T_ABC, B_ABC):
+def calculate_distances(T_ABC, B_ABC):
 
     # Calculate the distances between corresponding points
     distances = []
@@ -69,7 +69,7 @@ def dcstage_calculate_distances(T_ABC, B_ABC):
 # d_tx      Distance in XY plane between base pivot and TCP pivot
 # tcp_coord Coordinates of TCP pivot
 # base_coord Coordinates of the base pivot.
-def dcstage_lever_displacement(l, d_tx, tcp_coord,base_coord):
+def lever_displacement(l, d_tx, tcp_coord,base_coord):
     # Calculate the "alpha" angle at vertex A - the base pivot - using the Law of Cosines
     # Top half of Law of Cosines
     upper=(l**2 + lever_length**2 - arm_length**2)
@@ -88,7 +88,7 @@ def dcstage_lever_displacement(l, d_tx, tcp_coord,base_coord):
     return lever_length*math.cos(theta)
     
 # Process all three of the stage arms in one function.
-def dcstage_calculate_all_levers(T_ABC, B_ABC, L_ABC):
+def calculate_all_levers(T_ABC, B_ABC, L_ABC):
     # Initialize an empty list to store the displacements
     D_ABC = []
     
@@ -97,8 +97,8 @@ def dcstage_calculate_all_levers(T_ABC, B_ABC, L_ABC):
         # Calculate distance in XY plane,TCP pivot minus base pivot
         # Subtract distance from origin, so this can be -ve
         d_tx=math.sqrt(tcp_coord[0]**2+tcp_coord[1]**2)-math.sqrt(base_coord[0]**2+base_coord[1]**2)
-        # Calculate the displacement of point c along the z-axis using dcstage_lever_displacement function
-        displacement_c = dcstage_lever_displacement(l_value, d_tx, tcp_coord, base_coord)
+        # Calculate the displacement of point c along the z-axis using lever_displacement function
+        displacement_c = lever_displacement(l_value, d_tx, tcp_coord, base_coord)
         
         # Append the displacement to the list D_ABC
         D_ABC.append(displacement_c)
@@ -106,21 +106,20 @@ def dcstage_calculate_all_levers(T_ABC, B_ABC, L_ABC):
     return D_ABC
 
 # Function to Calculate Tower Joint Positions:
-# - dcstage_calculate_joint_positions calculates the displacements needed for the bottoms of the arms based
+# - calculate_joint_positions calculates the displacements needed for the bottoms of the arms based
 #   on the given TCP location.
 # - It utilizes inverse kinematics to determine the distance needed between the TCP joints and the base joints,
 #   then shortens the lever arms by bending them.
 # - The function takes a TCP location tuple (x, y, z) as input and returns a list of arm displacements.
-def dcstage_calculate_joint_positions(tcp_location):
+def calculate_joint_positions(tcp_location):
     # Calculate where the base joints are TBA this should only be called once on initialization.
-    B_ABC = dcstage_calculate_base_points()
+    B_ABC = calculate_base_points()
     # Calculate the positions of the joints around the TCP stage   
-    T_ABC = dcstage_calculate_stage_points(tcp_location,stage_radius)
+    T_ABC = calculate_stage_points(tcp_location,stage_radius)
     # Calculate the distance from the TCP to each tower base
-    L_ABC=dcstage_calculate_distances(T_ABC,B_ABC)
+    L_ABC=calculate_distances(T_ABC,B_ABC)
     print("Distances: ",L_ABC)
     # Finally, calculate the displacement needed at the bottom of the arms to achieve that distance.
-    D_ABC=dcstage_calculate_all_levers(T_ABC, B_ABC, L_ABC);
+    D_ABC=calculate_all_levers(T_ABC, B_ABC, L_ABC);
     print("Displacements: ",D_ABC)
     return D_ABC
-
