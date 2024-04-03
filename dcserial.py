@@ -7,7 +7,7 @@ import serial.tools.list_ports
 from graphics import *
 
 
-def dcserial_initialize_with_retry(baudrate, suggested_port=None):
+def initialize_with_retry(baudrate, suggested_port=None):
     if suggested_port:
         try:
             ser = serial.Serial(suggested_port, baudrate)
@@ -58,20 +58,20 @@ def dcserial_initialize_with_retry(baudrate, suggested_port=None):
             serial_win.close()
 
 # Send an ascii string out of the serial port and wait a bit for it to go out.
-def dcserial_send_string(ser, command):
+def send_string(ser, command):
     ser.write(command.encode('ascii'))
     time.sleep(0.1)  # Adjust delay as needed
 
 # Wait for an ascii string to come in the serial port with a timeout of 10s
-def dcserial_receive_string(ser):
+def receive_string(ser):
     ser.timeout = 10
     response = ser.readline().decode('ascii').strip()
     return response
 
-# Send an ascii string to the serial port and wait forever for an "ok" response
-def dcserial_send_string_wait_ok(ser):
+# Wait forever for an "ok" response from the serial port.
+def send_string_wait_ok(ser):
     while True:
-        response = dcserial_receive_string(ser)
+        response = receive_string(ser)
         print("Wait for OK", response)
         if response == "ok":
             break
@@ -79,11 +79,11 @@ def dcserial_send_string_wait_ok(ser):
 # Wait for serial data to stop coming in for 2 seconds, sending rsponses
 # to the console. This is used to absorb initialisation information
 # after a controller reset.
-def dcserial_wait_for_data_pause(ser):
+def wait_for_data_pause(ser):
     start_time = time.time()
     while True:
         if ser.in_waiting > 0:
-          response = dcserial_receive_string(ser)
+          response = receive_string(ser)
           print(": ", response)
           start_time = time.time()
 
@@ -96,15 +96,14 @@ def dcserial_wait_for_data_pause(ser):
 # Sends a command to the GRBL hardware on the serial port.
 # Waits a good long time before returning but does not return a
 # success code.
-def dcserial_send_GRBL_command(ser,GRBL_command):
+def send_GRBL_command(ser,GRBL_command):
     print(GRBL_command, end="")
     ser.write(GRBL_command.encode())
-    dcserial_wait_for_data_pause(ser)
+    wait_for_data_pause(ser)
 
 # Sends a GRBL command to the serial port. Waits for an
 # "ok" before returning. Will wait indefinitely.
-def dcserial_send_GRBL_command_ok(ser,GRBL_command):
+def send_GRBL_command_ok(ser,GRBL_command):
     print(GRBL_command, end="")
     ser.write(GRBL_command.encode())
-    dcserial_send_string_wait_ok(ser)
-
+    send_string_wait_ok(ser)
