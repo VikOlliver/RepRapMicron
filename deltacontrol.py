@@ -7,26 +7,48 @@ import numpy as np
 import os
 import dcserial
 from graphics import *
-# This bit contains the stage configuration of you need to fiddle with that
+# This bit contains the stage configuration if you need to fiddle with that
 import dcstage
 
+# Nasty Global variables
+# ======================
 # Units by which manual controls on the panel move.
 step_size = 0.1
-
+# Actual start positions of the delta towers. Set im main loop.
+# In theory zero, but in practice may be small roundings or plain wrong
+tower_zero_offset=(0,0,0)
+# Initial axis positions
+# These are the numbers the user sees:
+x_position, y_position, z_position = 0, 0, 0
+# These are the "machine offsets" which hold position when the user redefines an axis to zero.
+x_mc_offset, y_mc_offset, z_mc_offset = 0, 0, 0
 
 # Open the default port. Put there so it's all in one place.
 def open_port():
     return dcserial.initialize_with_retry(115200,'/dev/ttyACM1')
 
-
-
-# Move the print head to these coordinates, using whatever method
-def move_to(location):
+# Move the TCP to these coordinates using GRBL to move the stage towers
+def grbl_move_to(location):
   x, y, z = location
   # Format GRBL G0 command
   GRBL_command = f"G0 X{x:.5f} Y{y:.5f} Z{z:.5f}\n"
   dcserial.send_GRBL_command_ok(ser,GRBL_command)
   
+# Move the TCP to (x,y,z) by calculating the new tower positions, and then calling the
+# grbl_move_to function to set them.
+# Note: [xyz]_mc_offset contains the offsets applied from initial zero when user
+# sets an axis position as zero such as when levelling.
+def tcp_move_to(pos):
+  # Combine the user coordinates with machine coordinates
+  # Note: Y is inverted in this hardware, so we flip it.
+  offset_xyz=(x_mc_offset+pos[0],y_mc_offset-pos[1],z_mc_offset+pos[2])
+  tower_new_position=dcstage.calculate_joint_positions(offset_xyz)
+  # Subtract the zero offset from each axis. This should not do anything.
+  # However, I have misconfigured things before and it has saved my bacon.
+  shifted_tower_position=(tower_new_position[0]-tower_zero_offset[0], tower_new_position[1]-tower_zero_offset[1], tower_new_position[2]-tower_zero_offset[2])
+  # Now we move the GRBL axes to put the TCP in the right place
+  grbl_move_to(shifted_tower_position)
+
 
 def draw_axis_location(win, x, y, z):
     # Clear previous axis location text
@@ -71,6 +93,7 @@ def replace_xyz_from_gcode(gcode_line, x, y, z):
     return x, y, z
 
 
+
 # Opens a file dialog for selecting a file from the specified directory.
 #
 # Args:
@@ -101,8 +124,36 @@ def get_gcode_file(directory="."):
 #    else:
 #        print("No file selected.")
 
+#  Reads a specified file line by line and prints lines starting with 'G0', 'G1', or 'G2'.
+#
+#  Args:
+#  file_path (str): The path to the file to be read.
+#
+#  Returns:
+#  None
+def print_gcode_lines(file_path):
+    try:
+        with open(file_path, 'r') as file:
+            for line in file:
+                # Strip leading and trailing whitespace
+                line = line.strip()
+                # Check if the line starts with 'G0', 'G1', or 'G2'
+                if line.startswith(('G0', 'G1', 'G2')):
+                    print(line)
+    except FileNotFoundError:
+        print("File not found:", file_path)
 
+# Example usage
+#file_path = "example.gcode"  # Specify the path to your file
+#print("G-code lines:")
+#print_gcode_lines(file_path)
+
+
+# Expects to use global variables
+# step_size - size of a movement control step
+# tower_zero_offset - Position of tower bases at actual (0,0,0)
 if __name__ == "__main__":
+
     # Initialize serial port
     ser = open_port();
     # Display incoming characters
@@ -113,8 +164,6 @@ if __name__ == "__main__":
     # This assumes the machine *was* zeroed, which is an iffy thing to do.
     dcserial.send_GRBL_command(ser,"G92 X0 Y0 Z0\n")
 
-    # Initialize axis positions
-    x_position, y_position, z_position = 0, 0, 0
     # Find out where the virtual towers are when the TCP is at (0,0,0)
     # This is subtraced from any positioning so movement is relative to (0,0,0)
     tower_zero_offset=dcstage.calculate_joint_positions((0,0,0))
@@ -126,24 +175,40 @@ if __name__ == "__main__":
     
    
     # Draw control buttons
+    xy0_button = Rectangle(Point(540, 30), Point(590, 70))
+    xy0_button.draw(win)
+    xy0_text = Text(Point(565, 50), "XY=0")
+    xy0_text.draw(win)
+
+    z0_button = Rectangle(Point(540, 100), Point(590, 140))
+    z0_button.draw(win)
+    z0_text = Text(Point(565, 120), "Z=0")
+    z0_text.draw(win)
+
+
     up_button = Rectangle(Point(150, 30), Point(250, 70))
     up_button.draw(win)
     up_text = Text(Point(200, 50), "Up (Y+)")
     up_text.draw(win)
     
-    down_button = Rectangle(Point(150, 100), Point(250, 140))
+    down_button = Rectangle(Point(150, 120), Point(250, 160))
     down_button.draw(win)
-    down_text = Text(Point(200, 120), "Down (Y-)")
+    down_text = Text(Point(200, 140), "Down (Y-)")
     down_text.draw(win)
     
-    left_button = Rectangle(Point(40, 65), Point(140, 105))
+    home_button = Rectangle(Point(150, 80), Point(250, 110))
+    home_button.draw(win)
+    home_text = Text(Point(200, 98), "HOME")
+    home_text.draw(win)
+
+    left_button = Rectangle(Point(40, 75), Point(140, 115))
     left_button.draw(win)
-    left_text = Text(Point(90, 85), "Left (X-)")
+    left_text = Text(Point(90, 95), "Left (X-)")
     left_text.draw(win)
     
-    right_button = Rectangle(Point(260, 65), Point(360, 105))
+    right_button = Rectangle(Point(260, 75), Point(360, 115))
     right_button.draw(win)
-    right_text = Text(Point(310, 85), "Right (X+)")
+    right_text = Text(Point(310, 95), "Right (X+)")
     right_text.draw(win)
     
     pageup_button = Rectangle(Point(375, 30), Point(500, 70))
@@ -220,7 +285,9 @@ if __name__ == "__main__":
     # Draw initial axis location
     draw_axis_location(win, x_position, y_position, z_position)
     # Main loop for handling user input
+    # Some buttons emulate a keypress so we can keep code all in one place
     while True:
+        key = ""
         x_last=x_position
         y_last=y_position
         z_last=z_position
@@ -229,17 +296,18 @@ if __name__ == "__main__":
         click_point = win.checkMouse()
         if click_point:
             if is_clicked(click_point, up_button):
-                y_position += step_size
+                key = 'Up'
             elif is_clicked(click_point, down_button):
-                y_position -= step_size
+                key = 'Down'
             elif is_clicked(click_point, left_button):
-                x_position -= step_size
+                key = 'Left'
             elif is_clicked(click_point, right_button):
-                x_position += step_size
+                key = 'Right'
             elif is_clicked(click_point, pageup_button):
-                z_position += step_size
+                key = 'Prior'
             elif is_clicked(click_point, pagedown_button):
-                z_position -= step_size
+                key = 'Next'
+            # These bits set the size of the steps we move the XY or Z axes in
             if is_clicked(click_point, button_05):
                 step_size=0.5
                 update_status=True
@@ -252,6 +320,19 @@ if __name__ == "__main__":
             elif is_clicked(click_point, button_0001):
                 step_size=0.001
                 update_status=True
+            elif is_clicked(click_point,home_button):
+                key = 'Home'
+            elif is_clicked(click_point, xy0_button):
+                # Set the current point to X=0 Y=0 by adjusting the machine offset, ignore Z
+                x_mc_offset+=x_position
+                y_mc_offset+=y_position
+                update_status=True
+                last_x=last_y=x_position=y_position=0
+            elif is_clicked(click_point, z0_button):
+                # Set the current point to Z=0 by adjusting the machine offset, ignore XY
+                z_mc_offset+=z_position
+                update_status=True
+                last_z=z_position=0
             elif is_clicked(click_point, unlock_button):
                 # Unlock the CNC driver from fault state. DANGER DANGER!
                 # Because we don't know what will happen, we just wait for data to
@@ -291,7 +372,8 @@ if __name__ == "__main__":
                break
 
         # Handling keyboard events
-        key = win.checkKey()
+        if key == "":
+          key = win.checkKey()
         if key:
             if key == 'Up':
                 y_position += step_size
@@ -305,6 +387,17 @@ if __name__ == "__main__":
                 z_position += step_size
             elif key == 'Next':
                 z_position -= step_size
+            elif key == 'Home':
+                # Home the XY axes first, then the Z
+                # Set xyz so no further movement is made.
+                x_position=y_position=0
+                print("Move XY to zero")
+                tcp_move_to((x_position, y_position, z_position))
+                z_position=0
+                print("Move Z  to zero")
+                tcp_move_to((x_position, y_position, z_position))
+                last_x=last_y=Last_z=0
+                update_status=True
             # Finally, check for "Q" to quit
             elif key == "q":
                 break
@@ -312,13 +405,7 @@ if __name__ == "__main__":
         # If an axis moved, reposition the TCP
         if x_last != x_position or y_last != y_position or z_last != z_position:
             # Figure out the new XYZ for the tower positions
-            # Note: Y is inverted in this hardware, so we flip it.
-            tower_new_position=dcstage.calculate_joint_positions((x_position, -y_position, z_position))
-            # Subtract the zero offset from each axis. This should not do anything.
-            # However, I have misconfigured things before and it has saved my bacon.
-            shifted_tower_position=(tower_new_position[0]-tower_zero_offset[0], tower_new_position[1]-tower_zero_offset[1], tower_new_position[2]-tower_zero_offset[2])
-            # Now we do the horrible fudging to correct the flaws in my algorithm.
-            move_to(shifted_tower_position)
+            tcp_move_to((x_position, y_position, z_position))
             update_status=True
 
         if update_status:
