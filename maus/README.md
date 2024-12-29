@@ -4,13 +4,15 @@
 Maus is a collection of micron-accurate components based on 3D printed flexures. These can be combined into a multi-axis motion stage allowing a probe (or probes) to be manipulated.
 
 # Build
-The maus_stage.scad file has at its bottom three if (true/false) statements that can be used to print a set of parts for an axis driver (you probably want three), a slide probe assembly, and an XY Table. It uses files from the ../include directory.
+The *maus* directory contains three OpenSCAD build files and one kind-of-an-include file:
 
-flexure_linear_coupling.scad is a model for a couping that press fits on a NEMA17 motor shaft, and given sufficient downward pressure can hold a modified M3x50 screw. The screw has the head filed down in a drill so that it is narrower in diameter than the narrowest axis of an M3 nut, and the nut is screwed all the way down to the head, where it is secured with Loktite. The tapered hexagonal hole in the top of the coupling holds on to the nut.
+**maus_stage.scad** has at its bottom three *if (true/false)* statements used to print a selected set of parts for either an axis driver (you probably want three of those), a slide probe assembly, or an XY Table. It uses SCAD files included from the ../include directory.
 
-probe_electrolysis_grip.scad provides a convenient jig for making micron probe tips from fine nichrome wire. 5% salt solution is used as the electrolyte, and the extremely process is described at [https://www.printables.com/model/874566](https://www.printables.com/model/874566).
+**flexure_linear_coupling.scad** is a model for a couping that press fits on a NEMA17 motor shaft, and given sufficient downward pressure can hold a modified M3x50 screw. The screw has the head filed down in a drill so that it is narrower in diameter than the narrowest axis of an M3 nut, and the nut is screwed all the way down to the head, where it is secured with Loktite. The tapered hexagonal hole in the top of the coupling holds on to the nut.
 
-metriccano_flexures.scad has the 2-way flexure joints used for an XY Table in it, and is included by maus_stage.scad . This should probably be in the include directory, but there are too many dependencies and I haven't figured out a nice way yet.
+**probe_electrolysis_grip.scad** provides a convenient jig for making micron probe tips from fine nichrome wire. 5% salt solution is used as the electrolyte, and the extremely simple process is described at [https://www.printables.com/model/874566](https://www.printables.com/model/874566).
+
+**metriccano_flexures.scad** has the 2-way flexure joints used for an XY Table in it, and is included by maus_stage.scad . This should probably be in the include directory, but there are too many dependencies and I haven't figured out a nice way yet.
 
 ## Documentation
 There is precious little, mostly because I've been busy making it work and haven't written any yet. Experiences are logged on the RepRap Blog http://blog.reprap.org (yes, that is http, the project is rather old).
