@@ -4,7 +4,7 @@
 Maus is a collection of micron-accurate components based on 3D printed flexures. These can be combined into a multi-axis motion stage allowing a probe (or probes) to be manipulated.
 
 # Build
-The maus_stage.scad file has at its bottom three if (true/false) statements that can be used to print a set of parts for an axis driver (you probably want three), a slide probe assembly, and an XY Table.
+The maus_stage.scad file has at its bottom three if (true/false) statements that can be used to print a set of parts for an axis driver (you probably want three), a slide probe assembly, and an XY Table. It uses files from the ../include directory.
 
 flexure_linear_coupling.scad is a model for a couping that press fits on a NEMA17 motor shaft, and given sufficient downward pressure can hold a modified M3x50 screw. The screw has the head filed down in a drill so that it is narrower in diameter than the narrowest axis of an M3 nut, and the nut is screwed all the way down to the head, where it is secured with Loktite. The tapered hexagonal hole in the top of the coupling holds on to the nut.
 
