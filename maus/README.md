@@ -3,7 +3,7 @@
 ## Overview
 Maus is a collection of micron-accurate components based on 3D printed flexures. These can be combined into a multi-axis motion stage allowing a probe (or probes) to be manipulated.
 
-# Build
+## Build
 The *maus* directory contains three OpenSCAD build files and one kind-of-an-include file:
 
 **maus_stage.scad** has at its bottom three *if (true/false)* statements used to print a selected set of parts for either an axis driver (you probably want three of those), a slide probe assembly, or an XY Table. It uses SCAD files included from the ../include directory.
