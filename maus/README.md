@@ -18,7 +18,7 @@ There is precious little, mostly because I've been busy making it work and haven
 Hopefully there will be some videos made, as we've just had a videographer volunteer. But Everything Open conference presentation is near, and planning has to be done etc.
 
 ## Printing
-The parts are designed to be printed from quality PLA with no brim or support. Some printers may have difficulty printing the long beams, in which case use a brim. The design expects 0.2mm layers with perimeters and wall thicknesses optimised for strength. As a starting point, use 4 walls and 20% infill.
+The parts are designed to be printed from quality PLA with no brim or support. Some printers may have difficulty printing the long beams, in which case use a brim for only those parts. The design expects 0.2mm layers with perimeters and wall thicknesses optimised for strength. As a starting point, use 4 walls and 20% infill.
 
 ## Pre-built STL Files
 If you just want to print bits and play with them, a version can be found on Printables at [https://www.printables.com/model/1124932](https://www.printables.com/model/1124932) (after the 19th January 2025 for reasons) though these are not guaranteed to be up-to-date, and may need slight tweaking if your filament is particularly flexible or rigid.
