@@ -31,8 +31,10 @@ Hopefully there will be some videos made, as we've just had a videographer volun
 ## Todo
 The main thing missing is currently end stops. These will be implemented as simple crossed-wire switches that will bolt on to existing holes in the axis driver mechanism.
 
+A callibration test part for determining the flexibility of flexures printed in specific plastics has been designed, but it has not been quantitativly described.
+
 ## Printing
 The parts are designed to be printed from quality PLA with no brim or support. Some printers may have difficulty printing the long beams, in which case use a brim for only those parts. The design expects 0.2mm layers with perimeters and wall thicknesses optimised for strength. As a starting point, use 4 walls and 20% infill. The author uses a Prusa Mk4 with a 0.4mm nozzle loaded with either eSun PLA+ filament or Diamond Age/Imagin Ingeo PLA. Do not use ASA, PETG, exotic filaments, matt finish, metallic-filled and so forth as these tend to be stiffer and cause the structure to flex undesirably. The height (and thus flexibility) of the flexures can be tuned in the *maus_stage.scad* file if specific filaments or materials are required.
 
 ## Pre-built STL Files
-If you just want to print bits and play with them, a version can be found on Printables at [https://www.printables.com/model/1124932](https://www.printables.com/model/1124932) (after the 19th January 2025 for reasons) though these are not guaranteed to be up-to-date, and may need slight tweaking if your filament is particularly flexible or rigid.
+If you just want to print bits and play with them, a version can be found on Printables at [https://www.printables.com/model/1124932](https://www.printables.com/model/1124932) (after the 19th January 2025 for reasons) though these are not guaranteed to be up-to-date, and may not work if your filament is particularly flexible or rigid.
