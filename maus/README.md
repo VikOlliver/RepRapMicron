@@ -7,6 +7,8 @@ The probe can be manoeuvred around a standard 25mm x 75mm glass microscope slide
 
 A window in the XY Table allows UV exposure of the resin from underneath without illuminating the reservoir. Motion is achieved with a 400 step NEMA17 stepper motor on each axis driver, and these are controlled by any method convenient for the user.
 
+The intention is that the probe will also be used to manipulate or even operate micron-scale items.
+
 ## Build
 The *maus* directory contains three OpenSCAD build files and one kind-of-an-include file:
 
