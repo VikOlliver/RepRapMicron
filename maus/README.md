@@ -10,6 +10,8 @@ flexure_linear_coupling.scad is a model for a couping that press fits on a NEMA1
 
 probe_electrolysis_grip.scad provides a convenient jig for making micron probe tips from fine nichrome wire. 5% salt solution is used as the electrolyte, and the process is described at [https://www.printables.com/model/874566](https://www.printables.com/model/874566).
 
+metriccano_flexures.scad has the 2-way flexure joints used for an XY Table in it, and is included by maus_stage.scad . This should probably be in the include directory, but there are too many dependencies and I haven't figured out a nice way yet.
+
 ## Documentation
 There is precious little, mostly because I've been busy making it work and haven't written any yet. Experiences are logged on the RepRap Blog http://blog.reprap.org (yes, that is http, the project is rather old).
 
