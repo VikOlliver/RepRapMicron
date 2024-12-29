@@ -1,19 +1,7 @@
-# RepRapMicron (μRepRap)
+# μRepRap GRBL Delta Controller
 
 ## Overview
-
-The RepRapMicron Project, or μRepRap, is an extension of the Open Source RepRap 3D printer project that aims to bring micron-scale fabrication into very widespread adoption. The main project page is [here](https://reprap.org/wiki/RepRapMicron). It aims to use hardware and software familiar to 3D printer developers, and materials that are easily and inexpensively available.
-
-At present, the project is in the very early prototyping stages, figuring out the unknown unknowns. This repository holds files that can reasonably be expected to be useful to potential developers/experimenters, but at this stage there are absolutely no guarantees.
-
-## Roadmap
-
-1. Develop a micron-accurate, 3D printable mechanism.
-2. Develop a print head for it.
-3. Make more of them
-4. Reduce further to nanoscale
-5. Take over the world
-
+This code was written in the early stages of development to allow a GRBL XYZ controller to be driven in a such a way that it could control a Delta configuration axis. At present it is not under development, but in the way of things it could be resurrected later or cannibalised.
 
 ## Files
 The main python file is deltacontrol.py which uses the Zelle portable python graphics library. Just copy graphics.py into the same directory along with the other .py files.
