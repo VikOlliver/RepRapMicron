@@ -1,6 +1,14 @@
 // maus_stage.scad - RepRapMicron motion stage Mod. 0
 // (c)2024 vik@diamondage.co.nz, released under the terms of the GPL V3 or later
 // Printable plates of parts available in 3 sections at the end of the file inside if(true/false) statements.
+version_string="MAUS V0.01";
+// TODO
+//
+// Slide holder very clumsy, find a nicer way to clamp the slide.
+// Ditto probe height adjuster
+// Give board mounting braces a bigger footprint and more rigidity
+// Add a clip for the underside illumination LED
+// Add lid/floor to probebox
 
 include <../library/m3_parts.scad>
 include <../library/nema17lib.scad>
@@ -62,6 +70,13 @@ axis_end_bend_x=axis_anchor_block_width+flexure_length/2+axis_motion_clearance;
 
 // Function to calculate the distance between two points
 function distance(x1,y1,x2,y2) = sqrt(pow(x1-x2, 2) + pow(y1-y2, 2));
+
+// 0.6mm thick text, 5mm tall, vertical, flat on XY plane
+module version_text() {
+    translate([0,0,-0.3]) linear_extrude(0.6) {
+        text(version_string, size = 4, halign = "center", valign = "center", $fn = 16);
+    }
+}
 
 // Mounting plate for a NEMA17 motor with rounded corners,
 // Extended width for metriccano mounting
@@ -363,6 +378,9 @@ module axis_platform_assembly() {
     // Fractional translation ensures boolean join
     translate([0,-axis_anchor_block_length/2+wall*0.999,0]) z_bracing();
     translate([0,axis_anchor_block_length/2-wall*0.999,0]) z_bracing();
+    // Version text
+    translate([-axis_drive_pivot_x/2-2,axis_anchor_block_length/2-wall/2,z_bracing_height/2])
+        rotate([90,0,180]) version_text();
 
     //Support pad for platform so it prints
     translate([axis_lifter_length+flexure_length*1.5-10,-wall,0]) intersection() {
@@ -497,6 +515,9 @@ module integrated_stage() difference() {
                     cube([metriccano_unit*1.75,metriccano_unit,metriccano_unit]);
                 translate([metriccano_unit*2.5,metriccano_unit*1.5,0])
                     cube([metriccano_unit*2,metriccano_unit*1.5,metriccano_unit]);
+                // Version text
+                translate([-metriccano_unit*1.5,metriccano_unit*2.25,metriccano_unit/2]) rotate([90,0,-90])
+                    version_text();
             }
             // Slots for felxure beams. Take out slightly extra to stop bridges contacting
             translate([metriccano_unit*5.5,metriccano_unit*2.25,layer_height+1])
@@ -522,13 +543,24 @@ module integrated_stage() difference() {
                 m3_nut_cavity();
         }
 
+        // Side flexure modules
         translate([metriccano_unit,metriccano_unit*1.75,0]) joined_mettricano_2_via_flexures(5*metriccano_unit);
         translate([metriccano_unit*2,metriccano_unit*1.75,0])
             rotate([0,0,90]) joined_mettricano_2_via_flexures(5*metriccano_unit);
     }
-    // Cut light well
+    // Cut light well (a Metriccano unit-ish hole with rounded corners)
+    well_size=metriccano_unit/2+0.5;
     translate([metriccano_unit*1.5,metriccano_unit*2.25,0])
-        cylinder(h=metriccano_unit*3,r=4,$fn=30,center=true);
+        hull() {
+            translate([well_size,well_size,0])
+                cylinder(h=metriccano_unit*3,r=metriccano_screw_rad,$fn=20,center=true);
+            translate([-well_size,well_size,0])
+                cylinder(h=metriccano_unit*3,r=metriccano_screw_rad,$fn=20,center=true);
+            translate([well_size,-well_size,0])
+                cylinder(h=metriccano_unit*3,r=metriccano_screw_rad,$fn=20,center=true);
+            translate([-well_size,-well_size,0])
+                cylinder(h=metriccano_unit*3,r=metriccano_screw_rad,$fn=20,center=true);
+        }
 }
 
 // The base of the XY table. Basically the Integrated Stage without cutouts and XY drive linkages.
@@ -704,18 +736,14 @@ if (false) {
     translate([-95,70,0]) xy_table_base_anchor();
     translate([-95,85,0]) xy_table_base_anchor();
     
-    // The "legs" of the XY Table. Each corner requres two.
+    // The "legs" of the XY Table, one for each corner.
     translate([0,-20,0]) {
         metriccano_strip(10);
         translate([0,-11,0]) metriccano_strip(10);
-        translate([0,-22,0]) metriccano_strip(10);
-        translate([0,-33,0]) metriccano_strip(10);
     }
     translate([-105,-20,0]) {
         metriccano_strip(10);
         translate([0,-11,0]) metriccano_strip(10);
-        translate([0,-22,0]) metriccano_strip(10);
-        translate([0,-33,0]) metriccano_strip(10);
     }
 
     // Adjustable links to connect XY table to axis drivers
