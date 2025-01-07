@@ -183,6 +183,7 @@ module metriccano_base_anchor(length) {
         cube([metriccano_unit/2,metriccano_unit/2,metriccano_unit*(length+0.5)]);
 }
 
+// A flat plate of x by y holes
 module metriccano_plate(x,y) {
     x_holes=floor(x+0.5);
     y_holes=floor(y+0.5);
