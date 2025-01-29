@@ -8,6 +8,7 @@
         metriccano_plate(x,y)                    Plate with X holes in one direction, Y in the other.
         metriccano_base_anchor(holes)     Upended angle beam with a 3x3 base plate
         metriccano_woodscrew_clip(holes) Allows fixing 1u tall objects with C/S woodscrews
+        metriccano_equilateral_plate(h)         Equilateral triang;e with hole count radiating from centre
 */
 
 metriccano_unit=10;             // Our basic size unit.
@@ -15,13 +16,13 @@ metriccano_hole_spacing=metriccano_unit;  // Nice 10mm grid for holes
 metriccano_plate_height=metriccano_unit/2;
 metriccano_strip_width=metriccano_unit;
 // Yes, this is repeating an M3 library but in theory you can change this to M4 etc.
-metriccano_screw_rad=3.4/2; // M3 screw hole radius
+metriccano_screw_rad=3.3/2; // M3 screw hole radius
 metriccano_nut_max_width=6.6;     // Nut from point to point
 metriccano_nut_height=2.5;
 metriccano_nut_min_width=5.8;  // Nut from flat to flat
 
 // Hole for M3 screw, octagonal. Should print flat and vertical.
-module  lose_screw_hole(screw_len=metriccano_hole_spacing*2.01) {
+module  metriccano_screw_hole(screw_len=metriccano_hole_spacing*2.01) {
     rotate([180,0,360/16]) cylinder(h=screw_len,r=metriccano_screw_rad*1.2,$fn=8,center=true);
 }
 
@@ -33,6 +34,17 @@ module metriccano_square_unit(height=metriccano_plate_height) {
     translate([0,0,metriccano_plate_height/2]) cube([metriccano_unit,metriccano_unit,metriccano_plate_height],center=true);
 }
 
+// Return a round or square metriccano unit
+module round_square(squared=false) {
+        if (squared) {
+        // Square edge
+        metriccano_square_unit();
+    } else {
+        // Round edge
+        metriccano_round_unit();
+    }
+}
+
 // A convenient 8ga countersunk woodscrew hole for fixing things to base boards with.
 module metriccano_woodscrew() {
     cylinder(h=metriccano_unit*10,r=2.25,center=true,$fn=24);
@@ -41,14 +53,14 @@ module metriccano_woodscrew() {
 
 // A straight strip of Metriccano. Vertical holes go along the X axis
 // h    number of holes
-module metriccano_strip(h) {
+module metriccano_strip(h,squared=false) {
     holes=floor(h+0.5);
     difference() {
         hull() {
             translate([(holes-1)*metriccano_hole_spacing,0,0]) metriccano_round_unit();
-            metriccano_round_unit();
+            round_square(squared);
         }
-        for (i=[0:holes-1]) translate([i*metriccano_hole_spacing,0,0]) lose_screw_hole();
+        for (i=[0:holes-1]) translate([i*metriccano_hole_spacing,0,0]) metriccano_screw_hole();
     }
 }
 
@@ -62,8 +74,8 @@ module metriccano_slot_strip(h) {
             metriccano_round_unit();
         }
         hull() {
-            lose_screw_hole();
-            translate([(holes-1)*metriccano_hole_spacing,0,0]) lose_screw_hole();
+            metriccano_screw_hole();
+            translate([(holes-1)*metriccano_hole_spacing,0,0]) metriccano_screw_hole();
         }
     }
 }
@@ -82,18 +94,12 @@ module metriccano_tab_module(h,squared=false) {
         hull() {
             // Rounded far end
             translate([(holes-1)*metriccano_hole_spacing,0,0])
-                if (squared) {
-                    // Square edge
-                    metriccano_square_unit();
-                } else {
-                    // Round edge
-                    metriccano_round_unit();
-                }
+                round_square(squared);
             translate([-metriccano_hole_spacing/2,-metriccano_strip_width,0]) cube([holes*metriccano_hole_spacing,metriccano_strip_width,metriccano_plate_height]);
             // Rounded near end
             metriccano_round_unit();
         }
-        for (i=[0:holes-1]) translate([i*metriccano_hole_spacing,0,0]) lose_screw_hole();
+        for (i=[0:holes-1]) translate([i*metriccano_hole_spacing,0,0]) metriccano_screw_hole();
     }
 }
 
@@ -114,12 +120,12 @@ module metriccano_angle_plate_1x3() {
             translate([0,metriccano_hole_spacing,0]) metriccano_round_unit();
             translate([0,2*metriccano_hole_spacing,0]) metriccano_round_unit();
         }
-        lose_screw_hole();
-        translate([metriccano_hole_spacing,0,0]) lose_screw_hole();
-        translate([0,metriccano_hole_spacing,0]) lose_screw_hole();
-        translate([0,2*metriccano_hole_spacing,0]) lose_screw_hole();
+        metriccano_screw_hole();
+        translate([metriccano_hole_spacing,0,0]) metriccano_screw_hole();
+        translate([0,metriccano_hole_spacing,0]) metriccano_screw_hole();
+        translate([0,2*metriccano_hole_spacing,0]) metriccano_screw_hole();
         // 45 degree junction hole
-        rotate([0,0,45]) translate([metriccano_hole_spacing,0,0]) lose_screw_hole();
+        rotate([0,0,45]) translate([metriccano_hole_spacing,0,0]) metriccano_screw_hole();
     }
 }
 
@@ -135,25 +141,25 @@ module metriccano_square_strip(h) {
         // long sides holes
         for (i=[0:holes-1]) translate([i*metriccano_hole_spacing,0,0]) {
             // Vertical hole
-            lose_screw_hole();
+            metriccano_screw_hole();
             // Horizontal hole
-            translate([0,0,metriccano_strip_width/2]) rotate([90,0,0]) lose_screw_hole();
+            translate([0,0,metriccano_strip_width/2]) rotate([90,0,0]) metriccano_screw_hole();
         }
         // If we have room, pierce both ends and hide nuts in them. Ouch.
         // Otherwide just perforate the dude
         if (holes<3) {
             translate([0,0,metriccano_plate_height]) rotate([0,-90,0]) 
-                    lose_screw_hole(metriccano_unit*10);
+                    metriccano_screw_hole(metriccano_unit*10);
         } else {
             translate([0,0,metriccano_plate_height]) rotate([0,-90,0]) 
             {
-                    lose_screw_hole();
+                    metriccano_screw_hole();
                     translate([(metriccano_strip_width-metriccano_nut_max_width)/2,0,-metriccano_plate_height])
                         cube([metriccano_strip_width,metriccano_nut_min_width,metriccano_nut_height],center=true);
             }
             translate([(holes-1)*metriccano_hole_spacing,0,metriccano_plate_height]) rotate([0,90,0]) 
             {
-                    lose_screw_hole();
+                    metriccano_screw_hole();
                     translate([(metriccano_strip_width-metriccano_nut_max_width)/-2,0,-metriccano_plate_height])
                         cube([metriccano_strip_width,metriccano_nut_min_width,metriccano_nut_height],center=true);
             }
@@ -184,20 +190,46 @@ module metriccano_base_anchor(length) {
 }
 
 // A flat plate of x by y holes
-module metriccano_plate(x,y) {
+module metriccano_plate(x,y,squared=false) {
     x_holes=floor(x+0.5);
     y_holes=floor(y+0.5);
     difference() {
         hull() {
-            translate([(x_holes-1)*metriccano_hole_spacing,0,0]) metriccano_round_unit();
-                metriccano_round_unit();
+            round_square(squared);
+            translate([(x_holes-1)*metriccano_hole_spacing,0,0]) round_square(squared);
             translate([(x_holes-1)*metriccano_hole_spacing,(y_holes-1)*metriccano_hole_spacing,0]) 
-                metriccano_round_unit();
-            translate([0,(y_holes-1)*metriccano_hole_spacing,0]) metriccano_round_unit();
+                round_square(squared);
+            translate([0,(y_holes-1)*metriccano_hole_spacing,0]) round_square(squared);
         }
         for(j=[0:y_holes-1])
             for (i=[0:x_holes-1])
-                translate([i*metriccano_hole_spacing,j*metriccano_hole_spacing,0]) lose_screw_hole();
+                translate([i*metriccano_hole_spacing,j*metriccano_hole_spacing,0]) metriccano_screw_hole();
+    }
+}
+
+// A flat plate of x by y holes, the X edge holes are elongated and the length is half a unit larger
+module metriccano_elongated_plate(x,y,squared=false) {
+    x_holes=floor(x+0.5);
+    y_holes=floor(y+0.5);
+    difference() {
+        hull() {
+            round_square(squared);
+            translate([(x_holes-1)*metriccano_hole_spacing,0,0]) round_square(squared);
+            translate([(x_holes-1)*metriccano_hole_spacing,(y_holes-0.5)*metriccano_hole_spacing,0]) 
+                round_square(squared);
+            translate([0,(y_holes-0.5)*metriccano_hole_spacing,0]) round_square(squared);
+        }
+        // Regular holes
+        for(j=[0:y_holes-2])
+            for (i=[0:x_holes-1])
+                translate([i*metriccano_hole_spacing,j*metriccano_hole_spacing,0]) metriccano_screw_hole();
+        // Elongated holes
+        for (i=[0:x_holes-1])
+            translate([i*metriccano_hole_spacing,(y_holes-1)*metriccano_hole_spacing,0])
+                hull() {
+                    metriccano_screw_hole();
+                    translate([0,metriccano_unit/2,0]) metriccano_screw_hole();
+                }
     }
 }
 
@@ -221,8 +253,21 @@ module metriccano_woodscrew_clip(holes) {
         
 }
 
+// Ceates an equilateral triange with three holes spaced at metriccano_unit
+module metriccano_triangular_plate() difference() {
+    // The triangle
+    hull() {
+        cylinder(h=metriccano_unit/2,r=metriccano_unit/2);
+        translate([0,metriccano_unit,0]) cylinder(h=metriccano_unit/2,r=metriccano_unit/2);
+        rotate([0,0,60]) translate([0,metriccano_unit,0]) cylinder(h=metriccano_unit/2,r=metriccano_unit/2);
+    }
+    metriccano_screw_hole();
+    translate([0,metriccano_unit,0]) metriccano_screw_hole();
+    rotate([0,0,60]) translate([0,metriccano_unit,0]) metriccano_screw_hole();
+ }
+
 // Flat matrix of holes
-//metriccano_plate(4,4);
+//metriccano_plate(4,4,squared=true);
 // Basic strip
 //metriccano_strip(10);
 // Slotted strip
@@ -233,3 +278,6 @@ module metriccano_woodscrew_clip(holes) {
 //metriccano_l_beam(6);
 // For screwing things down to the bench
 // metriccano_woodscrew_clip(2);
+//metriccano_triangluar_plate();    // Triangular plate, equilateral
+//metriccano_tab_module(4);           // Tab for adding to things. Can have mostly squared corners
+metriccano_elongated_plate(2,3); // Plate with holes stretched out on one side
