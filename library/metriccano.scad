@@ -57,7 +57,7 @@ module metriccano_strip(h,squared=false) {
     holes=floor(h+0.5);
     difference() {
         hull() {
-            translate([(holes-1)*metriccano_hole_spacing,0,0]) metriccano_round_unit();
+            translate([(holes-1)*metriccano_hole_spacing,0,0]) round_square(squared);
             round_square(squared);
         }
         for (i=[0:holes-1]) translate([i*metriccano_hole_spacing,0,0]) metriccano_screw_hole();
@@ -65,7 +65,7 @@ module metriccano_strip(h,squared=false) {
 }
 
 // A straight strip of Metriccano with a vertical slot along it allowing adjustment
-// h    length of slot in merticcano units
+// h    length of slot in merticcano units - can be fractional
 module metriccano_slot_strip(h) {
     holes=floor(h+0.5);
     difference() {
@@ -280,4 +280,5 @@ module metriccano_triangular_plate() difference() {
 // metriccano_woodscrew_clip(2);
 //metriccano_triangluar_plate();    // Triangular plate, equilateral
 //metriccano_tab_module(4);           // Tab for adding to things. Can have mostly squared corners
-metriccano_elongated_plate(2,3); // Plate with holes stretched out on one side
+//metriccano_elongated_plate(2,2); // Plate with holes stretched out on one side
+ 
