@@ -9,6 +9,7 @@
         metriccano_base_anchor(holes)     Upended angle beam with a 3x3 base plate
         metriccano_woodscrew_clip(holes) Allows fixing 1u tall objects with C/S woodscrews
         metriccano_equilateral_plate(h)         Equilateral triang;e with hole count radiating from centre
+        metriccano_adjustment_bracket()     A right angle bracket with slotted holes to mount poorly-aligned parts
 */
 
 metriccano_unit=10;             // Our basic size unit.
@@ -99,7 +100,8 @@ module metriccano_tab_module(h,squared=false) {
             // Rounded near end
             metriccano_round_unit();
         }
-        for (i=[0:holes-1]) translate([i*metriccano_hole_spacing,0,0]) metriccano_screw_hole();
+        if (holes>1)
+            for (i=[0:holes-1]) translate([i*metriccano_hole_spacing,0,0]) metriccano_screw_hole();
     }
 }
 
@@ -266,6 +268,42 @@ module metriccano_triangular_plate() difference() {
     rotate([0,0,60]) translate([0,metriccano_unit,0]) metriccano_screw_hole();
  }
 
+// A flanged plate with perpendicular slots, handy for aligning things that don't want to align.
+module metriccano_adjustment_bracket(holes=2) {
+    // Horizontal slot
+    difference() {
+        hull() {
+            translate([(holes-1)*metriccano_hole_spacing,0,0]) metriccano_round_unit();
+            metriccano_round_unit();
+            translate([0,metriccano_unit/2]) {
+                translate([(holes-1)*metriccano_hole_spacing,0,0]) metriccano_square_unit();
+                metriccano_square_unit();
+            }
+        }
+        hull() {
+            metriccano_screw_hole();
+            translate([(holes-1)*metriccano_hole_spacing,0,0]) metriccano_screw_hole();
+        }
+    }
+    // Vertical slots
+    translate([0,metriccano_unit,0]) {
+        difference() {
+            // The rounded plate with multiple slots in
+            hull() {
+                translate([0,0,metriccano_unit*2])rotate([90,0,0]) metriccano_round_unit();
+                translate([(holes-1)*metriccano_hole_spacing,0,metriccano_unit*2])rotate([90,0,0]) metriccano_round_unit();
+                translate([0,0,metriccano_unit])rotate([90,0,0]) metriccano_square_unit();
+                translate([(holes-1)*metriccano_hole_spacing,0,metriccano_unit])rotate([90,0,0]) metriccano_square_unit();
+            }
+            // The slots
+            for (i=[0:(holes-1)]) hull() {
+                translate([i*metriccano_unit,0,metriccano_unit]) rotate([90,0,0]) metriccano_screw_hole();
+                translate([i*metriccano_unit,0,metriccano_unit*2]) rotate([90,0,0]) metriccano_screw_hole();
+            }
+        }
+    }
+}
+
 // Flat matrix of holes
 //metriccano_plate(4,4,squared=true);
 // Basic strip
@@ -281,4 +319,4 @@ module metriccano_triangular_plate() difference() {
 //metriccano_triangluar_plate();    // Triangular plate, equilateral
 //metriccano_tab_module(4);           // Tab for adding to things. Can have mostly squared corners
 //metriccano_elongated_plate(2,2); // Plate with holes stretched out on one side
- 
+//metriccano_adjustment_bracket();    // Slots at right angles
