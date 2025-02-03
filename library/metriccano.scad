@@ -8,7 +8,7 @@
         metriccano_plate(x,y)                    Plate with X holes in one direction, Y in the other.
         metriccano_base_anchor(holes)     Upended angle beam with a 3x3 base plate
         metriccano_woodscrew_clip(holes) Allows fixing 1u tall objects with C/S woodscrews
-        metriccano_equilateral_plate(h)         Equilateral triang;e with hole count radiating from centre
+        metriccano_triangular_plate(h)         Equilateral triangle with 3 holes
         metriccano_adjustment_bracket()     A right angle bracket with slotted holes to mount poorly-aligned parts
 */
 
@@ -67,7 +67,7 @@ module metriccano_strip(h,squared=false) {
 
 // A straight strip of Metriccano with a vertical slot along it allowing adjustment
 // h    length of slot in merticcano units - can be fractional
-module metriccano_slot_strip(h) {
+module metriccano_slot_strip(h=0) {
     holes=floor(h+0.5);
     difference() {
         hull() {
@@ -269,15 +269,16 @@ module metriccano_triangular_plate() difference() {
  }
 
 // A flanged plate with perpendicular slots, handy for aligning things that don't want to align.
-module metriccano_adjustment_bracket(holes=2) {
+// baselen determines the additional width of the base in metriccano units and can be fractional
+module metriccano_adjustment_bracket(holes=2,baselen=1) {
     // Horizontal slot
     difference() {
         hull() {
             translate([(holes-1)*metriccano_hole_spacing,0,0]) metriccano_round_unit();
             metriccano_round_unit();
             translate([0,metriccano_unit/2]) {
-                translate([(holes-1)*metriccano_hole_spacing,0,0]) metriccano_square_unit();
-                metriccano_square_unit();
+                translate([(holes-1)*metriccano_hole_spacing,(baselen-1)*metriccano_unit,0]) metriccano_square_unit();
+                translate([0,(baselen-1)*metriccano_unit,0]) metriccano_square_unit();
             }
         }
         hull() {
@@ -286,7 +287,7 @@ module metriccano_adjustment_bracket(holes=2) {
         }
     }
     // Vertical slots
-    translate([0,metriccano_unit,0]) {
+    translate([0,metriccano_unit*baselen,0]) {
         difference() {
             // The rounded plate with multiple slots in
             hull() {
@@ -302,6 +303,12 @@ module metriccano_adjustment_bracket(holes=2) {
             }
         }
     }
+}
+
+// Two strips joined at an angle. Common hole is counted. Angle is 45 degrees by default
+module metriccano_angle_strip(holes1,holes2,angle=45,squared=false) {
+    rotate([0,0,180]) metriccano_strip(holes1,squared);
+    rotate([0,0,angle]) metriccano_strip(holes2,squared);
 }
 
 // Flat matrix of holes
@@ -320,3 +327,4 @@ module metriccano_adjustment_bracket(holes=2) {
 //metriccano_tab_module(4);           // Tab for adding to things. Can have mostly squared corners
 //metriccano_elongated_plate(2,2); // Plate with holes stretched out on one side
 //metriccano_adjustment_bracket();    // Slots at right angles
+//metriccano_angle_strip(3,5);          // Strip with a bend in it (45 deg by default)
