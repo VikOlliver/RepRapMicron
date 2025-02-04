@@ -311,20 +311,59 @@ module metriccano_angle_strip(holes1,holes2,angle=45,squared=false) {
     rotate([0,0,angle]) metriccano_strip(holes2,squared);
 }
 
-// Flat matrix of holes
-//metriccano_plate(4,4,squared=true);
-// Basic strip
-//metriccano_strip(10);
-// Slotted strip
-//metriccano_slot_strip(4);
-// Square strip with holes both ways and hidden nuts
-//metriccano_square_strip(5);
-//Two strips of holes joined in an L-shaped beam
-//metriccano_l_beam(6);
+// if "true" creates a sampler plate of Metriccano parts
+if (false) {
+    // Flat matrix of holes
+    metriccano_plate(4,6);
+    // Basic strips
+    translate([0,65,0]) {
+        metriccano_strip(10);
+        translate([0,15,0]) metriccano_strip(10);
+        translate([0,30,0]) metriccano_strip(4);
+        translate([50,30,0]) metriccano_strip(5);
+        translate([50,45,0]) metriccano_strip(5);
+        translate([0,45,0]) metriccano_strip(4,squared=true);
+        // Slotted strip
+        translate([60,60,0]) metriccano_slot_strip(4);
+        translate([20,60,0]) metriccano_angle_strip(3,5);          // Strip with a bend in it (45 deg by default)
+    }
+    translate([45,0,0]) {
+        // Square strips with holes both ways and hidden nuts
+        metriccano_square_strip(5);
+        translate([55,0,0]) metriccano_square_strip(5);
+        translate([0,15,0]) metriccano_square_strip(4);
+        translate([45,15,0]) metriccano_square_strip(6);
+        translate([0,30,0]) metriccano_square_strip(3);
+        translate([35,30,0]) metriccano_square_strip(7);
+        translate([0,45,0]) metriccano_square_strip(10);
+    }
+        //Two strips of holes joined in an L-shaped beam
+        translate([155,5,0]) metriccano_l_beam(6);
+        translate([155,20,0]) metriccano_l_beam(6);
+        // Triangular plate, equilateral
+        translate([160,35,0]) metriccano_triangular_plate();
+        // Triangular plate, right angle
+        translate([180,35,0]) metriccano_angle_plate_1x3();
+        translate([205,55,0]) rotate([0,0,180]) metriccano_angle_plate_1x3();
+        // Plate with holes stretched out on one side
+        translate([105,90,0]) metriccano_elongated_plate(3,2);
+        translate([105,60,0]) metriccano_elongated_plate(2,2);
+        translate([140,90,0]) metriccano_elongated_plate(1,2);
+        // Slots at right angles
+        translate([130,60,0]) metriccano_adjustment_bracket();
+        translate([155,60,0]) metriccano_adjustment_bracket();
+        // L - saped plate
+        translate([190,90,0]) metriccano_l_plate(3);
+        // Sample aglomeration
+        translate([155,90,0]) {
+            union() {
+                metriccano_square_strip(3);
+                rotate([0,0,90]) metriccano_square_strip(3);
+                translate([metriccano_unit/2,0,metriccano_unit/2])
+                    rotate([0,-90,0]) metriccano_square_strip(3);
+            }
+        }
+}
 // For screwing things down to the bench
 // metriccano_woodscrew_clip(2);
-//metriccano_triangluar_plate();    // Triangular plate, equilateral
 //metriccano_tab_module(4);           // Tab for adding to things. Can have mostly squared corners
-//metriccano_elongated_plate(2,2); // Plate with holes stretched out on one side
-//metriccano_adjustment_bracket();    // Slots at right angles
-//metriccano_angle_strip(3,5);          // Strip with a bend in it (45 deg by default)
