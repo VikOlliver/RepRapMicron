@@ -20,10 +20,12 @@ At present, the project is in the very early prototyping stages, figuring out th
 ## Directory Structure
 ### library
 A Selection of useful OpenSCAD libraries used in generating "Metriccano" modular components (10mm grid, M3 fasteners), screw holes, motor mounts etc.
-### maus
+### Maus
 **M**icron **A**ccurate **U**niversal **S**ystem - OpenSCAD model files for micron precision axis components based on flexures.
 
 The maus.scad file contains standard axis drivers, XY flexure Table, and probe parts that need screwing down to a solid surface. The maus_complementary.scad file contains a more compact XY Table based on complementary flexures with an integral frame. It can be assembled on a Metriccano baseboard supplied for lasercutting as metriccano_baseboad.svg, or a 11 x 13 hole piece of 10mm pitch perf board.
+
+As assembly documentation is not available (and would rapidly outdate if it was) pictures from a variety of angles are available [here](http://blog.reprap.org/2025/02/maus-c-assembly-photos.html).
 
 ### oldGRBLdelta
 A python/Zelle Control Panel that drives a GRBL CNC using xyz steppers and uses them to control an OpenFlexure microscope delta stage.
