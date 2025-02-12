@@ -19,13 +19,16 @@ At present, the project is in the very early prototyping stages, figuring out th
 
 ## Directory Structure
 ### library
-A Selection of useful OpenSCAD libraries used in generating "Metriccano" modular components (10mm grid, M3 fasteners), screw holes, motor mounts etc.
+A Selection of useful OpenSCAD libraries used in generating "Metriccano" modular components (10mm grid, M3 fasteners), screw holes, XY stages, motor mounts etc.
 ### Maus
 **M**icron **A**ccurate **U**niversal **S**ystem - OpenSCAD model files for micron precision axis components based on flexures.
 
-The maus.scad file contains standard axis drivers, XY flexure Table, and probe parts that need screwing down to a solid surface. The maus_complementary.scad file contains a more compact XY Table based on complementary flexures with an integral frame. It can be assembled on a Metriccano baseboard supplied for lasercutting as metriccano_baseboad.svg, or a 11 x 13 hole piece of 10mm pitch perf board.
+The maus.scad file contains standard axis drivers, variable height XY flexure Table, and probe parts that need screwing down to a solid surface. The maus_complementary.scad file contains the more compact complementary flexure table with an integral frame. It can be assembled on a Metriccano baseboard supplied for lasercutting as metriccano_baseboad.svg, or a 11 x 13 hole piece of 10mm pitch perf board.
 
 As assembly documentation is not available (and would rapidly outdate if it was) pictures from a variety of angles are available [here](http://blog.reprap.org/2025/02/maus-c-assembly-photos.html).
+
+## gcode_segmentation
+Python code to take GCODE from a 3D printer slicing program such as PrusaSlicer, and break it into GCODE for a series of points that can be invidivually deposited with the probe. There is provision for a routine to "re-ink" the probe tip after a predetermined number of points are deposited.
 
 ### oldGRBLdelta
 A python/Zelle Control Panel that drives a GRBL CNC using xyz steppers and uses them to control an OpenFlexure microscope delta stage.
