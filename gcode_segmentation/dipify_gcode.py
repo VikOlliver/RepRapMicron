@@ -24,8 +24,6 @@
 #
 # Add real code to move to the resin reservoir
 # Tidy up SAFE_Z and Z probing so that multiple layers can be implemented
-# Strip off extruder parameters from the GCODE too
-
 
 
 import sys
@@ -105,6 +103,14 @@ def process_gcode(input_stream, output_stream):
         if not line:
             output_stream.write(line + '\n')
             continue
+
+        # Strip out all "M" codes
+        if line.startswith('M') == True:
+          continue
+
+        # Skip any attempts to move the A axis
+        if line.startswith('G1 A') == True:
+          continue
 
         # Parse the next GCODE line
         command, params, comment = parse_gcode_line(line)
