@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# dipify_gcode.py - Revision 0.03
+# dipify_gcode.py - Revision 0.04
 #
 # A tool to process GCODE, subdividing toolpaths below a safe Z height into smaller segments.
 # It moves the tool to safe Z height, touches down to original Z, and returns to safe Z
@@ -22,26 +22,33 @@
 #
 # TODO
 #
-# Add real code to move to the resin reservoir
 # Tidy up SAFE_Z and Z probing so that multiple layers can be implemented
+# Detect layers
+# Turn "Coolant Flood" (pin 10) on/off to activate UV with M8/M9
 
 
 import sys
 import math
 
 # Configuration parameters
-SAFE_Z = 40.0  # Safe Z height
+SAFE_Z = 50.0  # Safe Z height
 SEGMENT_LENGTH = 15.0  # Length of segments
-PROBE_POINT_LIMIT = 10  # Number of points before calling dip_probe()
+PROBE_POINT_LIMIT = 15  # Number of points before calling dip_probe()
+# Location of the dipping reservoir
+RESERVOIR_X = 0
+RESERVOIR_Y =1100
+RESERVOIR_Z=35;
 
-def dip_probe(current_position):
+def dip_probe(current_position,output_stream):
     """
-    Dummy function to simulate probing. Save and restore tool position.
+    Move the probe to the reservoir and dip the tip. Restore probe position after dip.
     """
-    print(f"G1 Z{SAFE_Z:.3f} ; Moving to safe Z before dipping")
-    print(f"; Saving tool position: X{current_position[0]:.3f} Y{current_position[1]:.3f} Z{current_position[2]:.3f}")
-    print("; Probe dipped.")
-    print(f"G1 Z{SAFE_Z:.3f} ; Restoring tool position to safe Z")
+    output_stream.write(f"G1 Z{SAFE_Z:.3f} ; Moving to safe Z before dipping\n")
+    output_stream.write(f"G1 X{RESERVOIR_X:.3f} Y{RESERVOIR_Y:.3f} ; Moving to reservoir\n")         
+    output_stream.write(f"G1 Z{RESERVOIR_Z:.3f} ; Dip the probe\n")
+    output_stream.write(f"G1 Z{(SAFE_Z+30):.3f} ; Restoring probe position to safe Z\n")
+    output_stream.write(f"G1 Z{SAFE_Z:.3f}\n")
+    output_stream.write(f"G1 X{current_position[0]:.3f} Y{current_position[1]:.3f} Z{current_position[2]:.3f} ; Return probe\n")
 
 def parse_gcode_line(line):
     """
@@ -156,7 +163,7 @@ def process_gcode(input_stream, output_stream):
                       # We probed a point. See if we've worn all the ink off and need to dip
                       point_count += 1
                       if point_count >= PROBE_POINT_LIMIT:
-                          dip_probe(current_position)
+                          dip_probe(last_probe_position,output_stream)
                           # Dipping probe resets the point count and also raises it to SAFE_Z
                           point_count = 0
 
