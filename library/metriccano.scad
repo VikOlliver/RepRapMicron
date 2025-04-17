@@ -27,6 +27,16 @@ module  metriccano_screw_hole(screw_len=metriccano_hole_spacing*2.01) {
     rotate([180,0,360/16]) cylinder(h=screw_len,r=metriccano_screw_rad*1.2,$fn=8,center=true);
 }
 
+// Hole for a nut to be lowered in from the top, or pushed into the bottom.
+// Has a conical top to print without support. Projects very slightly down to remove boolean issues.
+module metriccano_nut_cavity_tapered() {
+    // Cavity for m3 nut
+    translate([0,0,-0.01]) cylinder(h=metriccano_nut_height+0.01,r=metriccano_nut_max_width/2,$fn=6);
+    translate([0,0,metriccano_nut_height])
+        cylinder(h=1,r1=metriccano_nut_max_width/2,r2=metriccano_screw_rad*1.2,$fn=6);
+}
+
+
 module metriccano_round_unit(height=metriccano_plate_height) {
     cylinder(h=metriccano_plate_height,r=metriccano_strip_width/2);
 }
