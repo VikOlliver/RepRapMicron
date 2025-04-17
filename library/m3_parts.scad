@@ -13,9 +13,9 @@ nema17_screw_sep=31;
 nema17_collar_rad=22.5/2;   // The raised collar around the NEMA output shaft
 nema17_face_len=42;         // Length of the square face of a NEMA17 ignoring bevels
 
-module m3_nut_cavity() {
-    // Cavity for m3 nut
-    cylinder(h=m3_nut_height,r=m3_nut_max_width/2,$fn=6);
+// Cavity for M3 nut that goes into the top of things. Slight overshoot to avoid booleans
+module m3_nut_cavity(ht=m3_nut_height) {
+    translate([0,0,0.01]) cylinder(h=ht+0.01,r=m3_nut_max_width/2,$fn=6);
 }
 
 // A nut cavity for putting underneath things, with a nod to overhangs
@@ -40,7 +40,7 @@ module  m3_screw_cavity(screw_len) {
         cylinder(h=10,r=m3_screw_head_rad*1.2,$fn=8);
 }
 
-// Hole for screw, no head, centred, length extends up and down
+// Octagonal hole for screw, no head, centred, length extends up and down
 module  m3_screw_hole(screw_len) {
     rotate([180,0,360/16]) cylinder(h=screw_len,r=m3_screw_rad*1.2,$fn=8,center=true);
 }
