@@ -39,10 +39,10 @@ A python/Zelle Control Panel that drives a GRBL CNC using xyz steppers and uses 
 ## Contributing
 Please do join in. We need everything. Coders, makers, nanoscience experts, materials scientists, 3D printing experts, manual writers, graphics artists, dancers, the works. Well, maybe not the dancers.
 
-The main repository of knowledge is the wiki on the [main project page](https://reprap.org/wiki/RepRapMicron). General updates go on [the blog](http://blog.reprap.org/). There is some coverage on the Facebook RepRap page.
+The main repository of knowledge is the wiki on the [main project page](https://reprap.org/wiki/RepRapMicron). General updates go on [the blog](http://blog.reprap.org/). There is some coverage on the Facebook RepRap page, and commentary is welcomed.
 
 ## Licence
 GPL V3 or later
 
 ## Project status
-Early Alpha.
+Early Alpha, but functional.
