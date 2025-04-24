@@ -19,7 +19,7 @@ At present, the project is in the very early prototyping stages, figuring out th
 
 ## Directory Structure
 ### library
-A Selection of useful OpenSCAD libraries used in generating "Metriccano" modular components (10mm grid, M3 fasteners), screw holes, XY stages, motor mounts etc.
+A Selection of useful OpenSCAD libraries used in generating "Metriccano" modular components (10mm grid, M3 fasteners), screw holes, motor mounts etc.
 ### Maus
 **M**icron **A**ccurate **U**niversal **S**ystem - OpenSCAD model files for micron precision axis components based on flexures.
 
