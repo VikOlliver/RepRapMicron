@@ -1,7 +1,9 @@
 // flexure_linear_coupling.scad - Attempt to make a coupling that allows linear movement of the shaft.
+// (C)2024 vik@diamondage.co.nz GPLV3 or later applies
 
-include <../library/m3_parts.scad>
-include <../library/nema17lib.scad>
+// Uncomment these if building standalone
+//include <../library/m3_parts.scad>
+//include <../library/nema17lib.scad>
 
 flex_tube_height=13;
 flex_tube_spring_width=1.2;
@@ -42,17 +44,21 @@ module nema_m3_coupling() {
     }
 }
 
-// The outer cylinder
-flex_tube(outer_radius+flex_link_width*2,height=spring_height+1);
-// Fill with quadrants
-for (i=[0:3]) {
-    rotate([0,0,i*90]) flex_quadrant(outer_radius,height=spring_height);
-}
-// Central NEMA shaft hole
-difference() {
-    cylinder(h=spring_height,r=4.5);
-    cylinder(h=100,r=2.5,center=true,$fn=32);
+module flexure_linear_coupling() union() {
+    // The outer cylinder
+    flex_tube(outer_radius+flex_link_width*2,height=spring_height+1);
+    // Fill with quadrants
+    for (i=[0:3]) {
+        rotate([0,0,i*90]) flex_quadrant(outer_radius,height=spring_height);
+    }
+    // Central NEMA shaft hole
+    difference() {
+        cylinder(h=spring_height,r=4.5);
+        cylinder(h=100,r=2.5,center=true,$fn=32);
+    }
+
+    // Nut holding bit
+    translate([0,0,spring_height+2]) nema_m3_coupling();
 }
 
-// Nut holding bit
-translate([0,0,spring_height+2]) nema_m3_coupling();
+// flexure_linear_coupling();
