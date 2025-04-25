@@ -23,9 +23,9 @@ A Selection of useful OpenSCAD libraries used in generating "Metriccano" modular
 ### Maus
 **M**icron **A**ccurate **U**niversal **S**ystem - OpenSCAD model files for micron precision axis components based on flexures.
 
-The maus.scad file contains standard axis drivers, variable height XY flexure Table, and probe parts that need screwing down to a solid surface. The maus_complementary.scad file contains the more compact complementary flexure table with an integral frame. It can be assembled on a Metriccano baseboard supplied for lasercutting as metriccano_baseboad.svg, or a 11 x 13 hole piece of 10mm pitch perf board.
+The maus directory contains standard axis drivers, XY complementary flexure Table, and probe parts that need screwing down to a solid surface. It can be assembled on a Metriccano baseboard supplied for lasercutting as metriccano_baseboad.svg, or a 11 x 13 hole piece of 10mm pitch perf board.
 
-As assembly documentation is not available (and would rapidly outdate if it was) pictures from a variety of angles are available [here](http://blog.reprap.org/2025/02/maus-c-assembly-photos.html).
+As assembly documentation is in progress on the Github Wiki. Pictures from a variety of angles are available [here](http://blog.reprap.org/2025/02/maus-c-assembly-photos.html).
 
 ## gcode_segmentation
 Python code to take GCODE from a 3D printer slicing program such as PrusaSlicer, and break it into GCODE for a series of points that can be invidivually deposited with the probe. There is provision for a routine to "re-ink" the probe tip after a predetermined number of points are deposited.
@@ -45,4 +45,4 @@ The main repository of knowledge is the wiki on the [main project page](https://
 GPL V3 or later
 
 ## Project status
-Early Alpha, but functional.
+Alpha, but functional.
