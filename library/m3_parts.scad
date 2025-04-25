@@ -19,16 +19,39 @@ module m3_nut_cavity(ht=m3_nut_height) {
 }
 
 // A nut cavity for putting underneath things, with a nod to overhangs
-module m3_nut_cavity_tapered() {
-    // Cavity for m3 nut
-    cylinder(h=m3_nut_height,r=m3_nut_max_width/2,$fn=6);
-    translate([0,0,m3_nut_height])
-        cylinder(h=1,r1=m3_nut_max_width/2,r2=m3_screw_rad*1.2,$fn=6);
+// Has a conical top to print without support. Projects very slightly down to remove boolean issues.
+// Making it captive adds little bumps inside that make it hard to insert and remove the nut
+module m3_nut_cavity_tapered(captive=false) {
+    difference() {
+        union() {
+            // Tapered avity for m3 nut
+            translate([0,0,-0.01]) cylinder(h=m3_nut_height+0.01,r=m3_nut_max_width/2,$fn=6);
+            translate([0,0,m3_nut_height])
+                cylinder(h=1,r1=m3_nut_max_width/2,r2=m3_screw_rad*1.2,$fn=6);
+        }
+        if (captive) {
+            divot_rad=0.4;
+            rotate([0,0,30]) translate([m3_nut_max_width*0.42,0,m3_nut_height/2])
+                sphere(divot_rad);
+            rotate([0,0,30+120]) translate([m3_nut_max_width*0.42,0,m3_nut_height/2])
+                sphere(divot_rad);
+            rotate([0,0,30-120]) translate([m3_nut_max_width*0.42,0,m3_nut_height/2])
+                sphere(divot_rad);
+
+        }
+    }
 }
 
 // Nut  slot for M3 nut
-module m3_nut_slot() {
-    translate([-m3_nut_max_width/2,-m3_nut_min_width/2,0]) cube([m3_nut_max_width+100,m3_nut_min_width,m3_nut_height]);
+module m3_nut_slot(l=100) {
+    difference() {
+        // Long slot
+        translate([-m3_nut_max_width/2,-m3_nut_min_width/2,0])
+            cube([m3_nut_max_width+l,m3_nut_min_width,m3_nut_height]);
+        // Small knobs to retain nut
+        translate([0,m3_nut_min_width/2,m3_nut_height/2]) sphere(0.4);
+        translate([0,-m3_nut_min_width/2,m3_nut_height/2]) sphere(0.4);
+    }
 }
 
 // Cavity for an M3 screw and screw head of specified length.
