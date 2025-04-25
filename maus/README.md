@@ -18,7 +18,7 @@ The *maus* directory contains three main Maus OpenSCAD build files, a design for
 
 **flexure_linear_coupling.scad** is a model for a couping that press fits on a NEMA17 motor shaft, and given sufficient downward pressure can hold a modified M3x50 screw. The screw has the head filed down in a drill so that it is narrower in diameter than the narrowest axis of an M3 nut, and the nut is screwed all the way down to the head, where it is secured with Loktite. The tapered hexagonal hole in the top of the coupling holds on to the nut.
 
-**probe_electrolysis_grip.scad** provides a convenient jig for making micron probe tips from fine nichrome wire. 5% salt solution is used as the electrolyte, and the extremely simple process is described at [https://www.printables.com/model/874566](https://www.printables.com/model/874566).
+**probe_electrolysis_grip.scad** provides a convenient jig for making micron probe tips from 28ga stainless steel or nichrome wire. 5% salt solution is used as the electrolyte, and the extremely simple process is described at [https://www.printables.com/model/874566](https://www.printables.com/model/874566).
 
 ## Deprecated
 
