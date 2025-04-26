@@ -1,12 +1,11 @@
-// maus_stage.scad - RepRapMicron motion stage
+// maus_axis_driver.scad - RepRapMicron motion stage
 // (c)2024 vik@diamondage.co.nz, released under the terms of the GPL V3 or later
-// Printable plates of parts available in 3 sections at the end of the file inside if(true/false) statements.
+// One Maus Axis Diver. Three are needed for the complete Maus mechanism
 version_string="MAUS V0.03";
 
 include <../library/m3_parts.scad>
 include <../library/nema17lib.scad>
 include <../library/metriccano.scad>
-include <metriccano_flexures.scad>
 include <flexure_linear_coupling.scad>
 
 flexure_width=6;        // Reduced from original 7.
@@ -476,9 +475,9 @@ module axis_vertical_bearing_support() difference() {
     }
     // Hole for bearing block retention screw
     translate([0,axis_bearing_block_width+axis_bearing_clearance,axis_top_bearing_z]) m3_screw_hole(16-(axis_bearing_block_height-1));
-    // Slot for retaining nut for above, slightly over tall as the top will sag without support.
-    translate([0,axis_bearing_block_width*2+axis_bearing_clearance+5-m3_nut_max_width/2,axis_top_bearing_z-4]) 
-        cube([m3_nut_min_width,axis_bearing_block_width*3,m3_nut_height+0.2],center=true);
+    // Slot for retaining nut for above
+    translate([0,axis_bearing_block_width+axis_bearing_clearance,axis_top_bearing_z-4-m3_nut_height/2]) 
+        rotate([0,0,90]) m3_nut_slot();
 }
 
 // Printable axis and linkages assembly
