@@ -1,69 +1,73 @@
-// maus_stage.scad - RepRapMicron motion stage
-// (c)2024 vik@diamondage.co.nz, released under the terms of the GPL V3 or later
-// Printable plates of parts available in 3 sections at the end of the file inside if(true/false) statements.
-version_string="MAUS V0.03";
+// maus_complementary.scad - RepRapMicron Maus vertical complimentary flexure stage
+// (C) 2025 vik@diamondage.co.nz Released under the GPLV3 or later.
+// Notes:
+// Requires 3 standard Maus axis drivers and probe holder parts
+// Base should be secured to 10mm pitch perforated sheet, 13 x 11 holes
+//  avaliable as metriccano_baseboard.svg for lasercutting
+// The frame has to be wide enough to hold your UV light source centrally
+// It is a Very Good Idea(TM) to keep the width in Metriccano (10mm) units.
+// Printed on Prusa Mk4, 0.2mm layers, 20% infill, 2 v shells, 5 h shells
 
 include <../library/m3_parts.scad>
-include <../library/nema17lib.scad>
 include <../library/metriccano.scad>
-include <metriccano_flexures.scad>
-include <flexure_linear_coupling.scad>
+include <../library/nema17lib.scad>
 
-flexure_width=6;        // Reduced from original 7.
-flexure_length=2.5;
-flexure_height=1.0;     // For DIAS PLA, 1 is about right. Testing 0.8 for stiffer filament
-vertical_flexure_length=8;
-vertical_flexure_height=6;
-vertical_flexure_width=8;   // Width of the anchor block
-vertical_flexure_thick=8.2; // Width of the actual flexing bit
+version_string="MAUSC V0.03";
 
-// Used to fiddle flexures. Just over one layer...
-layer_height=0.21;
-wall=2;                         // Arbitrary rigid wall thickness
+// TODO
+// Test cross-bracing of flexures.
 
-// These define the size and mechanical advantage of the whole mechanism. Overall dimensions change to suit.
-/*axis_arm_ratio=2.5;
-axis_lifter_length=25;
-axis_arm_length=axis_lifter_length*axis_arm_ratio;*/
-axis_lifter_length=24;
-axis_arm_length=72;
-axis_arm_ratio=axis_arm_length/axis_lifter_length;
-echo(str("Arm ratio=",axis_arm_ratio));
+flexure_width=0.8;  // Width of a flexure beam, that's the very thin direction
+flexure_max=8+flexure_width;      // Maximum desired flexing distance off centre
+flexure_height=6;
 
-axis_probe_depression=2;       // Shouldn't this be 4 not 2?
-
-/* Valuse used for the original Z axis
-axis_arm_ratio=4;
-axis_lifter_length=14;
-axis_probe_depression=2;
-*/
+structure_height=70;    // Maximum height of the total structure
+frame_thick=5;              // Thickness of the notionally inflexible frame parts
+flexure_clearance=3;    // Give this much clearance on fixed flexure parts that must miss each other
+edge_clearance=1.5;       // For the edges of the table mount to clear the frame. Displace mounting holes by this much.
+x_axis_width=100;          // Width of the outer frame of the flexure structure
+y_axis_width=80-edge_clearance;          // Width of the table frame of the flexure structure
 
 
-axis_motion_clearance=axis_probe_depression+0.5;    // This should clear moving parts...
-axis_arm_width=12;
-axis_lifter_width=flexure_width;
-axis_lifter_height=4;
-axis_platform_height=40;   // Height of the Z platform with mounting holes in.
-axis_platform_thick=3;        // Thickness of Z platform with holes in.
-platform_pivot_width=30;    // Maximum horizontal separation of flexures (edge to edge) on platform
-platform_surface_width=40;  // Horizontal dimension of platform surface (Y axis)
+// Length of the outer frame flexures
+outer_frame_flexure_len=structure_height-frame_thick*3-flexure_clearance;
+inner_frame_flexure_len=outer_frame_flexure_len-frame_thick-flexure_clearance;
+// The outer frame flexures are spaced this far in from the frame edge
+outer_mf_offset=frame_thick+flexure_max/2+flexure_width/2;
+// Ditto inner flexures of the outer frame
+inner_mf_offset=outer_mf_offset+flexure_max+flexure_width/2;
 
-// The fixed block on which the platform pivots
-axis_anchor_block_length=platform_pivot_width;
-axis_anchor_block_width=8;
-axis_anchor_block_height=7;
-axis_arm_height=axis_anchor_block_height+axis_motion_clearance;
-axis_drive_pivot_x=axis_arm_length-axis_arm_length/axis_arm_ratio;  // Z drive flexure on X
-axis_nut_holder_rad=6;                 // Diameter of the thing that holds the drive nut
-axis_drive_nut_x=axis_drive_pivot_x+flexure_length/2+axis_nut_holder_rad;           // Z drive nut on X
-drive_lug_length=18;                    // Length of the transverse drive lug bar.
-axis_top_bearing_z=29;             // Bottom of the bearing block is this far off the base
+// The table frame is the flexure unit attached to the outer frame
+table_frame_height=outer_frame_flexure_len+frame_thick;
+outer_table_flexure_len=table_frame_height-frame_thick-flexure_clearance;
+inner_table_flexure_len=outer_table_flexure_len-frame_thick-flexure_clearance;
+// The outer table frame flexures are spaced this far in from the frame edge
+outer_tf_offset=max(frame_thick+flexure_max/2+flexure_width/2+edge_clearance,metriccano_unit);
+// Ditto inner flexures of the table frame
+inner_tf_offset=outer_tf_offset+flexure_max+flexure_width/2;
+// Size of the square light well
+light_well_size=metriccano_unit/2+0.5;
+// This plate fits on top of the stage and has cutouts for magnets in it
+/* Original magnet
+magnet_x=9.6;
+magnet_y=29.5;
+magnet_z=2; */
+// Alternative magnet
+magnet_x=10;
+magnet_y=30;
+magnet_z=3;
+led_wire_rad=3.2/2;      // Gap for UV LED wires
+led_strip_width=8;        // Dimensions of UV LED strip
+led_strip_length=20;
+led_strip_height=1;
+st_base_thick=1;
+st_plate_height=st_base_thick+magnet_z+m3_screw_head_height+0.2;  // Hide screw heads under the magnet.
+stage_holes_x=6;        // Number of holes in the stage
+stage_holes_y=4;
+// Work out stage dimensions to make maths easier
+stage_size_x=(stage_holes_x-1)*metriccano_unit;
+stage_size_y=(stage_holes_y-1)*metriccano_unit;
 
-// Where the flat, long arm starts near the anchor
-axis_end_bend_x=axis_anchor_block_width+flexure_length/2+axis_motion_clearance;
-
-// Function to calculate the distance between two points
-function distance(x1,y1,x2,y2) = sqrt(pow(x1-x2, 2) + pow(y1-y2, 2));
 
 // 0.6mm thick text, 5mm tall, vertical, flat on XY plane
 module version_text() {
@@ -72,568 +76,512 @@ module version_text() {
     }
 }
 
-// Mounting plate for a NEMA17 motor with rounded corners,
-// Extended width for metriccano mounting
-// nema_late_thick - Thickness of NEMA mounting plate
-// nema_corner_rad - radius of rounded corners
-module nema17_plate(nema_plate_thick=5,nema_corner_rad=2) difference() {
-    rad_loc=(5*metriccano_unit-nema_corner_rad)/2-1;
-    hull() {
-        // +Y side
-        translate([rad_loc,rad_loc+metriccano_unit,0]) cylinder(h=nema_plate_thick,r=nema_corner_rad);
-        translate([-rad_loc,rad_loc/2+metriccano_unit,0]) cylinder(h=nema_plate_thick,r=nema_corner_rad);
-        // _Y side
-        translate([rad_loc,-rad_loc-metriccano_unit,0]) cylinder(h=nema_plate_thick,r=nema_corner_rad);
-        translate([-rad_loc,-rad_loc/2-metriccano_unit,0]) cylinder(h=nema_plate_thick,r=nema_corner_rad);
-        // Central markers where we start narrowing the end down
-        translate([0,-rad_loc-metriccano_unit,0])
-            cylinder(h=nema_plate_thick,r=nema_corner_rad);
-        translate([0,rad_loc+metriccano_unit,0])
-            cylinder(h=nema_plate_thick,r=nema_corner_rad);
-
+// A generic flexure, origin [0,0,0].
+// Experience shows only the last bit of flexure needs to actually flex, the rest
+// allows excessive torsion so apply a limit and thicken the rest.
+// Later this will acquire tapering, etc.
+flex_limit_len=10;
+module generic_flexure(length) {
+    cube([flexure_width,length,flexure_height]);
+    if (length>flex_limit_len*2) {
+        // Put in an elongated stiff bit
+        hull() {
+            translate([flexure_width/2,flex_limit_len,flexure_height/2]) 
+                rotate([0,0,45]) cube([flexure_width*2,flexure_width*2,flexure_height],center=true);
+            translate([flexure_width/2,length-flex_limit_len,flexure_height/2]) 
+                rotate([0,0,45]) cube([flexure_width*2,flexure_width*2,flexure_height],center=true);
+        }
     }
-    // Screw holes
-    translate([nema17_screw_sep/2,nema17_screw_sep/2,0]) cylinder(h=nema_plate_thick*3,r=m3_screw_rad,$fn=16,center=true);
-    translate([-nema17_screw_sep/2,nema17_screw_sep/2,0]) cylinder(h=nema_plate_thick*3,r=m3_screw_rad,$fn=16,center=true);
-    translate([nema17_screw_sep/2,-nema17_screw_sep/2,0]) cylinder(h=nema_plate_thick*3,r=m3_screw_rad,$fn=16,center=true);
-    translate([-nema17_screw_sep/2,-nema17_screw_sep/2,0]) cylinder(h=nema_plate_thick*3,r=m3_screw_rad,$fn=16,center=true);
-     // Collar hole
-    cylinder(h=nema_plate_thick*3,r=nema17_collar_rad,center=true);
 }
 
-// A NEMA17 plate with nutted Metriccano mounting holes, pillars to prop up the axis flexure mechanism,
-// and hold a limit switch.
-// Why does it have a separate base plate? Because M3 screws come in standard lengths and it needs a spacer.
-axis_motor_pillar_height=35;
-limit_switch_level=30.3;    // Height to the top of the limit switch bar
-motor_pillar_spacing=6*metriccano_unit;     // Pillar holes, centre to centre
-motor_base_thick=10;
-
-module axis_motor_pillar_assy() {
+// This is the outer frame. It attaches to the base
+module outer_frame_unit() {
+    // Create the outer frame
     difference() {
-        union() {
-            nema17_plate(motor_base_thick);
-            // Mounting hole pillars, joined for strength
-            hull() {
-                // Screw pillars
-                translate([metriccano_unit,-motor_pillar_spacing/2,motor_base_thick]) cylinder(h=axis_motor_pillar_height,r=metriccano_plate_height);
-                translate([2*metriccano_unit,-motor_pillar_spacing/2,motor_base_thick]) cylinder(h=axis_motor_pillar_height,r=metriccano_plate_height);
-                // Reinforcement
-                translate([2*metriccano_unit,5-motor_pillar_spacing/2,motor_base_thick]) cylinder(h=axis_motor_pillar_height,r=metriccano_plate_height);
-            }
-            hull() {
-                // Screw pillars
-                translate([metriccano_unit,motor_pillar_spacing/2,motor_base_thick])
-                    cylinder(h=axis_motor_pillar_height,r=metriccano_plate_height);
-                translate([2*metriccano_unit,motor_pillar_spacing/2,motor_base_thick])
-                    cylinder(h=axis_motor_pillar_height,r=metriccano_plate_height);
-                // Reinforcement
-                translate([2*metriccano_unit,motor_pillar_spacing/2-5,motor_base_thick])
-                    cylinder(h=axis_motor_pillar_height,r=metriccano_plate_height);
-            }
-            // Version info
-            translate([-2.5*metriccano_unit,0,motor_base_thick/2]) rotate([90,0,-90]) version_text();
-            // Limit switch holder
-            translate([metriccano_unit*2.25,0,limit_switch_level/2+motor_base_thick])
-                difference() {
-                    // Body of limit switch block
-                    cube([metriccano_unit/2,motor_pillar_spacing,limit_switch_level],center=true);
-                    // Gaps for NEAM moutn screws & washers
-                    translate([0,nema17_screw_sep/2,-limit_switch_level/2]) rotate([0,90,0]) rotate([0,0,45])
-                        cube([6,6,metriccano_unit],center=true);
-                    translate([0,-nema17_screw_sep/2,-limit_switch_level/2]) rotate([0,90,0]) rotate([0,0,45])
-                        cube([6,6,metriccano_unit],center=true);
-                    // Captive nuts and holes, and wire slots to hold limit switch wires in place ???
-                    translate([0,metriccano_unit/2,limit_switch_level/2-5]) {
-                        rotate([0,-90,0]) {
-                            translate([0,0,-metriccano_unit/4]) m3_nut_cavity_tapered(captive=true);
-                            m3_screw_hole(metriccano_unit);
-                        }
-                        // Wire slot
-                        translate([-metriccano_unit/4,-1-metriccano_screw_rad,-metriccano_unit/2])
-                            cylinder(h=limit_switch_level/2,r=0.5,$fn=24);
-                        // Wire via
-                        translate([0,8,-8]) rotate([0,90,0]) m3_screw_hole(metriccano_unit*2);
-                    }
-                    translate([0,-metriccano_unit/2,limit_switch_level/2-5]) {
-                        rotate([0,-90,0]) {
-                            translate([0,0,-metriccano_unit/4]) m3_nut_cavity_tapered(captive=true);
-                            m3_screw_hole(metriccano_unit);
-                        }
-                        // Wire slot
-                        translate([-metriccano_unit/4,1+metriccano_screw_rad,-metriccano_unit/2])
-                            cylinder(h=limit_switch_level/2,r=0.5,$fn=24);
-                        // Wire via
-                        translate([0,-8,-8]) rotate([0,90,0]) m3_screw_hole(metriccano_unit*2);
-                    }
-                }
-        }
-        // Mounting rail screw holes
-        translate([metriccano_unit,-3*metriccano_unit,-0.001]) {
-            cylinder(h=axis_motor_pillar_height*3,r=m3_screw_rad,$fn=16,center=true);
-            m3_nut_cavity_tapered(captive=true) ;
-        }
-        translate([metriccano_unit,3*metriccano_unit,-0.001]) {
-            cylinder(h=axis_motor_pillar_height*3,r=m3_screw_rad,$fn=16,center=true);
-            m3_nut_cavity_tapered(captive=true) ;
-        }
-        // A line of holes in a strip, half the thickness of the hole spacing, headed in -X
-        // The number of holes will be rounded up to an integer.
-        translate([2*metriccano_unit,3*metriccano_unit,-0.001]) {
-            cylinder(h=axis_motor_pillar_height*3,r=m3_screw_rad,$fn=16,center=true);
-            m3_nut_cavity_tapered(captive=true) ;
-        }
-        translate([2*metriccano_unit,-3*metriccano_unit,-0.001]) {
-            cylinder(h=axis_motor_pillar_height*3,r=m3_screw_rad,$fn=16,center=true);
-            m3_nut_cavity_tapered(captive=true) ;
-        }
-    }
-}
-
-// A flexure join scalloped in case anyone tries printing it on the surface of the print bed
-module flexure_tab() difference() {
-    translate([0,0,flexure_height/2]) cube([flexure_length+1,flexure_width,flexure_height],center=true);
-    // Scalop the top of the flexure
-    translate([0,0,flexure_height]) scale([0.6,1,flexure_height/20]) rotate([90,0,0]) cylinder(h=flexure_width+1,r=flexure_length/2,center=true);
-    // Undercut the flexure so it does not touch print bed
-    translate([0,0,0.1]) cube([flexure_length*0.6,flexure_width*3,layer_height],center=true);
-}
-
-// A vertical flexure join scalloped in case anyone tries printing it on the surface of the print bed
-// Wedge used for each side
-module vertical_flexure_wedge(t) hull() {
-    translate([0,(t+vertical_flexure_width)/2,0]) cube([vertical_flexure_length/2,vertical_flexure_width,vertical_flexure_height*3],center=true);
-    translate([0,t+vertical_flexure_width,0]) cube([vertical_flexure_length,vertical_flexure_width,vertical_flexure_height*3],center=true);
+        cube([x_axis_width,structure_height,flexure_height+edge_clearance]);
+        translate([frame_thick,frame_thick,-1]) cube([x_axis_width-2*frame_thick,structure_height-2*frame_thick,flexure_height*2]);
+        // Chop edge clearance off the top edge of the frame
+        translate([metriccano_unit/2,-1,flexure_height]) cube([x_axis_width-metriccano_unit,frame_thick+2,edge_clearance+1]);
     }
 
-module vertical_flexure(thick=vertical_flexure_thick) difference() {
-    translate([0,0,vertical_flexure_height/2]) cube([vertical_flexure_length+1,vertical_flexure_width,vertical_flexure_height],center=true);
-    // Scalop the sides of the flexure. Use a blunt wedge
-    vertical_flexure_wedge(thick);
-    scale([1,-1,1]) vertical_flexure_wedge(thick);
-    // Undercut the flexure so it does not touch print bed
-    translate([0,0,0.1]) cube([vertical_flexure_length/2,flexure_width*3,layer_height],center=true);
-}
+    // Version stamp
+    translate([x_axis_width/2,0,flexure_height/2]) rotate([90,0,0])
+        version_text();
 
-// Flexure join for printing in mid-air. Basically one layer height thinner
-module flexure_tab_unsupported() difference() {
-    translate([0,0,flexure_height/2]) cube([flexure_length+1,flexure_width,flexure_height],center=true);
-    // Scalop the top of the flexure. The cube makes sure the scalop clears the upper surface
-    translate([0,0,flexure_height-layer_height]) {
-        scale([0.6,1,flexure_height/20]) rotate([90,0,0]) cylinder(h=flexure_width+1,r=flexure_length/2,center=true);
-        translate([0,0,flexure_height/2]) cube([flexure_length*0.6,flexure_width+1,flexure_height],center=true);
-    }
-}
-
-
-// A block that anchors the moving parts to the Z axis
-module axis_anchor_block() {
-    translate([-flexure_length/2-axis_anchor_block_width,-axis_anchor_block_length/2,0])
-        cube([axis_anchor_block_width,axis_anchor_block_length,axis_anchor_block_height]);
-}
-
-// These are used for all the lifting linkages in the tool end Z axis lifting section
-module axis_lifter_linkage() {
-    translate([0,0,axis_lifter_height/2])
-        cube([axis_lifter_length,axis_lifter_width,axis_lifter_height],center=true);
-}
-
-// The lifter linkage with an unsupported flexure
-module axis_unsupported_hinged_lifter_arm() {
-    flexure_tab_unsupported();
-    translate([(axis_lifter_length+flexure_length)/2,0,0]) axis_lifter_linkage();
-    translate([axis_lifter_length+flexure_length,0,0]) flexure_tab_unsupported();
-}
-
-// The lifter linkage with the flexure raised so it won't touch the print bed.
-module axis_hinged_lifter_arm() {
-    flexure_tab();
-    translate([(axis_lifter_length+flexure_length)/2,0,0]) axis_lifter_linkage();
-    translate([axis_lifter_length+flexure_length,0,0]) flexure_tab();
-}
-
-// Block with mounting holes that is lifted on Z axis
-module axis_platform() {
-        difference() {
-            translate([axis_platform_thick/2,0,axis_platform_height/2])
-                cube([axis_platform_thick,platform_surface_width,axis_platform_height],center=true);
-            // Mounting holes, 10mm spacing
-            for (j=[1:platform_surface_width/10])
-                for(i=[0:axis_platform_height/10-1])
-                    translate([0,-platform_surface_width/2+j*10-5,i*10+5]) rotate([0,90,0]) rotate([0,0,180/8]) cylinder(h=axis_platform_thick*3,r=1.6,center=true,$fn=8);
-        }
-}
-
-// Triangular brace mounting plate for Z axis frame
-axis_bracing_height=30;
-axis_bracing_top_width=wall*2;
-axis_bracing_top_height=6;
-module axis_bracing() translate([-flexure_length/2,0,0]) {
-//    translate([-axis_drive_pivot_x/2,0,axis_bracing_height/2])
-//        cube([axis_drive_pivot_x,wall*2,axis_bracing_height],center=true);
-    // Thin side wall
-    translate([-axis_drive_pivot_x/2,0,axis_bracing_height/2])
-        cube([axis_drive_pivot_x,wall,axis_bracing_height],center=true);
-    // Ridge along top
-    // Ridge along top, carefully miss nut holes
-    translate([-axis_drive_nut_x/2,0,axis_bracing_height-axis_bracing_top_height/2])
-        cube([axis_drive_nut_x-m3_nut_max_width-flexure_length,axis_bracing_top_width,axis_bracing_top_height],center=true);
-    /// Tapered bottom to the ridge to print without overhang
-    hull() {
-        // Minimal lower ridge
-        translate([-axis_drive_pivot_x/2,0,axis_bracing_height-axis_bracing_top_height])
-            cube([axis_drive_pivot_x,axis_bracing_top_width,0.01],center=true);
-        // Minimal top of thin wall
-        translate([-axis_drive_pivot_x/2,0,axis_bracing_height-axis_bracing_top_height-wall])
-            cube([axis_drive_pivot_x,wall,0.01],center=true);
-    }
-    // Bottom of wall has to engage Metriccano strip
-    translate([-axis_drive_pivot_x/2,0,metriccano_plate_height/2])
-        cube([axis_drive_pivot_x,axis_bracing_top_height+1,metriccano_plate_height],center=true);
-}
-
-// Z axis drive nut holder
-module axis_drive_nut_holder() {
-    nut_holder_height=9;
-    difference() {
-        union() {
-            // Cylindrical body with a rectangular area to attach a flexure to
-            hull() {
-                cylinder(h=nut_holder_height,r=axis_nut_holder_rad);
-                translate([axis_nut_holder_rad,0,wall/2]) cube([wall,flexure_width,wall],center=true);
-            }
-            // The lower lugs for tensioning spring attachment
-            difference() {
-                union() {
-                    // Horizontal octagonal lugs for easy printing.
-                    translate([0,0,nut_holder_height-2.31]) rotate([90,0,0]) rotate([0,0,180/8])
-                        cylinder(h=drive_lug_length,r=2.5,center=true);
-                    // Security lines to hold lug during assembly
-                    translate([0,0,layer_height]) difference() {
-                        cube([1,axis_anchor_block_length,layer_height*2],center=true);
-                        cube([2,drive_lug_length,layer_height*4],center=true);
-                    }
-                    // Props for lugs
-                    translate([0,wall/2-drive_lug_length/2,nut_holder_height/2]) cube([wall*2,wall,nut_holder_height],center=true);
-                    translate([0,wall/-2+drive_lug_length/2,nut_holder_height/2]) cube([wall*2,wall,nut_holder_height],center=true);
-                }
-            }
-        }
-        // Generously sized hole for drive screw
-        cylinder(h=999,r=m3_screw_rad+0.5,center=true,$fn=32);
-        // Tapered cavity to hold drive nut.
-        translate([0,0,1]) cylinder(h=nut_holder_height+0.001,r1=m3_nut_max_width/2-0.55,r2=m3_nut_max_width/2,$fn=6);
-    }
-}
-
-// The combined printable part holding the Z platform, all its linkages, and the Z drive coupling.
-module axis_platform_assembly() {
-    // Anchor block and bracing for Z platform linkages
-    axis_anchor_block();
+    // Put metriccano strips on the frame for final assembly
+    mf_assy_holes=floor(structure_height/metriccano_unit);
     // Sides
-    translate([-axis_anchor_block_width-flexure_length/2,-axis_anchor_block_length/2,0])
-        cube([axis_anchor_block_width,flexure_width,axis_platform_height]);
-    translate([-axis_anchor_block_width-flexure_length/2,axis_anchor_block_length/2-flexure_width,0])
-        cube([axis_anchor_block_width,flexure_width,axis_platform_height]);
-    // Top it with another block
-    translate([-flexure_length/2-axis_anchor_block_width,-axis_anchor_block_length/2,axis_platform_height]) {
-        cube([axis_anchor_block_width,axis_anchor_block_length,3]);
-        // A bit of a sloping on inside corners to reduce overhang droop
-        translate([axis_anchor_block_width/2,flexure_width,0]) rotate([45,0,0])
-            cube([axis_anchor_block_width,3,3],center=true);
-        translate([axis_anchor_block_width/2,axis_anchor_block_length-flexure_width,0]) rotate([45,0,0])
-            cube([axis_anchor_block_width,3,3],center=true);
+    translate([frame_thick,metriccano_unit/2,metriccano_unit+edge_clearance]) rotate([-90,0,90])
+        metriccano_strip(mf_assy_holes,squared=true);
+    translate([x_axis_width-frame_thick,metriccano_unit/2,metriccano_unit+edge_clearance]) rotate([90,0,90])
+        metriccano_strip(mf_assy_holes,squared=true);
+    // Bottom
+    translate([metriccano_unit/2,structure_height,metriccano_unit+edge_clearance]) rotate([90,0,0])
+        metriccano_strip(floor(x_axis_width/metriccano_unit),squared=true);
+    // The two outermost flexures on the main frame.
+    translate([outer_mf_offset,frame_thick,0])
+        generic_flexure(outer_frame_flexure_len);
+    translate([x_axis_width-outer_mf_offset-flexure_width,frame_thick,0])
+        generic_flexure(outer_frame_flexure_len);
+    // Cross beam that joins the two outermost flexures on the main frame.
+    translate([outer_mf_offset,outer_frame_flexure_len+frame_thick,0])
+        cube([x_axis_width-2*outer_mf_offset,frame_thick,flexure_height]);
+    // The two innermost flexures on the main frame
+    translate([inner_mf_offset,frame_thick*2+flexure_clearance,0])
+        generic_flexure(inner_frame_flexure_len);
+    translate([x_axis_width-inner_mf_offset-flexure_width,frame_thick*2+flexure_clearance,0])
+        generic_flexure(inner_frame_flexure_len);
+    translate([inner_mf_offset,frame_thick+flexure_clearance,0]) {
+            // Metriccano table mount. Reduced in height to match frame width
+            // so it doesn't interfere with flexure movement.
+            // Maths to put right number of holes in Metriccano plate
+            mf_mount_holes=floor((x_axis_width-2*inner_mf_offset)/metriccano_unit+0.75);
+            // Figure out where to centre the mounting strip
+            mf_mount_centre=(x_axis_width-2*inner_mf_offset)/2-(metriccano_unit*(mf_mount_holes-1))/2;
+            translate([mf_mount_centre,0,metriccano_unit+edge_clearance])
+                rotate([-90,0,0]) 
+                    scale([1,1,frame_thick/metriccano_unit*2])
+                        metriccano_strip(mf_mount_holes,squared=true);
+            cube([x_axis_width-2*inner_mf_offset,frame_thick,flexure_height+edge_clearance]);
     }
 
-    // The located Z platform
-    translate([axis_lifter_length+flexure_length*1.5,0,0]) axis_platform();
-
-    // +Y lower linkage arm
-    translate([0,(platform_pivot_width-flexure_width)/2,0]) axis_hinged_lifter_arm();
-    // -Y lower linkage arm
-    translate([0,-(platform_pivot_width-flexure_width)/2,0]) axis_hinged_lifter_arm();
-    // +Y upper linkage arm
-    translate([0,(platform_pivot_width-flexure_width)/2,axis_platform_height-flexure_height]) axis_unsupported_hinged_lifter_arm();
-    // -Y upper linkage arm
-    translate([0,-(platform_pivot_width-flexure_width)/2,axis_platform_height-flexure_height]) axis_unsupported_hinged_lifter_arm();
-    // We'll just brace those top arms together, starting the bracing higher up than the flexures
-    // to make sure it is all stable when printing in mid-air
-    translate([flexure_length/2,-platform_pivot_width/2,axis_platform_height+wall/2]) 
-        cube([wall*2,platform_pivot_width,wall]);
-     translate([axis_lifter_length-wall*2+flexure_length/2,-platform_pivot_width/2,axis_platform_height+wall/2]) 
-        cube([wall*2,platform_pivot_width,wall]);
-     
-    // Arbitrary pivot arm. Doubtless will need improvement.
-    // Vertical pivot block
-    translate([flexure_length/2,-axis_arm_width/2,0])
-        cube([axis_lifter_length/2,axis_arm_width,axis_anchor_block_height+axis_motion_clearance]);
-    // Brace joining lower two linkage arms
-    translate([flexure_length/2+axis_lifter_length/4
-     ,0,axis_lifter_height/2])
-        cube([axis_lifter_length/2,platform_pivot_width,axis_lifter_height],center=true);
-    translate([-axis_drive_pivot_x,0,0]) flexure_tab();
-
-    // The arm that goes onto the Z screw
-    // Arch over the frame, joining the lever and pivot block
-    axis_arch_len=axis_end_bend_x+flexure_length+axis_lifter_length/2;
-    axis_arch_height=6;
-    translate([-axis_end_bend_x,-axis_arm_width/2,axis_anchor_block_height+axis_motion_clearance])
-        cube([axis_arch_len-flexure_length/2,axis_arm_width,axis_arch_height]);
-    // The arm with a block as long as the block on the lifter end. This tapers to meet the vertical flexure
-    hull() {
-        translate([-axis_end_bend_x+0.5,0,(axis_arm_height+axis_arch_height)/2])
-            cube([1,axis_arm_width,axis_arm_height+axis_arch_height],center=true);
-        translate([-axis_end_bend_x-axis_lifter_length/2+0.5,0,axis_arm_height/2])
-            cube([1,vertical_flexure_width,axis_arm_height],center=true);
-    }
-    // Add a couple of flexures (these may or may not overlap depending on arm hieght but I don't care.
-    translate([-axis_lifter_length/4-axis_end_bend_x-vertical_flexure_length,0,0])
-        vertical_flexure();
-    translate([-axis_lifter_length/4-axis_end_bend_x-vertical_flexure_length,0,axis_arm_height-vertical_flexure_height])
-        vertical_flexure();
-    hull() {
-        // Space a 1mm block where one end of the flexure will go
-        translate([-1-vertical_flexure_length*1.5-axis_lifter_length/4-axis_end_bend_x,0,axis_arm_height/2])
-            cube([1,vertical_flexure_width,axis_arm_height],center=true);
-        // Place a block of wall just before the driven flexure
-        translate([flexure_length/2-axis_drive_pivot_x,-flexure_width/2,0]) cube([wall,flexure_width,wall]);
-    }
-    // Something to anchor it by, a couple of 4-hole mounting plates and 2x2 plates
-    // Has to be *behind* the flexure or they'll bang on the edge of the mounting platform.
-    translate([-axis_drive_nut_x,platform_pivot_width/2+metriccano_strip_width/2,0]) {
-        metriccano_strip(axis_drive_nut_x/10);
-        translate([metriccano_unit,0,0]) metriccano_plate(2,2);
-    }
-    translate([-axis_drive_nut_x,-platform_pivot_width/2-metriccano_strip_width/2,0]) {
-        metriccano_strip(axis_drive_nut_x/10);
-        translate([metriccano_unit,-metriccano_unit,0]) metriccano_plate(2,2);
-    }
-
-    // Brace mounting plates for axis frame
-    // Fractional translation ensures boolean join
-    translate([0,-axis_anchor_block_length/2+wall*0.999,0]) axis_bracing();
-    translate([0,axis_anchor_block_length/2-wall*0.999,0]) axis_bracing();
-    // Version text
-    translate([-axis_drive_pivot_x/2-2,axis_anchor_block_length/2-wall/2,axis_bracing_height/2])
-        rotate([90,0,180]) version_text();
-
-    //Support pad for platform so it prints
-    translate([axis_lifter_length+flexure_length*1.5-10,-wall,0]) intersection() {
-        cube([10,2*wall,10]);
-        rotate([0,45,0]) cube([50,5*wall,50]);
-    }
-
-    translate([-axis_drive_nut_x,0,0]) axis_drive_nut_holder();
 }
-
-axis_bearing_block_width=10;
-axis_bearing_block_height=11;  // 1mm of this is actually on top of the bering block arms, so the block will be thinner
-
-axis_bearing_clearance=5; // Allow this much room from the bearing axis for washers etc.
-axis_bearing_bracing_len=20;   // Length of the bottom of the bearing bracing
-// The lug poitions the tip on the origin, slightly raised above zero, the body heading out on Y+
-
-// Block across the top of the supports that holds the bearing. Bearing is an M3 nut drilled out to 3mm.
-// Made removable for ease of assembly
-module axis_bearing_block() {
-    // Rounded top bar with bearing hole in it
+    
+// This is a table flexure assembly. It attaches to the outer frame and supports the XY Table
+module table_frame_unit() {
+    // The main suspension beam with two-point Metriccano mount holes
     difference() {
-        hull() {
-            translate([0,axis_bearing_block_width+axis_bearing_clearance,0]) cylinder(h=axis_bearing_block_height-1,r=axis_bearing_block_width/2);
-            translate([0,-axis_bearing_block_width-axis_bearing_clearance,0]) cylinder(h=axis_bearing_block_height-1,r=axis_bearing_block_width/2);
-        }
-        // Bearing hole
-        m3_screw_hole(axis_top_bearing_z*4);
-        // Bearing nut, slightly proud to avoid booleans, rotated to maintain beam strength, undersize
-        translate([0,0,axis_bearing_block_height-0.999-m3_nut_height])
-            rotate([0,0,30]) scale([0.99,0.99,1]) m3_nut_cavity();
-        // Anchor screw holes
-        translate([0,-axis_bearing_block_width-axis_bearing_clearance,0]) m3_screw_hole(axis_top_bearing_z*4);
-        translate([0,axis_bearing_block_width+axis_bearing_clearance,0])
-            m3_screw_hole(axis_top_bearing_z*4);
-        // Groves to hold tension bands
-        translate([axis_bearing_block_width,m3_nut_max_width,0]) rotate([0,45,0])
-            cylinder(h=axis_bearing_block_height*2,r=axis_bearing_block_width*0.6,center=true,$fn=32);
-        translate([axis_bearing_block_width,-m3_nut_max_width,0]) rotate([0,45,0])
-            cylinder(h=axis_bearing_block_height*2,r=axis_bearing_block_width*0.6,center=true,$fn=32);
-        translate([-axis_bearing_block_width,m3_nut_max_width,0]) rotate([0,-45,0])
-            cylinder(h=axis_bearing_block_height*2,r=axis_bearing_block_width*0.6,center=true,$fn=32);
-        translate([-axis_bearing_block_width,-m3_nut_max_width,0]) rotate([0,-45,0])
-            cylinder(h=axis_bearing_block_height*2,r=axis_bearing_block_width*0.6,center=true,$fn=32);
-    }
-}
-
-// A pillar with a nut and M3x16 screw hole (less height of bearing block).
-// Used to prop the axis_bearing_block up
-module axis_vertical_bearing_support() difference() {
-    union() {
-        hull() {
-            translate([0,axis_bearing_block_width+axis_bearing_clearance,axis_top_bearing_z]) cylinder(h=1,r=axis_bearing_block_width/2,$fn=30);
-            translate([-axis_bearing_block_width/2,axis_anchor_block_length/2-wall*2,0])
-                cube([axis_bearing_bracing_len,wall*2,metriccano_plate_height]);
-        }
-        translate([-axis_bearing_block_width/2,axis_bearing_block_width*1.5,0]) cube([axis_bearing_block_width,axis_bearing_block_width,axis_top_bearing_z]);
-    }
-    // Hole for bearing block retention screw
-    translate([0,axis_bearing_block_width+axis_bearing_clearance,axis_top_bearing_z]) m3_screw_hole(16-(axis_bearing_block_height-1));
-    // Slot for retaining nut for above, slightly over tall as the top will sag without support.
-    translate([0,axis_bearing_block_width*2+axis_bearing_clearance+5-m3_nut_max_width/2,axis_top_bearing_z-4]) 
-        cube([m3_nut_min_width,axis_bearing_block_width*3,m3_nut_height+0.2],center=true);
-}
-
-// Printable axis and linkages assembly
- module axis_complete() {
-    axis_platform_assembly();
-    translate([-axis_drive_nut_x,0,0]) union() {
-        // +Y vertical bearing support
-        axis_vertical_bearing_support();
-        // -Y vertical bearing support
-        scale([1,-1,1]) axis_vertical_bearing_support();
-    }
-}
-
-// Manual thumbscrew
-module manual_thumbscrew() difference() {
-    union() {
-        cylinder(h=4,r=15);
-        translate([0,0,4]) cylinder(h=2,r1=8,r2=5);
-    }
-    m3_screw_hole(20);
-    translate([0,0,4]) m3_nut_cavity();
-}
-
-// NEMA17 mount, basically used as a spacer and to stop nuts falling out
-module nema17_horizontal_mount() {
-    difference() {
-            // Create something like a metriccano plate, slightly wider than NEMA17
-            translate([0,0,metriccano_plate_height/2])
-                cube([nema17_screw_sep+2*m3_screw_rad+4*wall,7*metriccano_unit+1,metriccano_plate_height],center=true);
-        // Smack holes in mounting plate
-        // Screw holes
-        translate([nema17_screw_sep/2,nema17_screw_sep/2,0]) cylinder(h=metriccano_plate_height*3,r=m3_screw_rad,$fn=16,center=true);
-        translate([-nema17_screw_sep/2,nema17_screw_sep/2,0]) cylinder(h=metriccano_plate_height*3,r=m3_screw_rad,$fn=16,center=true);
-        translate([nema17_screw_sep/2,-nema17_screw_sep/2,0]) cylinder(h=metriccano_plate_height*3,r=m3_screw_rad,$fn=16,center=true);
-        translate([-nema17_screw_sep/2,-nema17_screw_sep/2,0]) cylinder(h=metriccano_plate_height*3,r=m3_screw_rad,$fn=16,center=true);
-         // Collar hole
-        cylinder(h=metriccano_plate_height*3,r=nema17_collar_rad,center=true);
-    }
-}
-// Metriccano NEMA17 mount, 5 hole horizontal strips.
-// Might not be a good idea to mount it by the motor, but here's one if you need it...
-module metriccano_nema17_horizontal_mount() {
         union() {
-            nema17_horizontal_mount() ;
-            // Stick a strip of Metriccano on each side
-            translate([-2*metriccano_unit,4*metriccano_unit,0]) metriccano_strip(5);
-            translate([-2*metriccano_unit,-4*metriccano_unit,0]) metriccano_strip(5);
+            cube([y_axis_width,frame_thick,flexure_height]);
+            // "Wings" for mount holes
+            cube([metriccano_unit,frame_thick,metriccano_unit*2-flexure_height/2+edge_clearance]);
+            translate([y_axis_width-metriccano_unit,0,0]) cube([metriccano_unit,frame_thick,metriccano_unit*2-flexure_height/2+edge_clearance]);
         }
+        translate([metriccano_unit/2,0,flexure_height/2+edge_clearance]) rotate([90,0,0]) metriccano_screw_hole();
+        translate([y_axis_width-metriccano_unit/2,0,flexure_height/2+edge_clearance]) rotate([90,0,0]) metriccano_screw_hole();
+        translate([metriccano_unit/2,0,flexure_height/2+metriccano_unit+edge_clearance]) rotate([90,0,0]) metriccano_screw_hole();
+        translate([y_axis_width-metriccano_unit/2,0,flexure_height/2+metriccano_unit+edge_clearance]) rotate([90,0,0]) metriccano_screw_hole();
+    }
+    // The two outermost flexures on the table frame.
+    translate([outer_tf_offset,frame_thick,0])
+        generic_flexure(outer_table_flexure_len);
+    translate([y_axis_width-outer_tf_offset-flexure_width,frame_thick,0])
+        generic_flexure(outer_table_flexure_len);
+    // Cross beam that joins the two outermost flexures on the main frame.
+    translate([outer_tf_offset,outer_table_flexure_len+frame_thick,0])
+        cube([y_axis_width-2*outer_tf_offset,frame_thick,flexure_height]);
+    // The two innermost flexures on the main frame
+    translate([inner_tf_offset,frame_thick*2+flexure_clearance,0])
+        generic_flexure(inner_table_flexure_len);
+    translate([y_axis_width-inner_tf_offset-flexure_width,frame_thick*2+flexure_clearance,0])
+        generic_flexure(inner_table_flexure_len);
+    // This is the beam that the table attaches to
+    translate([inner_tf_offset,frame_thick+flexure_clearance,0]) {
+        // Metriccano table mount. Reduced in height to match frame width
+        // so it doesn't interfere with flexure movement. Ideally lines up
+        // with all the other mounting holes...
+        // Maths to put right number of holes in Metriccano strip
+        tf_mount_holes=floor((y_axis_width-2*inner_tf_offset)/metriccano_unit+0.75);
+        // Figure out where to centre the mounting strip
+        tf_mount_centre=(y_axis_width-2*inner_tf_offset)/2-(metriccano_unit*(tf_mount_holes-1))/2;
+        translate([tf_mount_centre,0,metriccano_unit+flexure_height/2+edge_clearance])
+            rotate([-90,0,0]) 
+                scale([1,1,frame_thick/metriccano_unit*2]) difference() {
+                    // Stick a couple of captive nut holes in the mounting strip or assembly is *hard*
+                    metriccano_strip(tf_mount_holes,squared=true);
+                    translate([metriccano_unit,0,metriccano_unit/2])
+                        rotate([180,0,0]) metriccano_nut_cavity_tapered(captive=true);
+                    translate([metriccano_unit*2,0,metriccano_unit/2])
+                        rotate([180,0,0]) metriccano_nut_cavity_tapered(captive=true);
+                }
+        cube([y_axis_width-2*inner_tf_offset,frame_thick,flexure_height*1.5+edge_clearance]);
+    }
 }
 
-
-
-// Integrated stage. Has XY linkages and long flexures to connect XY drivers.
-module integrated_stage() difference() {
+// The dimensions of the well that lets UV light up from under the stage
+module light_well() {
+    translate([stage_size_x/2,stage_size_y/2,0])
+        hull() {
+            translate([light_well_size,light_well_size,0])
+                cylinder(h=metriccano_unit*3,r=metriccano_screw_rad,$fn=20,center=true);
+            translate([-light_well_size,light_well_size,0])
+                cylinder(h=metriccano_unit*3,r=metriccano_screw_rad,$fn=20,center=true);
+            translate([light_well_size,-light_well_size,0])
+                cylinder(h=metriccano_unit*3,r=metriccano_screw_rad,$fn=20,center=true);
+            translate([-light_well_size,-light_well_size,0])
+                cylinder(h=metriccano_unit*3,r=metriccano_screw_rad,$fn=20,center=true);
+        }
+}
+// Plain stage, no linkages, flexures or linkage tunnels
+module plain_stage() difference() {
     union() {
         difference() {
             // Join up the flexure blocks and the mounting plate
             union() {
-                metriccano_flexure_block_bidirectional(4);
-                translate([0,metriccano_unit*4.5,0]) 
-                    scale([1,-1,1]) metriccano_flexure_block_bidirectional(4);
-                translate([-metriccano_unit,metriccano_unit*0.75,0]) metriccano_plate(6,4);
-                // Slap another mounting plate on top
-                translate([-metriccano_unit,metriccano_unit*0.75,metriccano_unit/2])
-                    metriccano_plate(6,4);
-                // Fill the holes in the block that the flexure passes through
-                translate([metriccano_unit*0.75,metriccano_unit*4.75,0])
-                    cube([metriccano_unit*1.5,metriccano_unit,metriccano_unit]);
-                translate([metriccano_unit*0.5,metriccano_unit*3.25,0])
-                    cube([metriccano_unit*1.75,metriccano_unit,metriccano_unit]);
-                translate([metriccano_unit*2.5,metriccano_unit*1.5,0])
-                    cube([metriccano_unit*2,metriccano_unit*1.5,metriccano_unit]);
+
+                //translate([-metriccano_unit,metriccano_unit*0.75,0]) 
+                metriccano_plate(stage_holes_x,stage_holes_y);
                 // Version text
-                translate([-metriccano_unit*1.5,metriccano_unit*2.25,metriccano_unit/2]) rotate([90,0,-90])
+                translate([-metriccano_unit*0.5,stage_size_y/2,metriccano_unit/4]) rotate([0,-90,0]) rotate([0,0,90])
                     version_text();
             }
-            // Slots for felxure beams. Take out slightly extra to stop bridges contacting
-            translate([metriccano_unit*5.5,metriccano_unit*2.25,layer_height+1])
-                cube([metriccano_unit*6,metriccano_unit,metriccano_unit],center=true);
-            translate([metriccano_unit*1.5,metriccano_unit*6,layer_height+1])
-                cube([metriccano_unit,metriccano_unit*6,metriccano_unit],center=true);
             // Nut sockets in the corners
-            translate([0,metriccano_unit*0.75,metriccano_unit-m3_nut_height+0.001])
+            translate([0,0,metriccano_unit/2-m3_nut_height+0.001])
                 m3_nut_cavity();
-            translate([-metriccano_unit,metriccano_unit*0.75,metriccano_unit-m3_nut_height+0.001])
+            translate([metriccano_unit,0,metriccano_unit/2-m3_nut_height+0.001])
                 m3_nut_cavity();
-            translate([3*metriccano_unit,metriccano_unit*0.75,metriccano_unit-m3_nut_height+0.001])
+            // This one is a hole for the ground probe post screw
+            translate([4*metriccano_unit,0,metriccano_unit/2-m3_screw_head_height])
+                m3_screw_cavity();
+            translate([5*metriccano_unit,0,metriccano_unit/2-m3_nut_height+0.001])
                 m3_nut_cavity();
-            translate([4*metriccano_unit,metriccano_unit*0.75,metriccano_unit-m3_nut_height+0.001])
+            translate([0,metriccano_unit*3,metriccano_unit/2-m3_nut_height+0.001])
                 m3_nut_cavity();
-            translate([0,metriccano_unit*3.75,metriccano_unit-m3_nut_height+0.001])
+            translate([metriccano_unit,metriccano_unit*3,metriccano_unit/2-m3_nut_height+0.001])
                 m3_nut_cavity();
-            translate([-metriccano_unit,metriccano_unit*3.75,metriccano_unit-m3_nut_height+0.001])
+            translate([4*metriccano_unit,metriccano_unit*3,metriccano_unit/2-m3_nut_height+0.001])
                 m3_nut_cavity();
-            translate([3*metriccano_unit,metriccano_unit*3.75,metriccano_unit-m3_nut_height+0.001])
-                m3_nut_cavity();
-            translate([4*metriccano_unit,metriccano_unit*3.75,metriccano_unit-m3_nut_height+0.001])
+            translate([5*metriccano_unit,metriccano_unit*3,metriccano_unit/2-m3_nut_height+0.001])
                 m3_nut_cavity();
         }
-
-        // Side flexure modules
-        translate([metriccano_unit,metriccano_unit*1.75,0]) joined_mettricano_2_via_flexures(5*metriccano_unit);
-        translate([metriccano_unit*2,metriccano_unit*1.75,0])
-            rotate([0,0,90]) joined_mettricano_2_via_flexures(5*metriccano_unit);
     }
     // Cut light well (a Metriccano unit-ish hole with rounded corners)
-    well_size=metriccano_unit/2+0.5;
-    translate([metriccano_unit*1.5,metriccano_unit*2.25,0])
-        hull() {
-            translate([well_size,well_size,0])
-                cylinder(h=metriccano_unit*3,r=metriccano_screw_rad,$fn=20,center=true);
-            translate([-well_size,well_size,0])
-                cylinder(h=metriccano_unit*3,r=metriccano_screw_rad,$fn=20,center=true);
-            translate([well_size,-well_size,0])
-                cylinder(h=metriccano_unit*3,r=metriccano_screw_rad,$fn=20,center=true);
-            translate([-well_size,-well_size,0])
-                cylinder(h=metriccano_unit*3,r=metriccano_screw_rad,$fn=20,center=true);
+    light_well();
+}
+
+// The shape of the magnet cavity in the slide top. Has tiny protrusions in the ends that can be
+// mashed to grip the magnet firmly
+module magnet_slot() {
+    magnet_nub_width=0.8;
+    difference() {
+        cube([magnet_x,magnet_y,magnet_z+0.01],center=true);
+        translate([0,magnet_y/2,0]) rotate([0,0,45])
+            cube([magnet_nub_width,magnet_nub_width,magnet_z+0.01],center=true);
+        translate([0,-magnet_y/2,0]) rotate([0,0,45])
+            cube([magnet_nub_width,magnet_nub_width,magnet_z+0.01],center=true);
+    }
+}
+
+// The top section of the stage. Has recesses for grounding pillar and slide moutn magnets
+module stage_top() {
+    difference() {
+        // Scale the plate to be the same thickness as a magnet plus a screw head
+        union() {
+            scale([1,1,(st_plate_height)/metriccano_unit*2]) metriccano_plate(stage_holes_x,stage_holes_y);
+            // Version stamp
+            translate([stage_size_x+metriccano_unit*0.5,stage_size_y/2,metriccano_unit/4]) rotate([0,90,0]) rotate([0,0,90])
+                scale(0.8) version_text();
+        }
+        // Chop out the light well
+        light_well();
+        // Holes for a screw head underneath to take grounding post
+        translate([metriccano_unit,0,m3_screw_head_height+0.2]) rotate([180,0,0]) m3_screw_cavity();
+        translate([stage_size_x-metriccano_unit,stage_size_y,m3_screw_head_height+0.2]) rotate([180,0,0]) m3_screw_cavity();
+        // Holes for screw heads
+        translate([0,(stage_size_y+metriccano_unit)/2,st_base_thick]) m3_screw_cavity();
+        translate([0,(stage_size_y-metriccano_unit)/2,st_base_thick]) m3_screw_cavity();
+        translate([stage_size_x,(stage_size_y+metriccano_unit)/2,st_base_thick]) m3_screw_cavity();
+        translate([stage_size_x,(stage_size_y-metriccano_unit)/2,st_base_thick]) m3_screw_cavity();
+        // Chop out magnet slots. Insetting from ends by 3mm allows the touchplate on a slide to get to the centre of the stage.
+        translate([3,metriccano_unit*1.5,st_plate_height-magnet_z/2]) magnet_slot();
+        translate([metriccano_unit*5-3,metriccano_unit*1.5,st_plate_height-magnet_z/2]) magnet_slot();
+        // Hollow out a cavity for the UV LED under the light well
+        translate([stage_size_x/2,stage_size_y/2,0]) cube([led_strip_length,led_strip_width,led_strip_height*2],center=true);
+        // Cavity for LED wires
+        translate([0,stage_size_y/2,led_wire_rad*0.35]) rotate([0,90,0]) rotate([0,0,180/8]) cylinder(h=metriccano_unit*6,r=led_wire_rad,$fn=8,center=true);
+        // Cavity for solder joints onto UV LED strip, bending wires to terminals, etc.
+        solder_cavity_len=7;
+        solder_cavity_height=2.6;
+        translate([(stage_size_x-light_well_size)/2-solder_cavity_len,stage_size_y/2,solder_cavity_height/2-0.01])
+            cube([solder_cavity_len,led_strip_width,solder_cavity_height],center=true);
+    }
+}
+
+// A stage with an X axis flexure (length fl) stuck out the side
+module flexured_stage(fl) {
+    plain_stage();
+    // Shift the flexure  and anchor en masse
+    translate([metriccano_unit*2.5,-metriccano_unit/2,0]) {
+        // Very thin flexure joining anchor and stage
+        translate([-0.4,metriccano_unit*4,0]) cube([0.8,fl,metriccano_plate_height]);
+        // Stress reliefs
+        translate([0,metriccano_unit*4,metriccano_plate_height/2])
+            rotate([0,0,45]) cube([2,2,metriccano_plate_height],center=true);
+        translate([0,metriccano_unit*4+fl,metriccano_plate_height/2])
+            rotate([0,0,45]) cube([2,2,metriccano_plate_height],center=true);
+        // Anchor point for actuator
+        translate([-metriccano_unit*0.5,metriccano_unit*4.5+fl,0]) metriccano_slot_strip(1.5);
+    }
+}
+
+// A bracing beam for joining frame halves together
+bracing_holes=floor(y_axis_width/metriccano_unit+0.5);
+module bracing_beam() union() {
+    metriccano_strip(bracing_holes);
+    rotate([0,0,90]) metriccano_strip(2);
+    translate([(bracing_holes-1)*metriccano_unit,0,0]) rotate([0,0,90]) metriccano_strip(2);
+}
+
+nema_brace_x=4;
+nema_brace_y=5;
+module brace_with_nema17() {
+    // Create a metriccano plate with NEMA17-shaped holes in it
+    difference() {
+        metriccano_plate(nema_brace_x,nema_brace_y);
+        // Hole for NEMA collar and mounting holes
+        translate([metriccano_unit*1.5,metriccano_unit*1.5,0]) {
+            // Collar hole
+            cylinder(h=metriccano_unit*3,r=nema17_collar_rad,center=true);
+            // Screw holes
+            translate([nema17_screw_sep/2,nema17_screw_sep/2,0]) cylinder(h=metriccano_unit*3,r=m3_screw_rad,$fn=16,center=true);
+            translate([-nema17_screw_sep/2,nema17_screw_sep/2,0]) cylinder(h=metriccano_unit*3,r=m3_screw_rad,$fn=16,center=true);
+            translate([nema17_screw_sep/2,-nema17_screw_sep/2,0]) cylinder(h=metriccano_unit*3,r=m3_screw_rad,$fn=16,center=true);
+            translate([-nema17_screw_sep/2,-nema17_screw_sep/2,0]) cylinder(h=metriccano_unit*3,r=m3_screw_rad,$fn=16,center=true);
+        }
+    }
+    // A rigid cross-beam for mounting to the side of the table assembly at the far Y end
+    translate([metriccano_unit*(bracing_holes-3),metriccano_unit*(nema_brace_y-1),0]) rotate([0,0,180])
+        union() {
+            // Basic beam
+            metriccano_l_beam(bracing_holes);
+            // Put two vertically spaced holes on each end of the beam
+            translate([0,-metriccano_unit/2,metriccano_unit]) rotate([90,0,0]) rotate([0,0,90]) metriccano_strip(2);
+            translate([metriccano_unit*(bracing_holes-1),-metriccano_unit/2,metriccano_unit]) rotate([90,0,0]) rotate([0,0,90]) metriccano_strip(2);
         }
 }
 
-// 100mm long beam for testing flexure deflection with a 10g weight (.38 cal bullet)
-test_pan_rad=10; // Radius of test pan cavity for weights
-test_arm_len=100;
-module test_flexure() {
-    flexure_tab();
-    // 100mm beam with pan on the end
+// Heavy square double bracket to hang Y axis on.
+module y_axis_mount() union() {
+    // U-Shaped bracket
+    translate([metriccano_unit*7,0,0]) metriccano_square_strip(2);
+    translate([metriccano_unit*7,metriccano_unit*4,0]) metriccano_square_strip(2);
+    rotate([0,0,90]) metriccano_square_strip(5);
+    // These bits are thinner to allow space for the Y driver beam's movement
+    translate([metriccano_unit,metriccano_unit*4,0]) metriccano_strip(6,squared=true);
+    translate([metriccano_unit,0,0]) metriccano_strip(6,squared=true);
+}
+
+// Single unit knobs for x_axis_mount that have retained nuts, thickened to increase beam strength
+module x_mount_nutted() {
+    rotate([0,-90,0])
+        difference() {
+            union() {
+                // Create a 2-unit square strip with a solid end
+                metriccano_square_strip(1);
+                translate([metriccano_unit/2,-metriccano_unit/2,0]) cube(metriccano_unit);
+            }
+            translate([metriccano_unit,0,metriccano_unit]) rotate([180,0,0]) {
+                metriccano_nut_cavity_tapered(captive=true);
+                metriccano_screw_hole(metriccano_unit*3);
+            }
+        }
+}
+// Heavy square double bracket to hang X axis on. Needs a bit more displacement on the X axis for the driver flexure
+module x_axis_mount() union() {
+    // U-shaped bracket
+    metriccano_square_strip(9);
+    translate([0,metriccano_unit*4,0]) metriccano_square_strip(9);
+    rotate([0,0,90]) metriccano_square_strip(5);
+    translate([metriccano_unit*8,metriccano_unit,0]) rotate([0,0,90]) metriccano_square_strip(3);
+    // Single unit knobs on the top of the U arms to give more stable mount points
+    translate([metriccano_unit*9.5,0,metriccano_unit/2]) x_mount_nutted();
+    translate([metriccano_unit*9.5,metriccano_unit*4,metriccano_unit/2]) x_mount_nutted();
+}
+
+
+// Two 2x2 Metriccano plates joined by horizontal and vertical flexures.
+// Minimum length 50mm
+module y_drive_flexure(fl) {
+    translate([metriccano_unit/2,-metriccano_unit,0]) rotate([0,0,90]) metriccano_square_strip(4);
+    // Anchor point on actuator
+    translate([fl+metriccano_unit*1.5,0,0]) rotate([0,0,90]) metriccano_slot_strip(1.5);
+    // Very thin flexure joining them. Slightly short so as not to rub overhanging parts
+    translate([metriccano_unit,metriccano_unit/2-0.4,0]) cube([fl,0.8,metriccano_plate_height]);
+    // Stress relief
+    translate([metriccano_unit,metriccano_unit/2,metriccano_plate_height/2])
+        rotate([0,0,45]) cube([2,2,metriccano_plate_height],center=true);
+    translate([fl+metriccano_unit+0.4,metriccano_unit/2,metriccano_plate_height/2])
+        rotate([0,0,45]) cube([2,2,metriccano_plate_height],center=true);
+}
+
+pole_clip_width=3;
+pole_stand_rad=16/2-0.2;       // 16mm pole, less a bit for a really tight fit.
+pole_stand_arm_length=7;     // Length of stand arm in metriccano units.
+
+// Holder for a 16mm pole to mount a microscope on
+module pole_top_arm() difference() {
+    // Body of stand with a metriccano rod sticking out
+    union () {
+        cylinder(h=metriccano_unit,r=pole_stand_rad+pole_clip_width,$fn=64);
+        translate([0,pole_clip_width+pole_stand_rad-metriccano_unit/2,0]) scale([1,1,2]) metriccano_slot_strip(pole_stand_arm_length);
+    }
+    // Hole in the middle for post
+    cylinder(h=metriccano_unit*3,r=pole_stand_rad,center=true,$fn=64);
+    // A split to give the grip a bit of spring
+    translate([0,-pole_stand_rad,0]) cube([1,(pole_stand_rad+pole_clip_width)*2,metriccano_unit*3],center=true);
+    // Two screw holes for optional mounting
+    translate([pole_clip_width+pole_stand_rad+metriccano_unit,0,metriccano_unit/2])
+        rotate([90,0,0]) metriccano_screw_hole(metriccano_unit*4);
+    translate([pole_clip_width+pole_stand_rad+metriccano_unit*4,0,metriccano_unit/2])
+        rotate([90,0,0]) metriccano_screw_hole(metriccano_unit*4);
+}
+
+// Much the same as top arm but has a bit across the bottom to stop the pole falling out
+module pole_bottom_arm() union() {
+    pole_top_arm();
+    // Semi-circular slice on side away from split
+    difference() {
+        cylinder(h=2,r=pole_stand_rad+pole_clip_width);
+        translate([0,-pole_stand_rad,0]) cube([(pole_stand_rad+pole_clip_width)*2,(pole_stand_rad+pole_clip_width)*2,20],center=true);
+    }
+}
+
+boss_square=15;         // Beefy square section
+clamping_pole_arm_length=55;
+
+// A clamp of specified internal radius and wall thickness
+module bolted_clamp(int_rad,thick) {
+    bolt_shift=boss_square/2+int_rad;
     difference() {
         union() {
-            translate([flexure_length/2,-4,0]) cube([100,8,8]);
-            translate([flexure_length/2+test_arm_len,0]) cylinder(h=10,r=test_pan_rad+wall);
-            // Wee spike on the end.
-            translate([flexure_length/2+test_arm_len+test_pan_rad+wall-0.5,0,0.5])
-                rotate([0,0,45]) cube([4,4,1],center=true);
+            // Clamp round body
+            cylinder(h=boss_square,r=int_rad+thick,$fn=64);
+            // Clamp clip
+            translate([-bolt_shift,0,boss_square/2]) cube(boss_square,center=true);
         }
-        // Scalop it out
-        translate([flexure_length/2+test_arm_len,0,1]) cylinder(h=100,r=test_pan_rad);
+        // Poke hole in ring
+        cylinder(h=boss_square*3,r=int_rad,center=true,$fn=64);
+        // Split the clip
+        translate([-bolt_shift,0,0]) cube([boss_square+2*int_rad,5,boss_square+2*int_rad],center=true);
+        // Shove a screw hole through the clip
+        translate([-bolt_shift,0,boss_square/2]) rotate([90,0,0]) m3_screw_hole(2*boss_square);
+        // Put a captive nut on one side
+        translate([-bolt_shift,-boss_square/2,boss_square/2]) rotate([-90,0,0]) m3_nut_cavity_tapered(captive=true);
     }
-    // Anchor plate
-    translate([-flexure_length/2-metriccano_unit*1.5,-metriccano_unit/2,0]) metriccano_plate(2,2);
 }
 
-// ** Testing Stuff**
-// 100mm beam to test flexibility of a PLA flexure.
-//test_flexure();
-// Postioned plate under axis mechanism for try-fitting
-//translate([-axis_drive_nut_x,0,-30])
-//    axis_motor_pillar_assy();
-//*****
+// Mounting to hold a USB microscope on the same pole as above.
+// Should probably make one with the slot horizontal at some point...
+module clamping_pole_arm() difference() {
+    // Body of stand with a metriccano slot sticking out
+    union () {
+        // The clamp body
+        bolted_clamp(pole_stand_rad,pole_clip_width);
+        // The arm body
+        translate([clamping_pole_arm_length/2,0,boss_square/2])
+            cube([clamping_pole_arm_length,boss_square,boss_square],center=true);
+        // Rounded arm end
+        translate([clamping_pole_arm_length,0,0]) cylinder(h=boss_square,r=boss_square/2,$fn=64);
+        // Version stamp
+        translate([pole_stand_rad+clamping_pole_arm_length/2,-boss_square/2,boss_square/2])
+            rotate([90,0,0]) version_text();
+    }
+    // Hole in the middle for post
+    cylinder(h=boss_square*3,r=pole_stand_rad,center=true,$fn=64);
+    // Slot to run an M3 bolt in, holding the hinge
+    hull() {
+        translate([boss_square+pole_clip_width,0,0]) m3_screw_hole(boss_square*3);
+        translate([clamping_pole_arm_length,0,0]) m3_screw_hole(boss_square*3);
+    }
+}
 
-// All the axis drive parts on one plate. Will also need a coupling from flexure_linear_coupling.scad
+pole_arm_hinge_rad=boss_square/2;
+pole_arm_hinge_height=12;   // Main height restriction here is the need to hide an M3 nut in the base.
+pole_clearance=0.3;
+// A hinge that can run up and down the clamping pole arm on an M3 screw. It's meant to rotate.
+// Let's base it on Metriccano units for funsies
+module clamping_pole_hinge() {
+    // Base for hinge. Whack out curvy bits for the top half of the hinge to swing in
+    difference() {
+        union() {
+            // Verical structure of pivot
+            cylinder(h=pole_arm_hinge_height+metriccano_unit/4,r=pole_arm_hinge_rad,$fn=64);
+            // Rounded flange on top of pivot
+            translate([0,0,pole_arm_hinge_height+metriccano_unit/2]) rotate([0,90,0]) 
+                cylinder(h=metriccano_unit/2-pole_clearance,r=pole_arm_hinge_rad,center=true,$fn=64);
+        }
+        // Curvy sockets
+        translate([metriccano_unit/4-pole_clearance/2,0,pole_arm_hinge_height+metriccano_unit/2]) rotate([0,90,0])
+            cylinder(h=pole_arm_hinge_rad,r=pole_arm_hinge_rad+pole_clearance,$fn=64);
+        translate([-metriccano_unit/4+pole_clearance/2,0,pole_arm_hinge_height+metriccano_unit/2]) rotate([0,-90,0])
+            cylinder(h=pole_arm_hinge_rad,r=pole_arm_hinge_rad+pole_clearance,$fn=64);
+        // M3 hole through the middle
+        translate([metriccano_unit,0,pole_arm_hinge_height+metriccano_unit/2]) rotate([0,90,0])
+            m3_screw_cavity(metriccano_unit*2);
+        // M3 hole up the middle
+        m3_screw_hole(pole_arm_hinge_height);
+        // Slot for captive nut
+        translate([0,0,3]) rotate([0,0,-90]) m3_nut_slot();
+    }
+}
+
+clamp_shaft_len=40;
+// A clamp to grab the USB microscope at the narrow end. Takes the radius of the microscope
+module microscope_clamp(mrad=31.5/2) {
+    difference() {
+        // Build a magnifying glass-like holder for the microscope
+        union() {
+            bolted_clamp(mrad,pole_clip_width);
+            // Octagonal easy-print shaft
+            translate([mrad+clamp_shaft_len/2,0,pole_arm_hinge_rad]) intersection() {
+                cube([clamp_shaft_len,pole_arm_hinge_rad*2,pole_arm_hinge_rad*2],center=true);
+                rotate([45,0,0]) cube([clamp_shaft_len,pole_arm_hinge_rad*2,pole_arm_hinge_rad*2],center=true);
+            }
+            // Version stamp
+            translate([mrad+clamp_shaft_len/2,0,pole_arm_hinge_rad*2]) version_text();
+        }
+        // Poke a screw hole and nut slot in the handle end.
+        translate([clamp_shaft_len+mrad-8,0,pole_arm_hinge_rad]) rotate([0,90,0])  {
+            m3_nut_slot();
+            m3_screw_hole(20);
+       }
+    }
+}
+
+
+// Assembly in 3D for visual test fit
+if (false) {
+    translate([0,0,structure_height]) rotate([-90,0,0]) outer_frame_unit();
+    translate([(inner_mf_offset+flexure_max+2*flexure_clearance+6),flexure_height+0.5,structure_height-flexure_clearance]) rotate([0,-90,0]) rotate([0,0,90]) table_frame_unit();
+}
+
+// Build plate A
 if (true) {
-    translate([-60,-25,0]) flexure_linear_coupling();
-    translate([10,10,0]) axis_complete();
-    translate([-60,10,0]) axis_bearing_block();
-    translate([15,-60,0]) axis_motor_pillar_assy();
-    translate([-40,-65,0]) nema17_plate();
-    translate([-10,-25,0]) metriccano_strip(2);    // Used to hold limit switch wires in place
+    outer_frame_unit();
+    translate([105,0,0]) outer_frame_unit();
+    translate([0,75,0]) table_frame_unit();
+    translate([90,75,0]) table_frame_unit();
+    translate([30,25,0]) metriccano_adjustment_bracket();
+    translate([60,25,0]) metriccano_adjustment_bracket();
+    translate([200,122,0]) rotate([0,0,90]) flexured_stage(53);
+    translate([10,145,0]) stage_top();
+    translate([140,25,0]) metriccano_strip(4);
+    translate([140,40,0]) metriccano_strip(4);
+    translate([35,45,0]) metriccano_square_strip(4);
+    translate([35,100,0]) metriccano_adjustment_bracket(2,1.5);
+    translate([125,100,0]) metriccano_adjustment_bracket(2,1.5);
+    translate([90,155,0]) y_drive_flexure(51.5);
+}
+// Build plate B
+if (false) {
+    translate([5,5,0]) metriccano_square_strip(10);        // Needs 3, Z driver mounts on them.
+    translate([5,20,0]) metriccano_square_strip(10);
+    translate([5,35,0]) metriccano_square_strip(10);
+    translate([115,5,0]) metriccano_square_strip(5);     // Anchors one Z driver support
+    translate([5,50,0]) x_axis_mount();
+    translate([5,105,0]) y_axis_mount();
+    translate([115,25,0]) pole_top_arm();
+    translate([115,50,0]) pole_bottom_arm();
+    translate([80,125,0]) rotate([0,0,180]) clamping_pole_arm();
+    translate([135,85,0]) clamping_pole_hinge();
+    translate([135,85,0]) microscope_clamp();
+    translate([20,70,0]) m3_thumbscrew_knob(7);
+    translate([40,70,0]) m3_thumbscrew_knob(7);
+    translate([60,70,0]) m3_thumbscrew_knob(7);
+    translate([120,145,0]) clamping_pole_arm();
+    translate([165,115,0])  clamping_pole_hinge();
+    translate([165,115,0]) rotate([0,0,180]) microscope_clamp();
+    translate([190,10,0]) m3_thumbscrew_knob(7);
+    translate([190,30,0]) m3_thumbscrew_knob(7);
+    translate([190,50,0]) m3_thumbscrew_knob(7);
 }
