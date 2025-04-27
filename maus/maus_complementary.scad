@@ -4,7 +4,6 @@
 // Requires 3 standard Maus axis drivers and probe holder parts
 // Base should be secured to 10mm pitch perforated sheet, 13 x 11 holes
 //  avaliable as metriccano_baseboard.svg for lasercutting
-// The frame has to be wide enough to hold your UV light source centrally
 // It is a Very Good Idea(TM) to keep the width in Metriccano (10mm) units.
 // Printed on Prusa Mk4, 0.2mm layers, 20% infill, 2 v shells, 5 h shells
 
@@ -309,6 +308,13 @@ module flexured_stage(fl) {
             rotate([0,0,45]) cube([2,2,metriccano_plate_height],center=true);
         translate([0,metriccano_unit*4+fl,metriccano_plate_height/2])
             rotate([0,0,45]) cube([2,2,metriccano_plate_height],center=true);
+            // Legend
+        translate([-5,metriccano_unit*5+fl,0])
+            difference() {
+                cube([10,8,metriccano_unit/2]);
+                translate([5,4,-0.3]) rotate([0,0,-90]) linear_extrude(0.6)
+                    text("X", size = 4, halign = "center", valign = "center", $fn = 16);
+                }
         // Anchor point for actuator
         translate([-metriccano_unit*0.5,metriccano_unit*4.5+fl,0]) metriccano_slot_strip(1.5);
     }
@@ -395,6 +401,13 @@ module y_drive_flexure(fl) {
     translate([metriccano_unit/2,-metriccano_unit,0]) rotate([0,0,90]) metriccano_square_strip(4);
     // Anchor point on actuator
     translate([fl+metriccano_unit*1.5,0,0]) rotate([0,0,90]) metriccano_slot_strip(1.5);
+    // Legend
+    translate([fl+metriccano_unit*2,0,0])
+        difference() {
+            cube([8,10,metriccano_unit/2]);
+            translate([4,5,metriccano_unit/2-0.3]) rotate([0,0,-90]) linear_extrude(0.6)
+                text("Y", size = 4, halign = "center", valign = "center", $fn = 16);
+            }
     // Very thin flexure joining them. Slightly short so as not to rub overhanging parts
     translate([metriccano_unit,metriccano_unit/2-0.4,0]) cube([fl,0.8,metriccano_plate_height]);
     // Stress relief
@@ -553,7 +566,7 @@ if (true) {
     translate([90,75,0]) table_frame_unit();
     translate([30,25,0]) metriccano_adjustment_bracket();
     translate([60,25,0]) metriccano_adjustment_bracket();
-    translate([200,122,0]) rotate([0,0,90]) flexured_stage(53);
+    translate([210,122,0]) rotate([0,0,90]) flexured_stage(53);
     translate([10,145,0]) stage_top();
     translate([140,25,0]) metriccano_strip(4);
     translate([140,40,0]) metriccano_strip(4);
