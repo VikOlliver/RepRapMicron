@@ -6,12 +6,12 @@ The RepRapMicron Project, or μRepRap, is an extension of the Open Source RepRap
 
 The meaty part is in the "maus" directory, where the OpenSCAD models for a rapidly reconfigurable 3D printed prototype can be found.
 
-At present, the project is in the very early prototyping stages, figuring out the unknown unknowns. This repository holds files that can reasonably be expected to be useful to potential developers/experimenters, but at this stage there are absolutely no guarantees.
+At present, the project is in the prototyping stage. This repository holds files that can reasonably be expected to be functional and useful to potential developers/experimenters.
 
 ## Roadmap
 
-1. Develop a micron-accurate, 3D printable mechanism.
-2. Develop a print head for it.
+1. Develop a micron-accurate, 3D printable mechanism. - UNLOCKED
+2. Develop a print head for it. - UNLOCKED
 3. Make more of them
 4. Reduce further to nanoscale
 5. Take over the world
@@ -19,7 +19,7 @@ At present, the project is in the very early prototyping stages, figuring out th
 
 ## Directory Structure
 ### library
-A Selection of useful OpenSCAD libraries used in generating "Metriccano" modular components (10mm grid, M3 fasteners), screw holes, motor mounts etc.
+A Selection of useful OpenSCAD libraries used in generating "Metriccano" modular components (10mm grid, metric fasteners), screw holes, motor mounts etc.
 ### Maus
 **M**icron **A**ccurate **U**niversal **S**ystem - OpenSCAD model files for micron precision axis components based on flexures.
 
