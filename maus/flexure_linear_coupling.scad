@@ -40,7 +40,7 @@ module nema_m3_coupling() {
     difference() {
         translate([0,0,-1]) cylinder(h=nema_coupling_height+1,r1=outer_radius+flex_link_width*2.25,r2=top_radius);
         // Cavity for nut, tapering, and a really tight fit
-        translate([0,0,1]) cylinder(h=nema_coupling_height-0.99,r1=m3_nut_max_width/2-0.45,r2=m3_nut_max_width/2-0.1,$fn=6);
+        translate([0,0,1]) cylinder(h=nema_coupling_height-0.99,r1=m3_nut_max_width/2-0.45,r2=m3_nut_max_width/2,$fn=6);
     }
 }
 
@@ -61,4 +61,4 @@ module flexure_linear_coupling() union() {
     translate([0,0,spring_height+2]) nema_m3_coupling();
 }
 
-// flexure_linear_coupling();
+ //flexure_linear_coupling();
