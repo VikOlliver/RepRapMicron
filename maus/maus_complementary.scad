@@ -383,15 +383,25 @@ module x_mount_nutted() {
         }
 }
 // Heavy square double bracket to hang X axis on. Needs a bit more displacement on the X axis for the driver flexure
-module x_axis_mount() union() {
-    // U-shaped bracket
-    metriccano_square_strip(9);
-    translate([0,metriccano_unit*4,0]) metriccano_square_strip(9);
-    rotate([0,0,90]) metriccano_square_strip(5);
-    translate([metriccano_unit*8,metriccano_unit,0]) rotate([0,0,90]) metriccano_square_strip(3);
-    // Single unit knobs on the top of the U arms to give more stable mount points
-    translate([metriccano_unit*9.5,0,metriccano_unit/2]) x_mount_nutted();
-    translate([metriccano_unit*9.5,metriccano_unit*4,metriccano_unit/2]) x_mount_nutted();
+module x_axis_mount() difference(){
+    union() {
+        // U-shaped bracket
+        metriccano_square_strip(9);
+        translate([0,metriccano_unit*4,0]) metriccano_square_strip(9);
+        rotate([0,0,90]) metriccano_square_strip(5);
+        translate([metriccano_unit*8,metriccano_unit,0]) rotate([0,0,90]) metriccano_square_strip(3);
+        // Single unit knobs on the top of the U arms to give more stable mount points
+        translate([metriccano_unit*9.5,0,metriccano_unit/2]) x_mount_nutted();
+        translate([metriccano_unit*9.5,metriccano_unit*4,metriccano_unit/2]) x_mount_nutted();
+        // Solidify the corners near captive nuts
+        translate([metriccano_unit/2,-metriccano_unit/2,0]) cube([metriccano_unit/4,metriccano_unit,metriccano_unit]);
+        translate([metriccano_unit/2,metriccano_unit*3.5,0]) cube([metriccano_unit/4,metriccano_unit,metriccano_unit]);
+    }
+    // Captive nuts to hold microscope stand brackets
+    translate([metriccano_unit,metriccano_unit/2,metriccano_unit/2]) rotate([90,0,0]) metriccano_nut_cavity_tapered(captive=true);
+    translate([metriccano_unit*2,metriccano_unit/2,metriccano_unit/2]) rotate([90,0,0]) metriccano_nut_cavity_tapered(captive=true);
+    translate([metriccano_unit,metriccano_unit*3.5,metriccano_unit/2]) rotate([-90,0,0]) metriccano_nut_cavity_tapered(captive=true);
+    translate([metriccano_unit*2,metriccano_unit*3.5,metriccano_unit/2]) rotate([-90,0,0]) metriccano_nut_cavity_tapered(captive=true);
 }
 
 
