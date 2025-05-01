@@ -584,9 +584,8 @@ if (true) {
     translate([35,100,0]) metriccano_adjustment_bracket(2,1.5);
     translate([125,100,0]) metriccano_adjustment_bracket(2,1.5);
     translate([90,155,0]) y_drive_flexure(51.5);
-}
-// Build plate B
-if (false) {
+} else {
+    // Build plate B
     translate([5,5,0]) metriccano_square_strip(10);        // Needs 3, Z driver mounts on them.
     translate([5,20,0]) metriccano_square_strip(10);
     translate([5,35,0]) metriccano_square_strip(10);
@@ -599,12 +598,16 @@ if (false) {
     translate([135,85,0]) clamping_pole_hinge();
     translate([135,85,0]) microscope_clamp();
     translate([20,70,0]) m3_thumbscrew_knob(7);
-    translate([40,70,0]) m3_thumbscrew_knob(7);
-    translate([60,70,0]) m3_thumbscrew_knob(7);
+    translate([35,75,0]) m3_thumbscrew_knob(7);
+    translate([50,70,0]) m3_thumbscrew_knob(7);
+    translate([65,75,0]) m3_thumbscrew_knob(7);
+    translate([100,68,0]) m3_thumbscrew_knob(7);
     translate([120,145,0]) clamping_pole_arm();
     translate([165,115,0])  clamping_pole_hinge();
     translate([165,115,0]) rotate([0,0,180]) microscope_clamp();
+    translate([174,10,0]) m3_thumbscrew_knob(7);
     translate([190,10,0]) m3_thumbscrew_knob(7);
-    translate([190,30,0]) m3_thumbscrew_knob(7);
-    translate([190,50,0]) m3_thumbscrew_knob(7);
+    translate([190,26,0]) m3_thumbscrew_knob(7);
+    translate([190,42,0]) m3_thumbscrew_knob(7);
+    translate([190,58,0]) m3_thumbscrew_knob(7);
 }
