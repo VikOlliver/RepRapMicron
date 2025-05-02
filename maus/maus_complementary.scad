@@ -415,7 +415,7 @@ module y_drive_flexure(fl) {
     translate([fl+metriccano_unit*2,0,0])
         difference() {
             cube([8,10,metriccano_unit/2]);
-            translate([4,5,metriccano_unit/2-0.3]) rotate([0,0,-90]) linear_extrude(0.6)
+            translate([4,5,-0.3]) rotate([0,0,-90]) linear_extrude(0.6)
                 text("Y", size = 4, halign = "center", valign = "center", $fn = 16);
             }
     // Very thin flexure joining them. Slightly short so as not to rub overhanging parts
