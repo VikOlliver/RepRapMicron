@@ -610,4 +610,7 @@ if (true) {
     translate([190,26,0]) m3_thumbscrew_knob(7);
     translate([190,42,0]) m3_thumbscrew_knob(7);
     translate([190,58,0]) m3_thumbscrew_knob(7);
+    translate([10,160,0]) metriccano_adjustment_bracket();
+    translate([40,160,0]) metriccano_adjustment_bracket();
+
 }
