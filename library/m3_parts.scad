@@ -1,4 +1,5 @@
 // m3_parts.scad - A collection of things useful when developing with M3 fasteners
+// (c)2025 vik@diamondage.co.nz, released under the GPL V3 or later
 
 m3_screw_rad=3.4/2; // M3 screw hole radius
 m3_screw_head_rad=5.9/2;    // Radius of the average M3 posi screw head
@@ -49,8 +50,8 @@ module m3_nut_slot(l=100) {
         translate([-m3_nut_max_width/2,-m3_nut_min_width/2,0])
             cube([m3_nut_max_width+l,m3_nut_min_width,m3_nut_height]);
         // Small knobs to retain nut
-        translate([0,m3_nut_min_width/2,m3_nut_height/2]) sphere(0.4);
-        translate([0,-m3_nut_min_width/2,m3_nut_height/2]) sphere(0.4);
+        translate([0.2,m3_nut_min_width/2,m3_nut_height/2]) sphere(0.5);
+        translate([0.2,-m3_nut_min_width/2,m3_nut_height/2]) sphere(0.5);
     }
 }
 
