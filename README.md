@@ -6,13 +6,13 @@ The RepRapMicron Project, or μRepRap, is an extension of the Open Source RepRap
 
 The meaty part is in the "maus" directory, where the OpenSCAD models for a rapidly reconfigurable 3D printed prototype can be found.
 
-At present, the project is in the prototyping stage. This repository holds files that can reasonably be expected to be functional and useful to potential developers/experimenters.
+The project has achieved the first Alpha release. This repository holds files that can reasonably be expected to be functional and useful to potential developers/experimenters.
 
 ## Roadmap
 
 1. Develop a micron-accurate, 3D printable mechanism. - UNLOCKED
 2. Develop a print head for it. - UNLOCKED
-3. Make more of them
+3. Make more of them - UNLOCKED
 4. Reduce further to nanoscale
 5. Take over the world
 
@@ -23,9 +23,9 @@ A Selection of useful OpenSCAD libraries used in generating "Metriccano" modular
 ### Maus
 **M**icron **A**ccurate **U**niversal **S**ystem - OpenSCAD model files for micron precision axis components based on flexures.
 
-The maus directory contains standard axis drivers, XY complementary flexure Table, and probe parts that need screwing down to a solid surface. It can be assembled on a Metriccano baseboard supplied for lasercutting as metriccano_baseboad.svg, or a 11 x 13 hole piece of 10mm pitch perf board.
+The maus directory contains standard axis drivers, XY complementary flexure Table, Z Tower, and probe parts that need screwing down to a solid surface. It can be assembled on a Metriccano baseboard supplied for lasercutting as metriccano_baseboad.svg, or a 11 x 13 hole piece of 10mm pitch perf board.
 
-As assembly documentation is in progress on the Github Wiki. Pictures from a variety of angles are available [here](http://blog.reprap.org/2025/02/maus-c-assembly-photos.html).
+As assembly documentation is on the Github Wiki, with configuration and usage instructions next up. Bill Of Materials to follow.
 
 ## gcode_segmentation
 Python code to take GCODE from a 3D printer slicing program such as PrusaSlicer, and break it into GCODE for a series of points that can be invidivually deposited with the probe. There is provision for a routine to "re-ink" the probe tip after a predetermined number of points are deposited.
@@ -45,4 +45,4 @@ The main repository of knowledge is the wiki on the [main project page](https://
 GPL V3 or later
 
 ## Project status
-Alpha, but functional.
+Alpha release with a tested build.
