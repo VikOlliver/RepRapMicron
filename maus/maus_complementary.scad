@@ -13,9 +13,6 @@ include <../library/nema17lib.scad>
 
 version_string="MAUSC V0.03";
 
-// TODO
-// Test cross-bracing of flexures.
-
 flexure_width=0.8;  // Width of a flexure beam, that's the very thin direction
 flexure_max=8+flexure_width;      // Maximum desired flexing distance off centre
 flexure_height=6;
@@ -357,16 +354,20 @@ module brace_with_nema17() {
 }
 
 // Heavy square double bracket to hang Y axis on.
-module y_axis_mount() union() {
-    // U-Shaped bracket
-    translate([metriccano_unit*7,0,0]) metriccano_square_strip(2);
-    translate([metriccano_unit*7,metriccano_unit*4,0]) metriccano_square_strip(2);
-    rotate([0,0,90]) metriccano_square_strip(5);
-    // These bits are thinner to allow space for the Y driver beam's movement
-    translate([metriccano_unit,metriccano_unit*4,0]) metriccano_strip(6,squared=true);
-    translate([metriccano_unit,0,0]) metriccano_strip(6,squared=true);
+module y_axis_mount() difference() {
+    union() {
+        // U-Shaped bracket
+        translate([metriccano_unit*7,0,0]) metriccano_square_strip(2);
+        translate([metriccano_unit*7,metriccano_unit*4,0]) metriccano_square_strip(2);
+        rotate([0,0,90]) metriccano_square_strip(5);
+        // These bits are thinner to allow space for the Y driver beam's movement
+        translate([metriccano_unit,metriccano_unit*4,0]) metriccano_strip(6,squared=true);
+        translate([metriccano_unit,0,0]) metriccano_strip(6,squared=true);
+    }
+    // A couple of captive nut cavities for attaching the Z tower
+    translate([0,metriccano_unit*2,0]) metriccano_nut_cavity_tapered(captive=true);
+    translate([0,metriccano_unit*4,0]) metriccano_nut_cavity_tapered(captive=true);
 }
-
 // Single unit knobs for x_axis_mount that have retained nuts, thickened to increase beam strength
 module x_mount_nutted() {
     rotate([0,-90,0])
@@ -428,7 +429,7 @@ module y_drive_flexure(fl) {
 }
 
 pole_clip_width=3;
-pole_stand_rad=16/2-0.2;       // 16mm pole, less a bit for a really tight fit.
+pole_stand_rad=16/2;             // 16mm pole
 pole_stand_arm_length=7;     // Length of stand arm in metriccano units.
 
 // Holder for a 16mm pole to mount a microscope on
@@ -574,8 +575,6 @@ if (true) {
     translate([105,0,0]) outer_frame_unit();
     translate([0,75,0]) table_frame_unit();
     translate([90,75,0]) table_frame_unit();
-    translate([30,25,0]) metriccano_adjustment_bracket();
-    translate([60,25,0]) metriccano_adjustment_bracket();
     translate([210,122,0]) rotate([0,0,90]) flexured_stage(53);
     translate([10,145,0]) stage_top();
     translate([140,25,0]) metriccano_strip(4);
@@ -586,31 +585,26 @@ if (true) {
     translate([90,155,0]) y_drive_flexure(51.5);
 } else {
     // Build plate B
-    translate([5,5,0]) metriccano_square_strip(10);        // Needs 3, Z driver mounts on them.
-    translate([5,20,0]) metriccano_square_strip(10);
-    translate([5,35,0]) metriccano_square_strip(10);
-    translate([115,5,0]) metriccano_square_strip(5);     // Anchors one Z driver support
     translate([5,50,0]) x_axis_mount();
-    translate([5,105,0]) y_axis_mount();
+    translate([15,105,0]) y_axis_mount();
     translate([115,25,0]) pole_top_arm();
     translate([115,50,0]) pole_bottom_arm();
-    translate([80,125,0]) rotate([0,0,180]) clamping_pole_arm();
-    translate([135,85,0]) clamping_pole_hinge();
-    translate([135,85,0]) microscope_clamp();
+    translate([65,30,0]) rotate([0,0,180]) clamping_pole_arm();
+    translate([135,82,0]) clamping_pole_hinge();
+    translate([135,82,0]) microscope_clamp();
     translate([20,70,0]) m3_thumbscrew_knob(7);
     translate([35,75,0]) m3_thumbscrew_knob(7);
     translate([50,70,0]) m3_thumbscrew_knob(7);
     translate([65,75,0]) m3_thumbscrew_knob(7);
     translate([100,68,0]) m3_thumbscrew_knob(7);
-    translate([120,145,0]) clamping_pole_arm();
-    translate([165,115,0])  clamping_pole_hinge();
-    translate([165,115,0]) rotate([0,0,180]) microscope_clamp();
+    translate([130,145,0]) clamping_pole_arm();
+    translate([165,114,0])  clamping_pole_hinge();
+    translate([165,114,0]) rotate([0,0,180]) microscope_clamp(37/2);
     translate([174,10,0]) m3_thumbscrew_knob(7);
     translate([190,10,0]) m3_thumbscrew_knob(7);
     translate([190,26,0]) m3_thumbscrew_knob(7);
     translate([190,42,0]) m3_thumbscrew_knob(7);
     translate([190,58,0]) m3_thumbscrew_knob(7);
-    translate([10,160,0]) metriccano_adjustment_bracket();
-    translate([40,160,0]) metriccano_adjustment_bracket();
-
+    translate([10,10,0]) metriccano_strip(3);      // Used as a booster
+    translate([50,10,0]) metriccano_strip(3);      // Used as a booster
 }
