@@ -54,7 +54,7 @@ module probe_holder() difference() {
 
 // Probe tip
 probe_tip_thick=2.5;
-probe_tip_len=22.5;   // Length of probe from centre of securing pivot.
+probe_tip_len=13;   // Length of probe from centre of securing pivot.
 module probe_tip_arm() difference() {
     hull() {
         cylinder(h=probe_tip_thick,r=metriccano_unit/2,$fn=32);
