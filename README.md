@@ -8,6 +8,8 @@ The meaty part is in the "maus" directory, where the OpenSCAD models for a rapid
 
 The project has achieved the first Alpha release. This repository holds files that can reasonably be expected to be functional and useful to potential developers/experimenters.
 
+If you're looking for pre-built STL files, they're [here](https://www.printables.com/model/1286343-reprapmicron-micron-accurate-3d-printer).
+
 ## Roadmap
 
 1. Develop a micron-accurate, 3D printable mechanism. - UNLOCKED
