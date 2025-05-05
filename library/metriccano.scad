@@ -1,4 +1,5 @@
 // metricano.scad - A construction and prototyping kit based on 10mm centres, 5mm strips, and M3 fasteners
+// (c)2025 vik@diamondage,co.nz, released under the GPL V3 or later
 /*  Useful parts:
         metriccano_strip(holes)                 Single strip of holes
         metriccano_slot_strip(holes)          As above but all holes joined into an adjustable channel
@@ -18,14 +19,25 @@ metriccano_plate_height=metriccano_unit/2;
 metriccano_strip_width=metriccano_unit;
 // Yes, this is repeating an M3 library but in theory you can change this to M4 etc.
 metriccano_screw_rad=3.3/2; // M3 screw hole radius
+metriccano_screw_head_rad=5.9/2;    // Radius of the average M3 posi screw head
 metriccano_nut_max_width=6.6;     // Nut from point to point
 metriccano_nut_height=2.5;
 metriccano_nut_min_width=5.8;  // Nut from flat to flat
 
-// Hole for M3 screw, octagonal. Should print flat and vertical.
+// Hole for Metriccano screw, octagonal. Should print flat and vertical.
 module  metriccano_screw_hole(screw_len=metriccano_hole_spacing*2.01) {
     rotate([180,0,360/16]) cylinder(h=screw_len,r=metriccano_screw_rad*1.2,$fn=8,center=true);
 }
+
+// Cavity for an Metriccano screw and screw head of specified length.
+// Points down. Uses octagons so that it can be printed horizontally
+module  metriccano_screw_cavity(screw_len) {
+    rotate([180,0,360/16]) cylinder(h=screw_len,r=metriccano_screw_rad*1.2,$fn=8);
+    // Rotate to make hole sflats parallel to axes. Tiny shift to fix booleans
+    rotate([0,0,360/16]) translate([0,0,-0.001])
+        cylinder(h=10,r=metriccano_screw_head_rad*1.2,$fn=8);
+}
+
 
 // Hole for a nut to be lowered in from the top, or pushed into the bottom.
 // Has a conical top to print without support. Projects very slightly down to remove boolean issues.
@@ -48,6 +60,18 @@ module metriccano_nut_cavity_tapered(captive=false) union() {
                 sphere(divot_rad);
 
         }
+    }
+}
+
+// Nut  slot for Metriccano nut with bumps to hold nut in place
+module metriccano_nut_slot(l=100) {
+    difference() {
+        // Long slot
+        translate([-metriccano_nut_max_width/2-0.5,-metriccano_nut_min_width/2,0])
+            cube([metriccano_nut_max_width+l,metriccano_nut_min_width,metriccano_nut_height]);
+        // Small knobs to retain nut
+        translate([0.2,metriccano_nut_min_width/2,metriccano_nut_height/2]) sphere(0.5);
+        translate([0.2,-metriccano_nut_min_width/2,metriccano_nut_height/2]) sphere(0.5);
     }
 }
 
@@ -178,18 +202,19 @@ module metriccano_square_strip(h) {
                     metriccano_screw_hole(metriccano_unit*10);
         } else {
             translate([0,0,metriccano_plate_height]) rotate([0,-90,0]) 
-            {
+           {
                     metriccano_screw_hole();
                     // Nut slot
-                    translate([(metriccano_strip_width-metriccano_nut_max_width)/2,0,-metriccano_plate_height])
-                        cube([metriccano_strip_width,metriccano_nut_min_width,metriccano_nut_height],center=true);
+                    translate([0,0,-metriccano_plate_height]) {
+                        metriccano_nut_slot();
+                    }
             }
-            translate([(holes-1)*metriccano_hole_spacing,0,metriccano_plate_height]) rotate([0,90,0]) 
+            translate([(holes-1)*metriccano_hole_spacing,0,metriccano_plate_height+0.01]) rotate([0,90,0]) 
             {
                     metriccano_screw_hole();
                 // Nut slot
-                    translate([(metriccano_strip_width-metriccano_nut_max_width)/-2,0,-metriccano_plate_height])
-                        cube([metriccano_strip_width,metriccano_nut_min_width,metriccano_nut_height],center=true);
+                    translate([0,0,-metriccano_plate_height])
+                        rotate([0,0,180])metriccano_nut_slot();
             }
         }
     }
@@ -393,3 +418,4 @@ if (false) {
 // For screwing things down to the bench
 // metriccano_woodscrew_clip(2);
 //metriccano_tab_module(4);           // Tab for adding to things. Can have mostly squared corners
+//metriccano_square_strip(4);
