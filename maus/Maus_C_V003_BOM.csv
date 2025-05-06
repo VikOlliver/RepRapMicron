@@ -1,0 +1,52 @@
+"Maus ‘C’ RepRapMicron Bill Of Materials",,,,,,,,,,
+,,,,,,,,,,
+"3D Prints",,,,,,,,,,
+,3,"Axis Drivers",,,,,,,,
+,1,"Maus Complimentary parts Plate ‘A’",,,,,,,,
+,1,"Maus Complimentary parts Plate ‘B’",,,,,,,,
+,1,"Maus Probe parts",,,,,,,,
+,1,"Maus Z Tower",,,,,,,,
+"* Printed in plain PLA or eSun PLA+, 0.2mm layers, 2 perimeters, 4 top/bottom layers, 20% grid infill, no support or brim",,,,,,,,,,
+,,,,,,,,,,
+"Control Hardware",,,,,,,,,,
+,1,"CNC controller with 3 x NEMA17 400 step/rev motors, Z Touch, max & min limit inputs, one spare output",,,,,,,,
+,2,"USB Microscopes, self-illuminating, 30mm dia. One of 10Mpixel resolution.",,,,,,,,
+,1,"220mm of 16mm dia stout metal tubing to mount microscopes",,,,,,,,
+,,,,,,,,,,
+"Fasteners",,"M3 Nut
+5.5x2.25mm","M3 Washer
+7x0.6mm","M3 Spring
+Washer","M3 Screw
+12mm","M3 Screw
+15mm","M3 Screw
+20mm","M3 Screw
+25mm","M3 Screw
+30mm","M3 Screw
+50mm"
+"Axis Driver (needs 3)",,13,6,,2,2,4,,,5
+"XY Table",,14,1,1,10,,,,4,
+"Probe",,7,1,,4,2,1,,,
+"Support",,34,15,4,10,8,13,4,,
+"Microscope clamps",,16,4,,,,6,,2,
+,,,,,"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         ",,,,,
+,,,,,,,,,,
+"Total",253,110,39,5,30,16,32,,6,15
+,,,,,,,,,,
+,,,,,,,,,,
+"Misc Materiel",,,,,,,,,,
+,,,,,,,,,,
+"Stage Assembly",,,,,,,,,,
+,1,"SMT UV LED, wide angle, with resistor to run off CNC output",,,,,,,,
+,2,"30x10x3mm Magnets",,,,,,,,
+,2,"M8 16x1.5mm washers or similar magnetic objects",,,,,,,,
+,1,"50mm 0.6mm dia solid copper wire",,,,,,,,
+,1,"20x10mm piece of PET soda bottle",,,,,,,,
+,1,"Dupont jumper connector pin",,,,,,,,
+,"unspecified","Hookup wire",,,,,,,,
+,,,,,,,,,,
+"Axis Drivers",,,,,,,,,,
+,"10m Spool","28ga 316 or 304 stainless steel wire (can use nichrome)",,,,,,,,
+,30,"“Loom Bands”",,,,,,,,
+,"unspecified","3mm dia heatshrink tubing",,,,,,,,
+,"unspecified","Wiring and connectors to suit CNC controller",,,,,,,,
+,"small qty","Cyanoacrylate adhesive",,,,,,,,
