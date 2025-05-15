@@ -25,7 +25,7 @@ A Selection of useful OpenSCAD libraries used in generating "Metriccano" modular
 ### Maus
 **M**icron **A**ccurate **U**niversal **S**ystem - OpenSCAD model files for micron precision axis components based on flexures.
 
-The maus directory contains standard axis drivers, XY complementary flexure Table, Z Tower, and probe parts that need screwing down to a solid surface. It can be assembled on a Metriccano baseboard supplied for lasercutting as metriccano_baseboad.svg, or a 11 x 13 hole piece of 10mm pitch perf board.
+The maus directory contains standard axis drivers, XY complementary flexure Table, Z Tower, and probe parts that need screwing down to a solid surface. It can be assembled on a Metriccano baseboard supplied for lasercutting as metriccano_baseboad.svg, or a 12 x 14 hole piece of 10mm pitch perf board.
 
 As assembly documentation is on the Github Wiki, with configuration and usage instructions next up. Bill Of Materials to follow.
 
