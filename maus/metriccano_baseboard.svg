@@ -23,9 +23,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.0862069"
-     inkscape:cx="497.12277"
-     inkscape:cy="815.09602"
+     inkscape:zoom="1.2300799"
+     inkscape:cx="478.20763"
+     inkscape:cy="764.8478"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      inkscape:document-rotation="0"
@@ -43,9 +43,9 @@
      inkscape:snap-center="true"
      inkscape:snap-global="true"
      inkscape:window-width="1920"
-     inkscape:window-height="1030"
-     inkscape:window-x="0"
-     inkscape:window-y="26"
+     inkscape:window-height="1056"
+     inkscape:window-x="1920"
+     inkscape:window-y="0"
      inkscape:window-maximized="1" />
   <metadata
      id="metadata839">
@@ -66,1447 +66,1635 @@
     <rect
        style="opacity:1;fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
        id="rect2577"
-       width="150"
+       width="170"
        height="130"
        x="28.675968"
        y="35.892235"
        rx="5"
        ry="5" />
     <g
-       style="stroke:#000000;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none"
-       transform="rotate(90,72.060049,61.258227)"
-       id="g1232">
+       id="g1748">
       <g
-         id="g1637">
-        <g
-           transform="rotate(-90,116.69406,24.6423)"
-           id="g2108"
-           style="stroke:#000000;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none">
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle1457-4"
-             cx="-40.3577"
-             cy="-41.694046"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2068"
-             cx="-40.3577"
-             cy="-51.694046"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2070"
-             cx="-40.3577"
-             cy="-61.694046"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2072"
-             cx="-40.3577"
-             cy="-71.694046"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2074"
-             cx="-40.3577"
-             cy="-81.694046"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2076"
-             cx="-40.3577"
-             cy="-91.694046"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2078"
-             cx="-40.3577"
-             cy="-101.69405"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2080"
-             cx="-40.3577"
-             cy="-111.69405"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2082"
-             cx="-40.3577"
-             cy="-121.69405"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2084"
-             cx="-40.3577"
-             cy="-131.69406"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2086"
-             cx="-40.3577"
-             cy="-141.69406"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2088"
-             cx="-40.3577"
-             cy="-151.69406"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2090"
-             cx="-40.3577"
-             cy="-161.69406"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2092"
-             cx="-40.3577"
-             cy="-171.69406"
-             transform="rotate(90)"
-             r="1.6" />
-        </g>
-        <g
-           id="g2138"
-           transform="rotate(-90,121.69406,19.642301)"
-           style="stroke:#000000;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none">
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2110"
-             cx="-40.3577"
-             cy="-41.694046"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2112"
-             cx="-40.3577"
-             cy="-51.694046"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2114"
-             cx="-40.3577"
-             cy="-61.694046"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2116"
-             cx="-40.3577"
-             cy="-71.694046"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2118"
-             cx="-40.3577"
-             cy="-81.694046"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2120"
-             cx="-40.3577"
-             cy="-91.694046"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2122"
-             cx="-40.3577"
-             cy="-101.69405"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2124"
-             cx="-40.3577"
-             cy="-111.69405"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2126"
-             cx="-40.3577"
-             cy="-121.69405"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2128"
-             cx="-40.3577"
-             cy="-131.69406"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2130"
-             cx="-40.3577"
-             cy="-141.69406"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2132"
-             cx="-40.3577"
-             cy="-151.69406"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2134"
-             cx="-40.3577"
-             cy="-161.69406"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2136"
-             cx="-40.3577"
-             cy="-171.69406"
-             transform="rotate(90)"
-             r="1.6" />
-        </g>
-        <g
-           id="g2168"
-           transform="rotate(-90,126.69406,14.642299)"
-           style="stroke:#000000;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none">
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2140"
-             cx="-40.3577"
-             cy="-41.694046"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2142"
-             cx="-40.3577"
-             cy="-51.694046"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2144"
-             cx="-40.3577"
-             cy="-61.694046"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2146"
-             cx="-40.3577"
-             cy="-71.694046"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2148"
-             cx="-40.3577"
-             cy="-81.694046"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2150"
-             cx="-40.3577"
-             cy="-91.694046"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2152"
-             cx="-40.3577"
-             cy="-101.69405"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2154"
-             cx="-40.3577"
-             cy="-111.69405"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2156"
-             cx="-40.3577"
-             cy="-121.69405"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2158"
-             cx="-40.3577"
-             cy="-131.69406"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2160"
-             cx="-40.3577"
-             cy="-141.69406"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2162"
-             cx="-40.3577"
-             cy="-151.69406"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2164"
-             cx="-40.3577"
-             cy="-161.69406"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2166"
-             cx="-40.3577"
-             cy="-171.69406"
-             transform="rotate(90)"
-             r="1.6" />
-        </g>
-        <g
-           id="g2198"
-           transform="rotate(-90,131.69406,9.6422997)"
-           style="stroke:#000000;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none">
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2170"
-             cx="-40.3577"
-             cy="-41.694046"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2172"
-             cx="-40.3577"
-             cy="-51.694046"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2174"
-             cx="-40.3577"
-             cy="-61.694046"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2176"
-             cx="-40.3577"
-             cy="-71.694046"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2178"
-             cx="-40.3577"
-             cy="-81.694046"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2180"
-             cx="-40.3577"
-             cy="-91.694046"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2182"
-             cx="-40.3577"
-             cy="-101.69405"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2184"
-             cx="-40.3577"
-             cy="-111.69405"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2186"
-             cx="-40.3577"
-             cy="-121.69405"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2188"
-             cx="-40.3577"
-             cy="-131.69406"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2190"
-             cx="-40.3577"
-             cy="-141.69406"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2192"
-             cx="-40.3577"
-             cy="-151.69406"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2194"
-             cx="-40.3577"
-             cy="-161.69406"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2196"
-             cx="-40.3577"
-             cy="-171.69406"
-             transform="rotate(90)"
-             r="1.6" />
-        </g>
-        <g
-           id="g2228"
-           transform="rotate(-90,136.69406,4.6422991)"
-           style="stroke:#000000;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none">
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2200"
-             cx="-40.3577"
-             cy="-41.694046"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2202"
-             cx="-40.3577"
-             cy="-51.694046"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2204"
-             cx="-40.3577"
-             cy="-61.694046"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2206"
-             cx="-40.3577"
-             cy="-71.694046"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2208"
-             cx="-40.3577"
-             cy="-81.694046"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2210"
-             cx="-40.3577"
-             cy="-91.694046"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2212"
-             cx="-40.3577"
-             cy="-101.69405"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2214"
-             cx="-40.3577"
-             cy="-111.69405"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2216"
-             cx="-40.3577"
-             cy="-121.69405"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2218"
-             cx="-40.3577"
-             cy="-131.69406"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2220"
-             cx="-40.3577"
-             cy="-141.69406"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2222"
-             cx="-40.3577"
-             cy="-151.69406"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2224"
-             cx="-40.3577"
-             cy="-161.69406"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2226"
-             cx="-40.3577"
-             cy="-171.69406"
-             transform="rotate(90)"
-             r="1.6" />
-        </g>
-        <g
-           id="g2258"
-           transform="rotate(-90,141.69406,-0.35770151)"
-           style="stroke:#000000;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none">
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2230"
-             cx="-40.3577"
-             cy="-41.694046"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2232"
-             cx="-40.3577"
-             cy="-51.694046"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2234"
-             cx="-40.3577"
-             cy="-61.694046"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2236"
-             cx="-40.3577"
-             cy="-71.694046"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2238"
-             cx="-40.3577"
-             cy="-81.694046"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2240"
-             cx="-40.3577"
-             cy="-91.694046"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2242"
-             cx="-40.3577"
-             cy="-101.69405"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2244"
-             cx="-40.3577"
-             cy="-111.69405"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2246"
-             cx="-40.3577"
-             cy="-121.69405"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2248"
-             cx="-40.3577"
-             cy="-131.69406"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2250"
-             cx="-40.3577"
-             cy="-141.69406"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2252"
-             cx="-40.3577"
-             cy="-151.69406"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2254"
-             cx="-40.3577"
-             cy="-161.69406"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2256"
-             cx="-40.3577"
-             cy="-171.69406"
-             transform="rotate(90)"
-             r="1.6" />
-        </g>
-        <g
-           id="g2288"
-           transform="rotate(-90,146.69406,-5.3577008)"
-           style="stroke:#000000;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none">
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2260"
-             cx="-40.3577"
-             cy="-41.694046"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2262"
-             cx="-40.3577"
-             cy="-51.694046"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2264"
-             cx="-40.3577"
-             cy="-61.694046"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2266"
-             cx="-40.3577"
-             cy="-71.694046"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2268"
-             cx="-40.3577"
-             cy="-81.694046"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2270"
-             cx="-40.3577"
-             cy="-91.694046"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2272"
-             cx="-40.3577"
-             cy="-101.69405"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2274"
-             cx="-40.3577"
-             cy="-111.69405"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2276"
-             cx="-40.3577"
-             cy="-121.69405"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2278"
-             cx="-40.3577"
-             cy="-131.69406"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2280"
-             cx="-40.3577"
-             cy="-141.69406"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2282"
-             cx="-40.3577"
-             cy="-151.69406"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2284"
-             cx="-40.3577"
-             cy="-161.69406"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2286"
-             cx="-40.3577"
-             cy="-171.69406"
-             transform="rotate(90)"
-             r="1.6" />
-        </g>
-        <g
-           id="g2318"
-           transform="rotate(-90,151.69406,-10.357701)"
-           style="stroke:#000000;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none">
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2290"
-             cx="-40.3577"
-             cy="-41.694046"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2292"
-             cx="-40.3577"
-             cy="-51.694046"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2294"
-             cx="-40.3577"
-             cy="-61.694046"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2296"
-             cx="-40.3577"
-             cy="-71.694046"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2298"
-             cx="-40.3577"
-             cy="-81.694046"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2300"
-             cx="-40.3577"
-             cy="-91.694046"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2302"
-             cx="-40.3577"
-             cy="-101.69405"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2304"
-             cx="-40.3577"
-             cy="-111.69405"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2306"
-             cx="-40.3577"
-             cy="-121.69405"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2308"
-             cx="-40.3577"
-             cy="-131.69406"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2310"
-             cx="-40.3577"
-             cy="-141.69406"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2312"
-             cx="-40.3577"
-             cy="-151.69406"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2314"
-             cx="-40.3577"
-             cy="-161.69406"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2316"
-             cx="-40.3577"
-             cy="-171.69406"
-             transform="rotate(90)"
-             r="1.6" />
-        </g>
-        <g
-           id="g2348"
-           transform="rotate(-90,156.69406,-15.357701)"
-           style="stroke:#000000;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none">
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2320"
-             cx="-40.3577"
-             cy="-41.694046"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2322"
-             cx="-40.3577"
-             cy="-51.694046"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2324"
-             cx="-40.3577"
-             cy="-61.694046"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2326"
-             cx="-40.3577"
-             cy="-71.694046"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2328"
-             cx="-40.3577"
-             cy="-81.694046"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2330"
-             cx="-40.3577"
-             cy="-91.694046"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2332"
-             cx="-40.3577"
-             cy="-101.69405"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2334"
-             cx="-40.3577"
-             cy="-111.69405"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2336"
-             cx="-40.3577"
-             cy="-121.69405"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2338"
-             cx="-40.3577"
-             cy="-131.69406"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2340"
-             cx="-40.3577"
-             cy="-141.69406"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2342"
-             cx="-40.3577"
-             cy="-151.69406"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2344"
-             cx="-40.3577"
-             cy="-161.69406"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2346"
-             cx="-40.3577"
-             cy="-171.69406"
-             transform="rotate(90)"
-             r="1.6" />
-        </g>
-        <g
-           id="g2378"
-           transform="rotate(-90,161.69406,-20.357701)"
-           style="stroke:#000000;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none">
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2350"
-             cx="-40.3577"
-             cy="-41.694046"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2352"
-             cx="-40.3577"
-             cy="-51.694046"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2354"
-             cx="-40.3577"
-             cy="-61.694046"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2356"
-             cx="-40.3577"
-             cy="-71.694046"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2358"
-             cx="-40.3577"
-             cy="-81.694046"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2360"
-             cx="-40.3577"
-             cy="-91.694046"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2362"
-             cx="-40.3577"
-             cy="-101.69405"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2364"
-             cx="-40.3577"
-             cy="-111.69405"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2366"
-             cx="-40.3577"
-             cy="-121.69405"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2368"
-             cx="-40.3577"
-             cy="-131.69406"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2370"
-             cx="-40.3577"
-             cy="-141.69406"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2372"
-             cx="-40.3577"
-             cy="-151.69406"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2374"
-             cx="-40.3577"
-             cy="-161.69406"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2376"
-             cx="-40.3577"
-             cy="-171.69406"
-             transform="rotate(90)"
-             r="1.6" />
-        </g>
-        <g
-           id="g2408"
-           transform="rotate(-90,166.69406,-25.3577)"
-           style="stroke:#000000;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none">
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2380"
-             cx="-40.3577"
-             cy="-41.694046"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2382"
-             cx="-40.3577"
-             cy="-51.694046"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2384"
-             cx="-40.3577"
-             cy="-61.694046"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2386"
-             cx="-40.3577"
-             cy="-71.694046"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2388"
-             cx="-40.3577"
-             cy="-81.694046"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2390"
-             cx="-40.3577"
-             cy="-91.694046"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2392"
-             cx="-40.3577"
-             cy="-101.69405"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2394"
-             cx="-40.3577"
-             cy="-111.69405"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2396"
-             cx="-40.3577"
-             cy="-121.69405"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2398"
-             cx="-40.3577"
-             cy="-131.69406"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2400"
-             cx="-40.3577"
-             cy="-141.69406"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2402"
-             cx="-40.3577"
-             cy="-151.69406"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2404"
-             cx="-40.3577"
-             cy="-161.69406"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2406"
-             cx="-40.3577"
-             cy="-171.69406"
-             transform="rotate(90)"
-             r="1.6" />
-        </g>
-        <g
-           id="g2772"
-           transform="rotate(-90,171.69406,-30.357701)"
-           style="stroke:#000000;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none">
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2744"
-             cx="-40.3577"
-             cy="-41.694046"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2746"
-             cx="-40.3577"
-             cy="-51.694046"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2748"
-             cx="-40.3577"
-             cy="-61.694046"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2750"
-             cx="-40.3577"
-             cy="-71.694046"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2752"
-             cx="-40.3577"
-             cy="-81.694046"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2754"
-             cx="-40.3577"
-             cy="-91.694046"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2756"
-             cx="-40.3577"
-             cy="-101.69405"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2758"
-             cx="-40.3577"
-             cy="-111.69405"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2760"
-             cx="-40.3577"
-             cy="-121.69405"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2762"
-             cx="-40.3577"
-             cy="-131.69406"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2764"
-             cx="-40.3577"
-             cy="-141.69406"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2766"
-             cx="-40.3577"
-             cy="-151.69406"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2768"
-             cx="-40.3577"
-             cy="-161.69406"
-             transform="rotate(90)"
-             r="1.6" />
-          <circle
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-             id="circle2770"
-             cx="-40.3577"
-             cy="-171.69406"
-             transform="rotate(90)"
-             r="1.6" />
-        </g>
-        <g
-           style="stroke:#000000;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none"
-           transform="rotate(-90,176.69406,-35.3577)"
-           id="g1202">
-          <circle
-             r="1.6"
-             transform="rotate(90)"
-             cy="-41.694046"
-             cx="-40.3577"
-             id="circle1174"
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
-          <circle
-             r="1.6"
-             transform="rotate(90)"
-             cy="-51.694046"
-             cx="-40.3577"
-             id="circle1176"
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
-          <circle
-             r="1.6"
-             transform="rotate(90)"
-             cy="-61.694046"
-             cx="-40.3577"
-             id="circle1178"
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
-          <circle
-             r="1.6"
-             transform="rotate(90)"
-             cy="-71.694046"
-             cx="-40.3577"
-             id="circle1180"
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
-          <circle
-             r="1.6"
-             transform="rotate(90)"
-             cy="-81.694046"
-             cx="-40.3577"
-             id="circle1182"
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
-          <circle
-             r="1.6"
-             transform="rotate(90)"
-             cy="-91.694046"
-             cx="-40.3577"
-             id="circle1184"
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
-          <circle
-             r="1.6"
-             transform="rotate(90)"
-             cy="-101.69405"
-             cx="-40.3577"
-             id="circle1186"
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
-          <circle
-             r="1.6"
-             transform="rotate(90)"
-             cy="-111.69405"
-             cx="-40.3577"
-             id="circle1188"
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
-          <circle
-             r="1.6"
-             transform="rotate(90)"
-             cy="-121.69405"
-             cx="-40.3577"
-             id="circle1190"
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
-          <circle
-             r="1.6"
-             transform="rotate(90)"
-             cy="-131.69406"
-             cx="-40.3577"
-             id="circle1192"
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
-          <circle
-             r="1.6"
-             transform="rotate(90)"
-             cy="-141.69406"
-             cx="-40.3577"
-             id="circle1194"
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
-          <circle
-             r="1.6"
-             transform="rotate(90)"
-             cy="-151.69406"
-             cx="-40.3577"
-             id="circle1196"
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
-          <circle
-             r="1.6"
-             transform="rotate(90)"
-             cy="-161.69406"
-             cx="-40.3577"
-             id="circle1198"
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
-          <circle
-             r="1.6"
-             transform="rotate(90)"
-             cy="-171.69406"
-             cx="-40.3577"
-             id="circle1200"
-             style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
-        </g>
+         style="stroke:#000000;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none"
+         id="g2108"
+         transform="translate(-8.018084,81.249938)">
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-41.694046"
+           cx="-40.3577"
+           id="circle1457-4"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-51.694046"
+           cx="-40.3577"
+           id="circle2068"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-61.694046"
+           cx="-40.3577"
+           id="circle2070"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-71.694046"
+           cx="-40.3577"
+           id="circle2072"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-81.694046"
+           cx="-40.3577"
+           id="circle2074"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-91.694046"
+           cx="-40.3577"
+           id="circle2076"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-101.69405"
+           cx="-40.3577"
+           id="circle2078"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-111.69405"
+           cx="-40.3577"
+           id="circle2080"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-121.69405"
+           cx="-40.3577"
+           id="circle2082"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-131.69406"
+           cx="-40.3577"
+           id="circle2084"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-141.69406"
+           cx="-40.3577"
+           id="circle2086"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-151.69406"
+           cx="-40.3577"
+           id="circle2088"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-161.69406"
+           cx="-40.3577"
+           id="circle2090"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-171.69406"
+           cx="-40.3577"
+           id="circle2092"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+      </g>
+      <g
+         style="stroke:#000000;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none"
+         transform="translate(-8.018085,91.249937)"
+         id="g2138">
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-41.694046"
+           cx="-40.3577"
+           id="circle2110"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-51.694046"
+           cx="-40.3577"
+           id="circle2112"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-61.694046"
+           cx="-40.3577"
+           id="circle2114"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-71.694046"
+           cx="-40.3577"
+           id="circle2116"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-81.694046"
+           cx="-40.3577"
+           id="circle2118"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-91.694046"
+           cx="-40.3577"
+           id="circle2120"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-101.69405"
+           cx="-40.3577"
+           id="circle2122"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-111.69405"
+           cx="-40.3577"
+           id="circle2124"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-121.69405"
+           cx="-40.3577"
+           id="circle2126"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-131.69406"
+           cx="-40.3577"
+           id="circle2128"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-141.69406"
+           cx="-40.3577"
+           id="circle2130"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-151.69406"
+           cx="-40.3577"
+           id="circle2132"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-161.69406"
+           cx="-40.3577"
+           id="circle2134"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-171.69406"
+           cx="-40.3577"
+           id="circle2136"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+      </g>
+      <g
+         style="stroke:#000000;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none"
+         transform="translate(-8.018083,101.24994)"
+         id="g2168">
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-41.694046"
+           cx="-40.3577"
+           id="circle2140"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-51.694046"
+           cx="-40.3577"
+           id="circle2142"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-61.694046"
+           cx="-40.3577"
+           id="circle2144"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-71.694046"
+           cx="-40.3577"
+           id="circle2146"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-81.694046"
+           cx="-40.3577"
+           id="circle2148"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-91.694046"
+           cx="-40.3577"
+           id="circle2150"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-101.69405"
+           cx="-40.3577"
+           id="circle2152"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-111.69405"
+           cx="-40.3577"
+           id="circle2154"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-121.69405"
+           cx="-40.3577"
+           id="circle2156"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-131.69406"
+           cx="-40.3577"
+           id="circle2158"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-141.69406"
+           cx="-40.3577"
+           id="circle2160"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-151.69406"
+           cx="-40.3577"
+           id="circle2162"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-161.69406"
+           cx="-40.3577"
+           id="circle2164"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-171.69406"
+           cx="-40.3577"
+           id="circle2166"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+      </g>
+      <g
+         style="stroke:#000000;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none"
+         transform="translate(-8.0180837,111.24994)"
+         id="g2198">
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-41.694046"
+           cx="-40.3577"
+           id="circle2170"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-51.694046"
+           cx="-40.3577"
+           id="circle2172"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-61.694046"
+           cx="-40.3577"
+           id="circle2174"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-71.694046"
+           cx="-40.3577"
+           id="circle2176"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-81.694046"
+           cx="-40.3577"
+           id="circle2178"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-91.694046"
+           cx="-40.3577"
+           id="circle2180"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-101.69405"
+           cx="-40.3577"
+           id="circle2182"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-111.69405"
+           cx="-40.3577"
+           id="circle2184"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-121.69405"
+           cx="-40.3577"
+           id="circle2186"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-131.69406"
+           cx="-40.3577"
+           id="circle2188"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-141.69406"
+           cx="-40.3577"
+           id="circle2190"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-151.69406"
+           cx="-40.3577"
+           id="circle2192"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-161.69406"
+           cx="-40.3577"
+           id="circle2194"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-171.69406"
+           cx="-40.3577"
+           id="circle2196"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+      </g>
+      <g
+         style="stroke:#000000;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none"
+         transform="translate(-8.0180831,121.24994)"
+         id="g2228">
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-41.694046"
+           cx="-40.3577"
+           id="circle2200"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-51.694046"
+           cx="-40.3577"
+           id="circle2202"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-61.694046"
+           cx="-40.3577"
+           id="circle2204"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-71.694046"
+           cx="-40.3577"
+           id="circle2206"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-81.694046"
+           cx="-40.3577"
+           id="circle2208"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-91.694046"
+           cx="-40.3577"
+           id="circle2210"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-101.69405"
+           cx="-40.3577"
+           id="circle2212"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-111.69405"
+           cx="-40.3577"
+           id="circle2214"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-121.69405"
+           cx="-40.3577"
+           id="circle2216"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-131.69406"
+           cx="-40.3577"
+           id="circle2218"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-141.69406"
+           cx="-40.3577"
+           id="circle2220"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-151.69406"
+           cx="-40.3577"
+           id="circle2222"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-161.69406"
+           cx="-40.3577"
+           id="circle2224"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-171.69406"
+           cx="-40.3577"
+           id="circle2226"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+      </g>
+      <g
+         style="stroke:#000000;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none"
+         transform="translate(-8.0180825,131.24994)"
+         id="g2258">
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-41.694046"
+           cx="-40.3577"
+           id="circle2230"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-51.694046"
+           cx="-40.3577"
+           id="circle2232"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-61.694046"
+           cx="-40.3577"
+           id="circle2234"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-71.694046"
+           cx="-40.3577"
+           id="circle2236"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-81.694046"
+           cx="-40.3577"
+           id="circle2238"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-91.694046"
+           cx="-40.3577"
+           id="circle2240"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-101.69405"
+           cx="-40.3577"
+           id="circle2242"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-111.69405"
+           cx="-40.3577"
+           id="circle2244"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-121.69405"
+           cx="-40.3577"
+           id="circle2246"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-131.69406"
+           cx="-40.3577"
+           id="circle2248"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-141.69406"
+           cx="-40.3577"
+           id="circle2250"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-151.69406"
+           cx="-40.3577"
+           id="circle2252"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-161.69406"
+           cx="-40.3577"
+           id="circle2254"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-171.69406"
+           cx="-40.3577"
+           id="circle2256"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+      </g>
+      <g
+         style="stroke:#000000;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none"
+         transform="translate(-8.0180832,141.24994)"
+         id="g2288">
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-41.694046"
+           cx="-40.3577"
+           id="circle2260"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-51.694046"
+           cx="-40.3577"
+           id="circle2262"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-61.694046"
+           cx="-40.3577"
+           id="circle2264"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-71.694046"
+           cx="-40.3577"
+           id="circle2266"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-81.694046"
+           cx="-40.3577"
+           id="circle2268"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-91.694046"
+           cx="-40.3577"
+           id="circle2270"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-101.69405"
+           cx="-40.3577"
+           id="circle2272"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-111.69405"
+           cx="-40.3577"
+           id="circle2274"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-121.69405"
+           cx="-40.3577"
+           id="circle2276"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-131.69406"
+           cx="-40.3577"
+           id="circle2278"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-141.69406"
+           cx="-40.3577"
+           id="circle2280"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-151.69406"
+           cx="-40.3577"
+           id="circle2282"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-161.69406"
+           cx="-40.3577"
+           id="circle2284"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-171.69406"
+           cx="-40.3577"
+           id="circle2286"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+      </g>
+      <g
+         style="stroke:#000000;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none"
+         transform="translate(-8.018083,151.24994)"
+         id="g2318">
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-41.694046"
+           cx="-40.3577"
+           id="circle2290"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-51.694046"
+           cx="-40.3577"
+           id="circle2292"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-61.694046"
+           cx="-40.3577"
+           id="circle2294"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-71.694046"
+           cx="-40.3577"
+           id="circle2296"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-81.694046"
+           cx="-40.3577"
+           id="circle2298"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-91.694046"
+           cx="-40.3577"
+           id="circle2300"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-101.69405"
+           cx="-40.3577"
+           id="circle2302"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-111.69405"
+           cx="-40.3577"
+           id="circle2304"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-121.69405"
+           cx="-40.3577"
+           id="circle2306"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-131.69406"
+           cx="-40.3577"
+           id="circle2308"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-141.69406"
+           cx="-40.3577"
+           id="circle2310"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-151.69406"
+           cx="-40.3577"
+           id="circle2312"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-161.69406"
+           cx="-40.3577"
+           id="circle2314"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-171.69406"
+           cx="-40.3577"
+           id="circle2316"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+      </g>
+      <g
+         style="stroke:#000000;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none"
+         transform="translate(-8.018083,161.24994)"
+         id="g2348">
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-41.694046"
+           cx="-40.3577"
+           id="circle2320"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-51.694046"
+           cx="-40.3577"
+           id="circle2322"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-61.694046"
+           cx="-40.3577"
+           id="circle2324"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-71.694046"
+           cx="-40.3577"
+           id="circle2326"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-81.694046"
+           cx="-40.3577"
+           id="circle2328"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-91.694046"
+           cx="-40.3577"
+           id="circle2330"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-101.69405"
+           cx="-40.3577"
+           id="circle2332"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-111.69405"
+           cx="-40.3577"
+           id="circle2334"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-121.69405"
+           cx="-40.3577"
+           id="circle2336"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-131.69406"
+           cx="-40.3577"
+           id="circle2338"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-141.69406"
+           cx="-40.3577"
+           id="circle2340"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-151.69406"
+           cx="-40.3577"
+           id="circle2342"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-161.69406"
+           cx="-40.3577"
+           id="circle2344"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-171.69406"
+           cx="-40.3577"
+           id="circle2346"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+      </g>
+      <g
+         style="stroke:#000000;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none"
+         transform="translate(-8.018083,171.24994)"
+         id="g2378">
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-41.694046"
+           cx="-40.3577"
+           id="circle2350"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-51.694046"
+           cx="-40.3577"
+           id="circle2352"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-61.694046"
+           cx="-40.3577"
+           id="circle2354"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-71.694046"
+           cx="-40.3577"
+           id="circle2356"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-81.694046"
+           cx="-40.3577"
+           id="circle2358"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-91.694046"
+           cx="-40.3577"
+           id="circle2360"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-101.69405"
+           cx="-40.3577"
+           id="circle2362"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-111.69405"
+           cx="-40.3577"
+           id="circle2364"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-121.69405"
+           cx="-40.3577"
+           id="circle2366"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-131.69406"
+           cx="-40.3577"
+           id="circle2368"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-141.69406"
+           cx="-40.3577"
+           id="circle2370"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-151.69406"
+           cx="-40.3577"
+           id="circle2372"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-161.69406"
+           cx="-40.3577"
+           id="circle2374"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-171.69406"
+           cx="-40.3577"
+           id="circle2376"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+      </g>
+      <g
+         style="stroke:#000000;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none"
+         transform="translate(-8.018084,181.24994)"
+         id="g2408">
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-41.694046"
+           cx="-40.3577"
+           id="circle2380"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-51.694046"
+           cx="-40.3577"
+           id="circle2382"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-61.694046"
+           cx="-40.3577"
+           id="circle2384"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-71.694046"
+           cx="-40.3577"
+           id="circle2386"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-81.694046"
+           cx="-40.3577"
+           id="circle2388"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-91.694046"
+           cx="-40.3577"
+           id="circle2390"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-101.69405"
+           cx="-40.3577"
+           id="circle2392"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-111.69405"
+           cx="-40.3577"
+           id="circle2394"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-121.69405"
+           cx="-40.3577"
+           id="circle2396"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-131.69406"
+           cx="-40.3577"
+           id="circle2398"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-141.69406"
+           cx="-40.3577"
+           id="circle2400"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-151.69406"
+           cx="-40.3577"
+           id="circle2402"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-161.69406"
+           cx="-40.3577"
+           id="circle2404"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-171.69406"
+           cx="-40.3577"
+           id="circle2406"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+      </g>
+      <g
+         style="stroke:#000000;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none"
+         transform="translate(-8.018083,191.24994)"
+         id="g2772">
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-41.694046"
+           cx="-40.3577"
+           id="circle2744"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-51.694046"
+           cx="-40.3577"
+           id="circle2746"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-61.694046"
+           cx="-40.3577"
+           id="circle2748"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-71.694046"
+           cx="-40.3577"
+           id="circle2750"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-81.694046"
+           cx="-40.3577"
+           id="circle2752"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-91.694046"
+           cx="-40.3577"
+           id="circle2754"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-101.69405"
+           cx="-40.3577"
+           id="circle2756"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-111.69405"
+           cx="-40.3577"
+           id="circle2758"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-121.69405"
+           cx="-40.3577"
+           id="circle2760"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-131.69406"
+           cx="-40.3577"
+           id="circle2762"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-141.69406"
+           cx="-40.3577"
+           id="circle2764"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-151.69406"
+           cx="-40.3577"
+           id="circle2766"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-161.69406"
+           cx="-40.3577"
+           id="circle2768"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="rotate(90)"
+           cy="-171.69406"
+           cx="-40.3577"
+           id="circle2770"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+      </g>
+      <g
+         id="g1202"
+         transform="translate(-8.018084,201.24994)"
+         style="stroke:#000000;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none">
         <circle
            style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-           id="circle1206"
+           id="circle1174"
+           cx="-40.3577"
+           cy="-41.694046"
+           transform="rotate(90)"
+           r="1.6" />
+        <circle
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
+           id="circle1176"
            cx="-40.3577"
            cy="-51.694046"
            transform="rotate(90)"
            r="1.6" />
         <circle
            style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-           id="circle1208"
+           id="circle1178"
            cx="-40.3577"
            cy="-61.694046"
            transform="rotate(90)"
            r="1.6" />
         <circle
            style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-           id="circle1210"
+           id="circle1180"
            cx="-40.3577"
            cy="-71.694046"
            transform="rotate(90)"
            r="1.6" />
         <circle
            style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-           id="circle1212"
+           id="circle1182"
            cx="-40.3577"
            cy="-81.694046"
            transform="rotate(90)"
            r="1.6" />
         <circle
            style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-           id="circle1214"
+           id="circle1184"
            cx="-40.3577"
            cy="-91.694046"
            transform="rotate(90)"
            r="1.6" />
         <circle
            style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-           id="circle1216"
+           id="circle1186"
            cx="-40.3577"
            cy="-101.69405"
            transform="rotate(90)"
            r="1.6" />
         <circle
            style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-           id="circle1218"
+           id="circle1188"
            cx="-40.3577"
            cy="-111.69405"
            transform="rotate(90)"
            r="1.6" />
         <circle
            style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-           id="circle1220"
+           id="circle1190"
            cx="-40.3577"
            cy="-121.69405"
            transform="rotate(90)"
            r="1.6" />
         <circle
            style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-           id="circle1222"
+           id="circle1192"
            cx="-40.3577"
            cy="-131.69406"
            transform="rotate(90)"
            r="1.6" />
         <circle
            style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-           id="circle1224"
+           id="circle1194"
            cx="-40.3577"
            cy="-141.69406"
            transform="rotate(90)"
            r="1.6" />
         <circle
            style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-           id="circle1226"
+           id="circle1196"
            cx="-40.3577"
            cy="-151.69406"
            transform="rotate(90)"
            r="1.6" />
         <circle
            style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-           id="circle1228"
+           id="circle1198"
            cx="-40.3577"
            cy="-161.69406"
            transform="rotate(90)"
            r="1.6" />
         <circle
            style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-           id="circle1230"
+           id="circle1200"
            cx="-40.3577"
            cy="-171.69406"
            transform="rotate(90)"
+           r="1.6" />
+      </g>
+      <g
+         id="g1453">
+        <circle
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
+           id="circle1206"
+           cx="-173.67598"
+           cy="-40.892223"
+           transform="scale(-1)"
+           r="1.6" />
+        <circle
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
+           id="circle1208"
+           cx="-173.67598"
+           cy="-50.892223"
+           transform="scale(-1)"
+           r="1.6" />
+        <circle
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
+           id="circle1210"
+           cx="-173.67598"
+           cy="-60.892223"
+           transform="scale(-1)"
+           r="1.6" />
+        <circle
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
+           id="circle1212"
+           cx="-173.67598"
+           cy="-70.892227"
+           transform="scale(-1)"
+           r="1.6" />
+        <circle
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
+           id="circle1214"
+           cx="-173.67598"
+           cy="-80.892227"
+           transform="scale(-1)"
+           r="1.6" />
+        <circle
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
+           id="circle1216"
+           cx="-173.67598"
+           cy="-90.892235"
+           transform="scale(-1)"
+           r="1.6" />
+        <circle
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
+           id="circle1218"
+           cx="-173.67598"
+           cy="-100.89223"
+           transform="scale(-1)"
+           r="1.6" />
+        <circle
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
+           id="circle1220"
+           cx="-173.67598"
+           cy="-110.89223"
+           transform="scale(-1)"
+           r="1.6" />
+        <circle
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
+           id="circle1222"
+           cx="-173.67598"
+           cy="-120.89224"
+           transform="scale(-1)"
+           r="1.6" />
+        <circle
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
+           id="circle1224"
+           cx="-173.67598"
+           cy="-130.89224"
+           transform="scale(-1)"
+           r="1.6" />
+        <circle
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
+           id="circle1226"
+           cx="-173.67598"
+           cy="-140.89224"
+           transform="scale(-1)"
+           r="1.6" />
+        <circle
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
+           id="circle1228"
+           cx="-173.67598"
+           cy="-150.89224"
+           transform="scale(-1)"
+           r="1.6" />
+        <circle
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
+           id="circle1230"
+           cx="-173.67598"
+           cy="-160.89224"
+           transform="scale(-1)"
+           r="1.6" />
+      </g>
+      <g
+         transform="translate(10)"
+         id="g1481">
+        <circle
+           r="1.6"
+           transform="scale(-1)"
+           cy="-40.892223"
+           cx="-173.67598"
+           id="circle1455"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="scale(-1)"
+           cy="-50.892223"
+           cx="-173.67598"
+           id="circle1457"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="scale(-1)"
+           cy="-60.892223"
+           cx="-173.67598"
+           id="circle1459"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="scale(-1)"
+           cy="-70.892227"
+           cx="-173.67598"
+           id="circle1461"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="scale(-1)"
+           cy="-80.892227"
+           cx="-173.67598"
+           id="circle1463"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="scale(-1)"
+           cy="-90.892235"
+           cx="-173.67598"
+           id="circle1465"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="scale(-1)"
+           cy="-100.89223"
+           cx="-173.67598"
+           id="circle1467"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="scale(-1)"
+           cy="-110.89223"
+           cx="-173.67598"
+           id="circle1469"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="scale(-1)"
+           cy="-120.89224"
+           cx="-173.67598"
+           id="circle1471"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="scale(-1)"
+           cy="-130.89224"
+           cx="-173.67598"
+           id="circle1473"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="scale(-1)"
+           cy="-140.89224"
+           cx="-173.67598"
+           id="circle1475"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="scale(-1)"
+           cy="-150.89224"
+           cx="-173.67598"
+           id="circle1477"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+        <circle
+           r="1.6"
+           transform="scale(-1)"
+           cy="-160.89224"
+           cx="-173.67598"
+           id="circle1479"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+      </g>
+      <g
+         id="g1509"
+         transform="translate(20)">
+        <circle
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
+           id="circle1483"
+           cx="-173.67598"
+           cy="-40.892223"
+           transform="scale(-1)"
+           r="1.6" />
+        <circle
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
+           id="circle1485"
+           cx="-173.67598"
+           cy="-50.892223"
+           transform="scale(-1)"
+           r="1.6" />
+        <circle
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
+           id="circle1487"
+           cx="-173.67598"
+           cy="-60.892223"
+           transform="scale(-1)"
+           r="1.6" />
+        <circle
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
+           id="circle1489"
+           cx="-173.67598"
+           cy="-70.892227"
+           transform="scale(-1)"
+           r="1.6" />
+        <circle
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
+           id="circle1491"
+           cx="-173.67598"
+           cy="-80.892227"
+           transform="scale(-1)"
+           r="1.6" />
+        <circle
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
+           id="circle1493"
+           cx="-173.67598"
+           cy="-90.892235"
+           transform="scale(-1)"
+           r="1.6" />
+        <circle
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
+           id="circle1495"
+           cx="-173.67598"
+           cy="-100.89223"
+           transform="scale(-1)"
+           r="1.6" />
+        <circle
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
+           id="circle1497"
+           cx="-173.67598"
+           cy="-110.89223"
+           transform="scale(-1)"
+           r="1.6" />
+        <circle
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
+           id="circle1499"
+           cx="-173.67598"
+           cy="-120.89224"
+           transform="scale(-1)"
+           r="1.6" />
+        <circle
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
+           id="circle1501"
+           cx="-173.67598"
+           cy="-130.89224"
+           transform="scale(-1)"
+           r="1.6" />
+        <circle
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
+           id="circle1503"
+           cx="-173.67598"
+           cy="-140.89224"
+           transform="scale(-1)"
+           r="1.6" />
+        <circle
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
+           id="circle1505"
+           cx="-173.67598"
+           cy="-150.89224"
+           transform="scale(-1)"
+           r="1.6" />
+        <circle
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
+           id="circle1507"
+           cx="-173.67598"
+           cy="-160.89224"
+           transform="scale(-1)"
            r="1.6" />
       </g>
     </g>
