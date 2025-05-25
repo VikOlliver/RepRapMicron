@@ -2,21 +2,21 @@
 // (C)2024 vik@diamondage.co.nz GPLV3 or later applies
 
 // Uncomment these if building standalone
-//include <../library/m3_parts.scad>
-//include <../library/nema17lib.scad>
+include <../library/m3_parts.scad>
+include <../library/nema17lib.scad>
 
 flex_tube_height=13;
-flex_tube_spring_width=1.2;
-max_gap=1;
+flex_tube_spring_width=0.6;
+max_gap=1.2;
 flex_link_width=max_gap+flex_tube_spring_width;
-wall=2;     // Minimal ridig wall
+wall=2;     // Minimal rigid wall
 outer_radius=6;
 spring_height=7;
 
 // Basically a tube with spring_width walls
 module flex_tube(radius,height=flex_tube_height) translate([0,0,height/2]) difference() {
-    cylinder(h=height,r=radius+max_gap/2,center=true);
-    cylinder(h=height+1,r=radius-flex_tube_spring_width/2,center=true);
+    cylinder(h=height,r=radius+max_gap/2,center=true,$fn=radius*8);
+    cylinder(h=height+1,r=radius-flex_tube_spring_width/2,center=true,$fn=radius*8);
 }
 
 module flex_quadrant(radius,height=flex_tube_height) {
@@ -38,9 +38,9 @@ nema_coupling_height=6;
 top_radius=m3_nut_max_width/2+wall;
 module nema_m3_coupling() {
     difference() {
-        translate([0,0,-1]) cylinder(h=nema_coupling_height+1,r1=outer_radius+flex_link_width*2.25,r2=top_radius);
-        // Cavity for nut, tapering, and a really tight fit
-        translate([0,0,1]) cylinder(h=nema_coupling_height-0.99,r1=m3_nut_max_width/2-0.45,r2=m3_nut_max_width/2,$fn=6);
+        translate([0,0,-1]) cylinder(h=nema_coupling_height+1,r1=outer_radius+flex_link_width*2.25,r2=top_radius,$fn=60);
+        // Cavity for nut, tapering
+        translate([0,0,1]) cylinder(h=nema_coupling_height-0.99,r1=m3_nut_max_width/2-0.4,r2=m3_nut_max_width/2+0.1,$fn=6);
     }
 }
 
@@ -61,4 +61,4 @@ module flexure_linear_coupling() union() {
     translate([0,0,spring_height+2]) nema_m3_coupling();
 }
 
- //flexure_linear_coupling();
+ flexure_linear_coupling();
