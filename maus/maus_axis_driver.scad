@@ -6,7 +6,6 @@ version_string="MAUS V0.03";
 include <../library/m3_parts.scad>
 include <../library/nema17lib.scad>
 include <../library/metriccano.scad>
-include <flexure_linear_coupling.scad>
 
 flexure_width=6;        // Reduced from original 7.
 flexure_length=2.5;
@@ -629,7 +628,6 @@ module test_flexure() {
 
 // All the axis drive parts on one plate. Will also need a coupling from flexure_linear_coupling.scad
 if (true) {
-    translate([-60,-25,0]) flexure_linear_coupling();
     translate([10,10,0]) axis_complete();
     translate([-60,10,0]) axis_bearing_block();
     translate([15,-60,0]) axis_motor_pillar_assy();
