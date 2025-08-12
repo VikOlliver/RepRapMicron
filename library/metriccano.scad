@@ -1,6 +1,11 @@
 // metricano.scad - A construction and prototyping kit based on 10mm centres, 5mm strips, and M3 fasteners
 // (c)2025 vik@diamondage,co.nz, released under the GPL V3 or later
-/*  Useful parts:
+/*
+    Notes:
+        nutted      - Adds captive nut cavities to screw holes
+        squared   - Gives flat components square corners instead of radiused ones
+ 
+    Useful parts:
         metriccano_strip(holes)                 Single strip of holes
         metriccano_slot_strip(holes)          As above but all holes joined into an adjustable channel
         metriccano_l_plate(holes)              L-shaped plate
@@ -46,7 +51,7 @@ module metriccano_nut_cavity_tapered(captive=false) union() {
     difference() {
         union() {
             // Tapered avity for m3 nut
-            translate([0,0,-0.01]) cylinder(h=metriccano_nut_height+0.01,r=metriccano_nut_max_width/2,$fn=6);
+            translate([0,0,-0.01]) cylinder(h=metriccano_nut_height+0.02,r=metriccano_nut_max_width/2,$fn=6);
             translate([0,0,metriccano_nut_height])
                 cylinder(h=1,r1=metriccano_nut_max_width/2,r2=metriccano_screw_rad*1.2,$fn=6);
         }
@@ -102,14 +107,20 @@ module metriccano_woodscrew() {
 
 // A straight strip of Metriccano. Vertical holes go along the X axis
 // h    number of holes
-module metriccano_strip(h,squared=false) {
+module metriccano_strip(h,squared=false,nutted=false) {
     holes=floor(h+0.5);
     difference() {
         hull() {
             translate([(holes-1)*metriccano_hole_spacing,0,0]) round_square(squared);
             round_square(squared);
         }
-        for (i=[0:holes-1]) translate([i*metriccano_hole_spacing,0,0]) metriccano_screw_hole();
+        // Add the holes. Might use captive nuts.
+        for (i=[0:holes-1]) translate([i*metriccano_hole_spacing,0,0]) {
+            if (nutted)
+                // Nut holes. Raise the tapered part above the surface of the strip
+                translate([0,0,metriccano_plate_height-metriccano_nut_height])  metriccano_nut_cavity_tapered(captive=true);
+           metriccano_screw_hole();
+        }
     }
 }
 
@@ -129,9 +140,9 @@ module metriccano_slot_strip(h=0) {
     }
 }
 
-module metriccano_l_plate(holes) union() {
-    metriccano_strip(holes);
-    rotate([0,0,90]) metriccano_strip(holes);
+module metriccano_l_plate(holes,nutted=false) union() {
+    metriccano_strip(holes,nutted);
+    rotate([0,0,90]) metriccano_strip(holes,nutted);
 }
 
 // Not intended as an end part. It's a strip with a wide flat edge down one side. Useful for adding tabs
@@ -243,7 +254,7 @@ module metriccano_base_anchor(length) {
 }
 
 // A flat plate of x by y holes
-module metriccano_plate(x,y,squared=false) {
+module metriccano_plate(x,y,squared=false,nutted=false) {
     x_holes=floor(x+0.5);
     y_holes=floor(y+0.5);
     difference() {
@@ -255,8 +266,14 @@ module metriccano_plate(x,y,squared=false) {
             translate([0,(y_holes-1)*metriccano_hole_spacing,0]) round_square(squared);
         }
         for(j=[0:y_holes-1])
-            for (i=[0:x_holes-1])
-                translate([i*metriccano_hole_spacing,j*metriccano_hole_spacing,0]) metriccano_screw_hole();
+            for (i=[0:x_holes-1]) translate([i*metriccano_hole_spacing,j*metriccano_hole_spacing,0]) {
+                if (nutted)
+                      // Nut holes. Raise the tapered part above the surface of the strip
+                    translate([0,0,metriccano_plate_height-metriccano_nut_height])
+                        metriccano_nut_cavity_tapered(captive=true);
+                // Screw holes
+                metriccano_screw_hole();
+            }
     }
 }
 
@@ -357,9 +374,9 @@ module metriccano_adjustment_bracket(holes=2,baselen=1) {
 }
 
 // Two strips joined at an angle. Common hole is counted. Angle is 45 degrees by default
-module metriccano_angle_strip(holes1,holes2,angle=45,squared=false) {
-    rotate([0,0,180]) metriccano_strip(holes1,squared);
-    rotate([0,0,angle]) metriccano_strip(holes2,squared);
+module metriccano_angle_strip(holes1,holes2,angle=45,squared=false,nutted=false) {
+    rotate([0,0,180]) metriccano_strip(holes1,squared,nutted);
+    rotate([0,0,angle]) metriccano_strip(holes2,squared,nutted);
 }
 
 // if "true" creates a sampler plate of Metriccano parts
