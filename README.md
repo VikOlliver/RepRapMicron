@@ -2,7 +2,7 @@
 
 ## Overview
 
-The RepRapMicron Project, or μRepRap, is an extension of the Open Source RepRap 3D printer project that aims to bring micron-scale fabrication into very widespread adoption. The main project page is [here](https://reprap.org/wiki/RepRapMicron). It uses hardware and software familiar to 3D printer developers, and materials that are easily and inexpensively available.
+The RepRapMicron Project, or μRepRap, is an extension of the Open Source RepRap 3D printer project that aims to bring micron-scale fabrication into very widespread adoption. The main project page is [here](https://reprap.org/wiki/RepRapMicron) and currently the assembly instructions are on the Github wiki. It uses hardware and software familiar to 3D printer developers, and materials that are easily and inexpensively available.
 
 The meaty part is in the "maus" directory, where the OpenSCAD models for a rapidly reconfigurable 3D printed prototype can be found.
 
