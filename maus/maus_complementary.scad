@@ -6,12 +6,16 @@
 //  avaliable as metriccano_baseboard.svg for lasercutting
 // It is a Very Good Idea(TM) to keep the width in Metriccano (10mm) units.
 // Printed on Prusa Mk4, 0.2mm layers, 20% infill, 2 v shells, 5 h shells
+//
+//  V0.04
+//      Corrected frame and table parallel flexures so that flexure pairs are the same length
+//      Added captive nut cavities to frame sides
 
 include <../library/m3_parts.scad>
 include <../library/metriccano.scad>
 include <../library/nema17lib.scad>
 
-version_string="MAUSC V0.03";
+version_string="MAUSC V0.04";
 
 flexure_width=0.8;  // Width of a flexure beam, that's the very thin direction
 flexure_max=8+flexure_width;      // Maximum desired flexing distance off centre
@@ -19,28 +23,29 @@ flexure_height=6;
 
 structure_height=70;    // Maximum height of the total structure
 frame_thick=5;              // Thickness of the notionally inflexible frame parts
-flexure_clearance=3;    // Give this much clearance on fixed flexure parts that must miss each other
+flexure_clearance=2;    // Give this much clearance on fixed flexure parts that must miss each other
 edge_clearance=1.5;       // For the edges of the table mount to clear the frame. Displace mounting holes by this much.
 x_axis_width=100;          // Width of the outer frame of the flexure structure
 y_axis_width=80-edge_clearance;          // Width of the table frame of the flexure structure
 
+// Height of the frame attached directly to the XY table
+table_frame_height=structure_height-frame_thick-2*flexure_clearance;//52;
 
-// Length of the outer frame flexures
-outer_frame_flexure_len=structure_height-frame_thick*3-flexure_clearance;
-inner_frame_flexure_len=outer_frame_flexure_len-frame_thick-flexure_clearance;
+// Length of the frame flexures
+frame_flexure_length=structure_height-4*frame_thick-2*flexure_clearance;
+
 // The outer frame flexures are spaced this far in from the frame edge
 outer_mf_offset=frame_thick+flexure_max/2+flexure_width/2;
 // Ditto inner flexures of the outer frame
 inner_mf_offset=outer_mf_offset+flexure_max+flexure_width/2;
 
 // The table frame is the flexure unit attached to the outer frame
-table_frame_height=outer_frame_flexure_len+frame_thick;
-outer_table_flexure_len=table_frame_height-frame_thick-flexure_clearance;
-inner_table_flexure_len=outer_table_flexure_len-frame_thick-flexure_clearance;
+table_flexure_len=table_frame_height-3*frame_thick-flexure_clearance;
 // The outer table frame flexures are spaced this far in from the frame edge
 outer_tf_offset=max(frame_thick+flexure_max/2+flexure_width/2+edge_clearance,metriccano_unit);
 // Ditto inner flexures of the table frame
 inner_tf_offset=outer_tf_offset+flexure_max+flexure_width/2;
+
 // Size of the square light well
 light_well_size=metriccano_unit/2+0.5;
 // This plate fits on top of the stage and has cutouts for magnets in it
@@ -90,6 +95,15 @@ module generic_flexure(length) {
     }
 }
 
+// A frame side with stabilized corner, filling in the unusable screw holes
+module outer_frame_side(holes) union() {
+    // Flip so nut cavities are on the right side
+    translate([0,0,metriccano_plate_height]) scale([1,1,-1]) 
+        metriccano_strip(holes,squared=true,nutted=true);
+    // Hole filler
+    translate([metriccano_unit*(holes-1),0,0]) metriccano_square_unit();
+    translate([metriccano_unit*(holes-1),0,]) rotate([0,90,0]) metriccano_square_unit();
+}
 // This is the outer frame. It attaches to the base
 module outer_frame_unit() {
     // Create the outer frame
@@ -108,25 +122,31 @@ module outer_frame_unit() {
     mf_assy_holes=floor(structure_height/metriccano_unit);
     // Sides
     translate([frame_thick,metriccano_unit/2,metriccano_unit+edge_clearance]) rotate([-90,0,90])
-        metriccano_strip(mf_assy_holes,squared=true);
+        outer_frame_side(mf_assy_holes);
     translate([x_axis_width-frame_thick,metriccano_unit/2,metriccano_unit+edge_clearance]) rotate([90,0,90])
-        metriccano_strip(mf_assy_holes,squared=true);
+        outer_frame_side(mf_assy_holes);
     // Bottom
     translate([metriccano_unit/2,structure_height,metriccano_unit+edge_clearance]) rotate([90,0,0])
         metriccano_strip(floor(x_axis_width/metriccano_unit),squared=true);
-    // The two outermost flexures on the main frame.
-    translate([outer_mf_offset,frame_thick,0])
-        generic_flexure(outer_frame_flexure_len);
-    translate([x_axis_width-outer_mf_offset-flexure_width,frame_thick,0])
-        generic_flexure(outer_frame_flexure_len);
+
+    // The two outermost flexures on the main frame and their cubic supports
+    translate([outer_mf_offset,frame_thick*2+flexure_clearance,0])
+        generic_flexure(frame_flexure_length);
+    translate([outer_mf_offset-frame_thick*2+flexure_width,0,0])
+        cube([frame_thick*2,frame_thick*2+flexure_clearance,flexure_height]);
+    translate([x_axis_width-outer_mf_offset-flexure_width,frame_thick*2+flexure_clearance,0])
+        generic_flexure(frame_flexure_length);
+    translate([x_axis_width-outer_mf_offset-flexure_width,0,0])
+        cube([frame_thick*2,frame_thick*2+flexure_clearance,flexure_height]);
+
     // Cross beam that joins the two outermost flexures on the main frame.
-    translate([outer_mf_offset,outer_frame_flexure_len+frame_thick,0])
+    translate([outer_mf_offset,frame_flexure_length+frame_thick*2+flexure_clearance,0])
         cube([x_axis_width-2*outer_mf_offset,frame_thick,flexure_height]);
     // The two innermost flexures on the main frame
     translate([inner_mf_offset,frame_thick*2+flexure_clearance,0])
-        generic_flexure(inner_frame_flexure_len);
+        generic_flexure(frame_flexure_length);
     translate([x_axis_width-inner_mf_offset-flexure_width,frame_thick*2+flexure_clearance,0])
-        generic_flexure(inner_frame_flexure_len);
+        generic_flexure(frame_flexure_length);
     translate([inner_mf_offset,frame_thick+flexure_clearance,0]) {
             // Metriccano table mount. Reduced in height to match frame width
             // so it doesn't interfere with flexure movement.
@@ -150,27 +170,36 @@ module table_frame_unit() {
         union() {
             cube([y_axis_width,frame_thick,flexure_height]);
             // "Wings" for mount holes
-            cube([metriccano_unit,frame_thick,metriccano_unit*2-flexure_height/2+edge_clearance]);
-            translate([y_axis_width-metriccano_unit,0,0]) cube([metriccano_unit,frame_thick,metriccano_unit*2-flexure_height/2+edge_clearance]);
+            cube([outer_tf_offset+flexure_width,frame_thick*2+flexure_clearance,metriccano_unit*2-flexure_height/2+edge_clearance]);
+            translate([y_axis_width-outer_tf_offset-flexure_width,0,0])
+                cube([outer_tf_offset+flexure_width,frame_thick*2+flexure_clearance,metriccano_unit*2-flexure_height/2+edge_clearance]);
         }
-        translate([metriccano_unit/2,0,flexure_height/2+edge_clearance]) rotate([90,0,0]) metriccano_screw_hole();
-        translate([y_axis_width-metriccano_unit/2,0,flexure_height/2+edge_clearance]) rotate([90,0,0]) metriccano_screw_hole();
-        translate([metriccano_unit/2,0,flexure_height/2+metriccano_unit+edge_clearance]) rotate([90,0,0]) metriccano_screw_hole();
-        translate([y_axis_width-metriccano_unit/2,0,flexure_height/2+metriccano_unit+edge_clearance]) rotate([90,0,0]) metriccano_screw_hole();
+        // Screw holes to attach to outer frame
+        translate([metriccano_unit/2,0,flexure_height/2+edge_clearance]) rotate([90,0,0]) metriccano_screw_hole(structure_height);
+        translate([y_axis_width-metriccano_unit/2,0,flexure_height/2+edge_clearance]) rotate([90,0,0]) metriccano_screw_hole(structure_height);
+        translate([metriccano_unit/2,0,flexure_height/2+metriccano_unit+edge_clearance]) rotate([90,0,0]) metriccano_screw_hole(structure_height);
+        translate([y_axis_width-metriccano_unit/2,0,flexure_height/2+metriccano_unit+edge_clearance]) rotate([90,0,0]) metriccano_screw_hole(structure_height);
+        // Slots for outer frame
+      translate([-1,frame_thick,-metriccano_unit])
+            cube([outer_tf_offset+1,frame_thick+0.2,metriccano_unit*4]);
+      translate([y_axis_width-outer_tf_offset,frame_thick,-metriccano_unit])
+            cube([outer_tf_offset+1,frame_thick+0.2,metriccano_unit*4]);
+
     }
     // The two outermost flexures on the table frame.
-    translate([outer_tf_offset,frame_thick,0])
-        generic_flexure(outer_table_flexure_len);
-    translate([y_axis_width-outer_tf_offset-flexure_width,frame_thick,0])
-        generic_flexure(outer_table_flexure_len);
+   translate([outer_tf_offset,2*frame_thick+flexure_clearance,0])
+        generic_flexure(table_flexure_len);
+   translate([y_axis_width-outer_tf_offset-flexure_width,2*frame_thick+flexure_clearance,0])
+        generic_flexure(table_flexure_len);
+
     // Cross beam that joins the two outermost flexures on the main frame.
-    translate([outer_tf_offset,outer_table_flexure_len+frame_thick,0])
+    translate([outer_tf_offset,table_frame_height-frame_thick,0])
         cube([y_axis_width-2*outer_tf_offset,frame_thick,flexure_height]);
     // The two innermost flexures on the main frame
     translate([inner_tf_offset,frame_thick*2+flexure_clearance,0])
-        generic_flexure(inner_table_flexure_len);
+        generic_flexure(table_flexure_len);
     translate([y_axis_width-inner_tf_offset-flexure_width,frame_thick*2+flexure_clearance,0])
-        generic_flexure(inner_table_flexure_len);
+        generic_flexure(table_flexure_len);
     // This is the beam that the table attaches to
     translate([inner_tf_offset,frame_thick+flexure_clearance,0]) {
         // Metriccano table mount. Reduced in height to match frame width
@@ -566,11 +595,13 @@ module microscope_clamp(mrad=31.5/2) {
 // Assembly in 3D for visual test fit
 if (false) {
     translate([0,0,structure_height]) rotate([-90,0,0]) outer_frame_unit();
-    translate([(inner_mf_offset+flexure_max+2*flexure_clearance+6),flexure_height+0.5,structure_height-flexure_clearance]) rotate([0,-90,0]) rotate([0,0,90]) table_frame_unit();
+    translate([(inner_mf_offset+metriccano_unit*2-1+edge_clearance),flexure_height+0.5,structure_height-flexure_clearance]) rotate([0,-90,0]) rotate([0,0,90]) table_frame_unit();
 }
 
+plate=1;
+
 // Build plate A
-if (true) {
+if (plate==1) {
     outer_frame_unit();
     translate([105,0,0]) outer_frame_unit();
     translate([0,75,0]) table_frame_unit();
@@ -583,7 +614,7 @@ if (true) {
     translate([35,100,0]) metriccano_adjustment_bracket(2,1.5);
     translate([125,100,0]) metriccano_adjustment_bracket(2,1.5);
     translate([90,155,0]) y_drive_flexure(51.5);
-} else {
+} else if (plate==2) {
     // Build plate B
     translate([5,50,0]) x_axis_mount();
     translate([15,105,0]) y_axis_mount();
