@@ -56,7 +56,7 @@ module metriccano_nut_cavity_tapered(captive=false) union() {
                 cylinder(h=1,r1=metriccano_nut_max_width/2,r2=metriccano_screw_rad*1.2,$fn=6);
         }
         if (captive) {
-            divot_rad=0.4;
+            divot_rad=0.5;
             rotate([0,0,30]) translate([metriccano_nut_max_width*0.42,0,metriccano_nut_height/2])
                 sphere(divot_rad);
             rotate([0,0,30+120]) translate([metriccano_nut_max_width*0.42,0,metriccano_nut_height/2])
