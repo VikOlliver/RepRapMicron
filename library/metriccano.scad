@@ -25,6 +25,7 @@ metriccano_strip_width=metriccano_unit;
 // Yes, this is repeating an M3 library but in theory you can change this to M4 etc.
 metriccano_screw_rad=3.3/2; // M3 screw hole radius
 metriccano_screw_head_rad=5.9/2;    // Radius of the average M3 posi screw head
+metriccano_screw_head_height=2.1;   // Height of a screw head
 metriccano_nut_max_width=6.6;     // Nut from point to point
 metriccano_nut_height=2.5;
 metriccano_nut_min_width=5.8;  // Nut from flat to flat
@@ -36,13 +37,28 @@ module  metriccano_screw_hole(screw_len=metriccano_hole_spacing*2.01) {
 
 // Cavity for an Metriccano screw and screw head of specified length.
 // Points down. Uses octagons so that it can be printed horizontally
-module  metriccano_screw_cavity(screw_len) {
-    rotate([180,0,360/16]) cylinder(h=screw_len,r=metriccano_screw_rad*1.2,$fn=8);
-    // Rotate to make hole sflats parallel to axes. Tiny shift to fix booleans
-    rotate([0,0,360/16]) translate([0,0,-0.001])
-        cylinder(h=10,r=metriccano_screw_head_rad*1.2,$fn=8);
+// if "inverted" a fine removable support is added to prevent the screw hole collapsing.
+module  metriccano_screw_cavity(screw_len,inverted=false) {
+    difference() {
+        // The screw hole and head assembly
+        union() {
+            rotate([180,0,360/16]) cylinder(h=screw_len,r=metriccano_screw_rad*1.2,$fn=8);
+            // Rotate to make hole sflats parallel to axes. Tiny shift to fix booleans
+            rotate([0,0,360/16]) translate([0,0,-0.001])
+                cylinder(h=10,r=metriccano_screw_head_rad*1.2,$fn=8);
+        }
+        // If it's inverted, put a hollow cylinder in the head cavity lined up with the screw hole as support.
+        if (inverted) {
+            translate([0,0,0.01]) rotate([0,0,360/16]) {
+                // Hollow cylinder
+                difference() {
+                    cylinder(h=screw_len,r=metriccano_screw_rad*1.2,$fn=8);
+                    cylinder(h=screw_len*3,r=metriccano_screw_rad*1.2-0.4,$fn=8,center=true);
+                }
+            }
+        }
+    }
 }
-
 
 // Hole for a nut to be lowered in from the top, or pushed into the bottom.
 // Has a conical top to print without support. Projects very slightly down to remove boolean issues.
@@ -123,6 +139,27 @@ module metriccano_strip(h,squared=false,nutted=false) {
         }
     }
 }
+
+// A straight strip of Metriccano. Vertical holes go along the X axis
+// Nearest end always squared, shifted slightly for a good boolean join.
+// h    number of holes
+module metriccano_strip_flatend(h,squared=false,nutted=false) {
+    holes=floor(h+0.5);
+    difference() {
+        hull() {
+            translate([(holes-1)*metriccano_hole_spacing,0,0]) round_square(squared);
+            translate([-0.01-metriccano_unit/2,-metriccano_unit/2,0]) cube([1,metriccano_unit,metriccano_plate_height]);
+        }
+        // Add the holes. Might use captive nuts.
+        for (i=[0:holes-1]) translate([i*metriccano_hole_spacing,0,0]) {
+            if (nutted)
+                // Nut holes. Raise the tapered part above the surface of the strip
+                translate([0,0,metriccano_plate_height-metriccano_nut_height])  metriccano_nut_cavity_tapered(captive=true);
+           metriccano_screw_hole();
+        }
+    }
+}
+
 
 // A straight strip of Metriccano with a vertical slot along it allowing adjustment
 // h    length of slot in merticcano units - can be fractional
