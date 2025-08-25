@@ -27,6 +27,8 @@ A Selection of useful OpenSCAD libraries used in generating "Metriccano" modular
 
 The maus directory contains standard axis drivers, XY complementary flexure Table, Z Tower, and probe parts that need screwing down to a solid surface. It can be assembled on a Metriccano baseboard supplied for lasercutting as metriccano_baseboad.svg, or a 12 x 14 hole piece of 10mm pitch perf board.
 
+An untested preliminary pantograph-like driver is under development in maus_parallelogram_axis_driver.scad
+
 As assembly documentation is on the Github Wiki, with configuration and usage instructions next up. Bill Of Materials to follow.
 
 ## gcode_segmentation
