@@ -39,7 +39,7 @@ module  metriccano_screw_hole(screw_len=metriccano_hole_spacing*2.01) {
 // Cavity for an Metriccano screw and screw head of specified length.
 // Points down. Uses octagons so that it can be printed horizontally
 // if "inverted" a fine removable support is added to prevent the screw hole collapsing.
-module  metriccano_screw_cavity(screw_len,inverted=false) {
+module  metriccano_screw_cavity(screw_len=metriccano_unit,inverted=false) {
     difference() {
         // The screw hole and head assembly
         union() {
@@ -53,8 +53,8 @@ module  metriccano_screw_cavity(screw_len,inverted=false) {
             translate([0,0,0.01]) rotate([0,0,360/16]) {
                 // Hollow cylinder
                 difference() {
-                    cylinder(h=screw_len,r=metriccano_screw_rad*1.2,$fn=8);
-                    cylinder(h=screw_len*3,r=metriccano_screw_rad*1.2-0.4,$fn=8,center=true);
+                    cylinder(h=screw_len,r=metriccano_screw_rad*1.2+0.3,$fn=8);
+                    cylinder(h=screw_len*3,r=metriccano_screw_rad*1.2,$fn=8,center=true);
                 }
             }
         }
@@ -67,7 +67,7 @@ module  metriccano_screw_cavity(screw_len,inverted=false) {
 module metriccano_nut_cavity_tapered(captive=false) union() {
     difference() {
         union() {
-            // Tapered avity for m3 nut
+            // Tapered cavity for m3 nut. Slight protrusion for clean booleans.
             translate([0,0,-0.01]) cylinder(h=metriccano_nut_height+0.02,r=metriccano_nut_max_width/2,$fn=6);
             translate([0,0,metriccano_nut_height])
                 cylinder(h=1,r1=metriccano_nut_max_width/2,r2=metriccano_screw_rad*1.2,$fn=6);
