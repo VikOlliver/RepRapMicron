@@ -7,6 +7,7 @@
  
     Useful parts:
         metriccano_strip(holes)                 Single strip of holes
+        metriccano_strip_flatend(holes)    Flat-ended strip for adding as a tag
         metriccano_slot_strip(holes)          As above but all holes joined into an adjustable channel
         metriccano_l_plate(holes)              L-shaped plate
         metriccano_l_beam(holes)             Two strips of holes joined in an L-shaped beam
@@ -143,12 +144,13 @@ module metriccano_strip(h,squared=false,nutted=false) {
 // A straight strip of Metriccano. Vertical holes go along the X axis
 // Nearest end always squared, shifted slightly for a good boolean join.
 // h    number of holes
-module metriccano_strip_flatend(h,squared=false,nutted=false) {
+// extend_end Extends the flat, plain end on the -X
+module metriccano_strip_flatend(h,squared=false,nutted=false,extend_end=0) {
     holes=floor(h+0.5);
     difference() {
         hull() {
             translate([(holes-1)*metriccano_hole_spacing,0,0]) round_square(squared);
-            translate([-0.01-metriccano_unit/2,-metriccano_unit/2,0]) cube([1,metriccano_unit,metriccano_plate_height]);
+            translate([-0.01-metriccano_unit/2-extend_end,-metriccano_unit/2,0]) cube([1,metriccano_unit,metriccano_plate_height]);
         }
         // Add the holes. Might use captive nuts.
         for (i=[0:holes-1]) translate([i*metriccano_hole_spacing,0,0]) {
