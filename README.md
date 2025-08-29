@@ -6,7 +6,7 @@ The RepRapMicron Project, or μRepRap, is an extension of the Open Source RepRap
 
 The meaty part is in the "maus" directory, where the OpenSCAD models for a rapidly reconfigurable 3D printed prototype can be found.
 
-The project has achieved the first Alpha release. This repository holds files that can reasonably be expected to be functional and useful to potential developers/experimenters.
+The project has achieved the secomnd Alpha release. This repository holds files that can reasonably be expected to be functional and useful to potential developers/experimenters.
 
 If you're looking for pre-built STL files, they're [here](https://www.printables.com/model/1286343-reprapmicron-micron-accurate-3d-printer).
 
@@ -49,4 +49,4 @@ The main repository of knowledge is the wiki on the [main project page](https://
 GPL V3 or later
 
 ## Project status
-Alpha release with a tested build.
+Second Alpha release. V0.03 is a tested build with a few known flaws, V0.04 is currently the head and is the prefereble build. V0.04 documentation is currently a list of fixups for V0.03 docs.
