@@ -6,10 +6,12 @@
 //  avaliable as metriccano_baseboard.svg for lasercutting
 // It is a Very Good Idea(TM) to keep the width in Metriccano (10mm) units.
 // Printed on Prusa Mk4, 0.2mm layers, 20% infill, 2 v shells, 5 h shells
+// V0.04
+//  Moved one beam and added reinforcement to avoid collisions with new X flexure.
 
 include <../library/metriccano.scad>
 
-version_string="MAUSC V0.03";
+version_string="MAUSC V0.04";
 
 
 
@@ -43,13 +45,12 @@ module crossed_span(width) translate([metriccano_unit/2,-metriccano_unit/2,0]) {
 union() {
     // Metriccano-based tower to support Z axis
     translate([metriccano_unit,0,0]) {
-        vertical_strip(10);        // Solid strip support
-        // Cross-links between two close beams
-        translate([0,-metriccano_unit*2,0]) rotate([0,0,90]) crossed_span(1);
-        translate([0,-metriccano_unit*2,metriccano_unit*4]) rotate([0,0,90]) crossed_span(1);
-        translate([0,-metriccano_unit*2,metriccano_unit*8]) rotate([0,0,90]) crossed_span(1);
-        //  Pair of vertical strips, one side flattened
-        translate([0,-metriccano_unit*2,0])  vertical_strip(10);
+        translate([0,-metriccano_unit,0]) vertical_strip(10);        // Solid strip support
+        //  Pillar closest to motor 
+        translate([0,-metriccano_unit*2,0])  rotate([0,0,90]) vertical_strip(10);
+        // Outside pillarto improve stability
+        translate([-metriccano_unit,-metriccano_unit*2,0])  rotate([0,0,90]) vertical_strip(10);
+        // Upper extended part
         translate([metriccano_unit*4,-metriccano_unit*2,metriccano_unit*7])  rotate([0,0,180]) vertical_strip(3);
         translate([metriccano_unit*3.5,-metriccano_unit*2.5,0]) {
             // Versioning
