@@ -10,6 +10,8 @@
 //  V0.04
 //      Corrected frame and table parallel flexures so that flexure pairs are the same length
 //      Added captive nut cavities to frame sides
+//      Y Drive Flexure now connexts directly to Flexure Table
+//      X Flexure not complementary to allow Y movement
 
 include <../library/m3_parts.scad>
 include <../library/metriccano.scad>
@@ -237,37 +239,37 @@ module light_well() {
                 cylinder(h=metriccano_unit*3,r=metriccano_screw_rad,$fn=20,center=true);
         }
 }
+
+module plain_stage_standoff() rotate([0,0,90]) {
+    metriccano_strip(4);
+    translate([0,0,metriccano_plate_height]) metriccano_strip(4);
+    translate([0,0,metriccano_plate_height+flexure_clearance+1]) metriccano_strip(4);
+    translate([0,0,metriccano_plate_height*2+flexure_clearance+1]) metriccano_strip(4,nutted=true);
+}
+
 // Plain stage, no linkages, flexures or linkage tunnels
 module plain_stage() difference() {
     union() {
         difference() {
             // Join up the flexure blocks and the mounting plate
             union() {
-
-                //translate([-metriccano_unit,metriccano_unit*0.75,0]) 
                 metriccano_plate(stage_holes_x,stage_holes_y);
+                // Standoffs to connect to XY Table
+                translate([0,0,metriccano_plate_height]) plain_stage_standoff();
+                translate([metriccano_unit*5,0,metriccano_plate_height]) plain_stage_standoff();
                 // Version text
-                translate([-metriccano_unit*0.5,stage_size_y/2,metriccano_unit/4]) rotate([0,-90,0]) rotate([0,0,90])
+                translate([-metriccano_unit*0.5,stage_size_y/2,metriccano_unit/2]) rotate([0,-90,0]) rotate([0,0,90])
                     version_text();
             }
-            // Nut sockets in the corners
-            translate([0,0,metriccano_unit/2-m3_nut_height+0.001])
-                m3_nut_cavity();
-            translate([metriccano_unit,0,metriccano_unit/2-m3_nut_height+0.001])
-                m3_nut_cavity();
-            // This one is a hole for the ground probe post screw
-            translate([4*metriccano_unit,0,metriccano_unit/2-m3_screw_head_height])
-                m3_screw_cavity();
-            translate([5*metriccano_unit,0,metriccano_unit/2-m3_nut_height+0.001])
-                m3_nut_cavity();
-            translate([0,metriccano_unit*3,metriccano_unit/2-m3_nut_height+0.001])
-                m3_nut_cavity();
-            translate([metriccano_unit,metriccano_unit*3,metriccano_unit/2-m3_nut_height+0.001])
-                m3_nut_cavity();
-            translate([4*metriccano_unit,metriccano_unit*3,metriccano_unit/2-m3_nut_height+0.001])
-                m3_nut_cavity();
-            translate([5*metriccano_unit,metriccano_unit*3,metriccano_unit/2-m3_nut_height+0.001])
-                m3_nut_cavity();
+            // Nut sockets in the sides
+            translate([metriccano_unit,0,metriccano_unit/2-metriccano_nut_height])
+                metriccano_nut_cavity_tapered(true);
+            translate([4*metriccano_unit,0,metriccano_unit/2-metriccano_nut_height])
+                metriccano_nut_cavity_tapered(true);
+            translate([metriccano_unit,metriccano_unit*3,metriccano_unit/2-metriccano_nut_height])
+                metriccano_nut_cavity_tapered(true);
+            translate([4*metriccano_unit,metriccano_unit*3,metriccano_unit/2-metriccano_nut_height])
+                metriccano_nut_cavity_tapered(true);
         }
     }
     // Cut light well (a Metriccano unit-ish hole with rounded corners)
@@ -300,8 +302,9 @@ module stage_top() {
         // Chop out the light well
         light_well();
         // Holes for a screw head underneath to take grounding post
-        translate([metriccano_unit,0,m3_screw_head_height+0.2]) rotate([180,0,0]) m3_screw_cavity();
-        translate([stage_size_x-metriccano_unit,stage_size_y,m3_screw_head_height+0.2]) rotate([180,0,0]) m3_screw_cavity();
+        translate([metriccano_unit,0,m3_screw_head_height+0.2]) rotate([180,0,0]) metriccano_screw_cavity(inverted=true);
+        translate([stage_size_x-metriccano_unit,stage_size_y,m3_screw_head_height+0.2]) rotate([180,0,0]) metriccano_screw_cavity(inverted=true);
+
         // Holes for screw heads
         translate([0,(stage_size_y+metriccano_unit)/2,st_base_thick]) m3_screw_cavity();
         translate([0,(stage_size_y-metriccano_unit)/2,st_base_thick]) m3_screw_cavity();
@@ -322,28 +325,66 @@ module stage_top() {
     }
 }
 
-// A stage with an X axis flexure (length fl) stuck out the side
-module flexured_stage(fl) {
-    plain_stage();
-    // Shift the flexure  and anchor en masse
-    translate([metriccano_unit*2.5,-metriccano_unit/2,0]) {
-        // Very thin flexure joining anchor and stage
-        translate([-0.4,metriccano_unit*4,0]) cube([0.8,fl,metriccano_plate_height]);
-        // Stress reliefs
-        translate([0,metriccano_unit*4,metriccano_plate_height/2])
-            rotate([0,0,45]) cube([2,2,metriccano_plate_height],center=true);
-        translate([0,metriccano_unit*4+fl,metriccano_plate_height/2])
-            rotate([0,0,45]) cube([2,2,metriccano_plate_height],center=true);
-            // Legend
-        translate([-5,metriccano_unit*5+fl,0])
+xsf_beam_length=61; // Overall length of main beam up to attachment slot
+// Length of the crossbeam at the end of the main beam.
+xsf_minor_crossbeam=frame_thick+2*flexure_max+2*flexure_width;
+// Thickness of the X Stage Flexure assembly (needs to be same height as stage
+xsf_thick=metriccano_plate_height;
+xsf_flexure_length=xsf_beam_length-30;
+// Flexure used in x_stage_flexures
+module xsf_flexure() {
+    translate([-flexure_width/2,0,0]) cube([flexure_width,xsf_flexure_length,xsf_thick]);
+}
+
+// A pair of flexures with a crossbar
+module xsf_flexure_pair() {
+    translate([-flexure_max/2-flexure_width/2,0,0]) xsf_flexure();
+    translate([flexure_max/2+flexure_width/2,0,0]) xsf_flexure();
+    // Crossbar is taller to allow clearance on the Bar
+    translate([-(flexure_max+2*flexure_width)/2,xsf_flexure_length,0]) cube([flexure_max+2*flexure_width,frame_thick,xsf_thick+flexure_clearance]);
+}
+
+
+// X Stage Flexure Assembly
+// Joins the X Axis Driver to the Stage. Protrudes 1mm into the stage to ensure a good boolean join.
+module x_stage_flexure() {
+    // Central bar, with Axis Driver attachment.
+    translate([0,flexure_clearance,0]) {
+        // Bar
+        translate([-frame_thick/2,0,0])
+            cube([frame_thick,xsf_beam_length-metriccano_unit,xsf_thick]);
+        // Anchor slot
+        translate([-metriccano_unit/2,xsf_beam_length-metriccano_unit/2,0]) metriccano_slot_strip(1.5);
+                // Legend
+        translate([-5,xsf_beam_length,0])
             difference() {
                 cube([10,8,metriccano_unit/2]);
                 translate([5,4,-0.3]) rotate([0,0,-90]) linear_extrude(0.6)
                     text("X", size = 4, halign = "center", valign = "center", $fn = 16);
                 }
-        // Anchor point for actuator
-        translate([-metriccano_unit*0.5,metriccano_unit*4.5+fl,0]) metriccano_slot_strip(1.5);
+        // Minor crossbeam and flexures
+        translate([-xsf_minor_crossbeam/2,0,0]) cube([xsf_minor_crossbeam,frame_thick,xsf_thick]);
+        translate([xsf_minor_crossbeam/2+flexure_max/2,frame_thick,0]) xsf_flexure_pair();
+        translate([-xsf_minor_crossbeam/2-flexure_max/2,frame_thick,0]) xsf_flexure_pair();
     }
+    // Standoff blocks that attach to the Stage
+    translate([xsf_minor_crossbeam/2+flexure_max,-1,0]) {
+        cube([frame_thick,frame_thick+flexure_clearance+1,xsf_thick]);
+    }
+    translate([-xsf_minor_crossbeam/2-flexure_max-frame_thick,-1,0]) {
+        cube([frame_thick,frame_thick+flexure_clearance+1,xsf_thick]);
+    }
+    // Beam that passes over the main bar, joining the two flexure pairs
+    translate([0,frame_thick*1.5+xsf_flexure_length+flexure_clearance,frame_thick/2+xsf_thick+flexure_clearance])
+        cube([4*flexure_max,frame_thick,frame_thick],center=true);
+}
+
+// A stage with an X axis flexure (length fl) stuck out the side
+module flexured_stage() {
+    plain_stage();
+    // Shift the flexure and anchor en masse
+    translate([metriccano_unit*2.5,metriccano_unit*3.5,0])
+        x_stage_flexure();
 }
 
 // A bracing beam for joining frame halves together
@@ -432,29 +473,6 @@ module x_axis_mount() difference(){
     translate([metriccano_unit*2,metriccano_unit/2,metriccano_unit/2]) rotate([90,0,0]) metriccano_nut_cavity_tapered(captive=true);
     translate([metriccano_unit,metriccano_unit*3.5,metriccano_unit/2]) rotate([-90,0,0]) metriccano_nut_cavity_tapered(captive=true);
     translate([metriccano_unit*2,metriccano_unit*3.5,metriccano_unit/2]) rotate([-90,0,0]) metriccano_nut_cavity_tapered(captive=true);
-}
-
-
-// Two 2x2 Metriccano plates joined by horizontal and vertical flexures.
-// Minimum length 50mm
-module y_drive_flexure(fl) {
-    translate([metriccano_unit/2,-metriccano_unit,0]) rotate([0,0,90]) metriccano_square_strip(4);
-    // Anchor point on actuator
-    translate([fl+metriccano_unit*1.5,0,0]) rotate([0,0,90]) metriccano_slot_strip(1.5);
-    // Legend
-    translate([fl+metriccano_unit*2,0,0])
-        difference() {
-            cube([8,10,metriccano_unit/2]);
-            translate([4,5,-0.3]) rotate([0,0,-90]) linear_extrude(0.6)
-                text("Y", size = 4, halign = "center", valign = "center", $fn = 16);
-            }
-    // Very thin flexure joining them. Slightly short so as not to rub overhanging parts
-    translate([metriccano_unit,metriccano_unit/2-0.4,0]) cube([fl,0.8,metriccano_plate_height]);
-    // Stress relief
-    translate([metriccano_unit,metriccano_unit/2,metriccano_plate_height/2])
-        rotate([0,0,45]) cube([2,2,metriccano_plate_height],center=true);
-    translate([fl+metriccano_unit+0.4,metriccano_unit/2,metriccano_plate_height/2])
-        rotate([0,0,45]) cube([2,2,metriccano_plate_height],center=true);
 }
 
 pole_clip_width=3;
@@ -591,6 +609,54 @@ module microscope_clamp(mrad=31.5/2) {
     }
 }
 
+// Block used to attach Y Transfer Bar to Outer Frame
+module y_transfer_bar_mount() {
+    difference() {
+        union() {
+            cube([metriccano_unit*2-flexure_height/2+edge_clearance,outer_tf_offset,metriccano_plate_height+2*flexure_clearance]);
+            translate([flexure_height/2+edge_clearance,metriccano_unit/2,0]) metriccano_strip(4,squared=true);
+        }
+        // Screw holes to attach to outer frame
+        translate([flexure_height/2+edge_clearance,metriccano_unit/2,metriccano_screw_head_height])
+            rotate([180,0,0]) metriccano_screw_cavity(structure_height,inverted=true);
+        translate([flexure_height/2+metriccano_unit+edge_clearance,metriccano_unit/2,metriccano_screw_head_height])
+            rotate([180,0,0]) metriccano_screw_cavity(structure_height,inverted=true);
+    }
+}
+
+// Transfer bar connects the Outer Frame to the Y Axis Driver. This makes the Y Axis movement 
+// independent of the X Axis.
+module y_transfer_bar(fl) {
+    y_transfer_bar_mount();
+    // Flip as the mounts are mirrors of each other.
+    translate([0,y_axis_width,0]) scale([1,-1,1]) y_transfer_bar_mount();
+    // Join 'em up using a bar with the driving Y flexure on
+    translate([flexure_height/2+edge_clearance+metriccano_unit*4-2*frame_thick,metriccano_unit,0]) {
+        cube([frame_thick,y_axis_width-metriccano_unit*2,metriccano_plate_height]);
+        // The Y Stage Flexure assembly
+        translate([frame_thick,(y_axis_width-metriccano_unit*2)/2,0]) {
+            // Anchor point on actuator
+            translate([fl+metriccano_unit/2,-metriccano_unit/2,0]) {
+                // Anchor slot for attaching Y Axis flexure to Y Axis Driver
+                rotate([0,0,90]) metriccano_slot_strip(1.5);
+                // Y Axis marker
+                translate([metriccano_unit/2,0,0])
+                    difference() {
+                        cube([8,10,metriccano_unit/2]);
+                        translate([4,5,-0.3]) rotate([0,0,-90]) linear_extrude(0.6)
+                            text("Y", size = 4, halign = "center", valign = "center", $fn = 16);
+                        }
+             }
+            // Very thin flexure joining them. Slightly short so as not to rub overhanging parts
+            translate([0,-0.4,0]) cube([fl,0.8,metriccano_plate_height]);
+            // Stress relief
+            translate([0,0,metriccano_plate_height/2])
+                rotate([0,0,45]) cube([2,2,metriccano_plate_height],center=true);
+            translate([fl+0.4,0,metriccano_plate_height/2])
+                rotate([0,0,45]) cube([2,2,metriccano_plate_height],center=true);
+         }
+     }
+}
 
 // Assembly in 3D for visual test fit
 if (false) {
@@ -605,15 +671,16 @@ if (plate==1) {
     outer_frame_unit();
     translate([105,0,0]) outer_frame_unit();
     translate([0,75,0]) table_frame_unit();
-    translate([90,75,0]) table_frame_unit();
-    translate([210,122,0]) rotate([0,0,90]) flexured_stage(53);
-    translate([10,145,0]) stage_top();
-    translate([140,25,0]) metriccano_strip(4);
-    translate([140,40,0]) metriccano_strip(4);
-    translate([35,45,0]) metriccano_square_strip(4);
+    translate([125,75,0]) table_frame_unit();
+    translate([95,190,0]) rotate([0,0,-90]) flexured_stage();
+    translate([77,95,0]) stage_top();
+    // Triple height strip
     translate([35,100,0]) metriccano_adjustment_bracket(2,1.5);
-    translate([125,100,0]) metriccano_adjustment_bracket(2,1.5);
-    translate([90,155,0]) y_drive_flexure(51.5);
+    translate([160,100,0]) metriccano_adjustment_bracket(2,1.5);
+    translate([85,140,0]) rotate([0,0,90]) y_transfer_bar(24);
+    // Mounts for X Axis Driver
+    translate([45,50,0]) metriccano_square_strip(2);
+    translate([45,30,0]) metriccano_square_strip(2);
 } else if (plate==2) {
     // Build plate B
     translate([5,50,0]) x_axis_mount();
