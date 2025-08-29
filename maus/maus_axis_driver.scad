@@ -1,7 +1,13 @@
 // maus_axis_driver.scad - RepRapMicron motion stage
 // (c)2024 vik@diamondage.co.nz, released under the terms of the GPL V3 or later
 // One Maus Axis Diver. Three are needed for the complete Maus mechanism
-version_string="MAUS V0.03";
+//
+// V0.04 Updates:
+// Lowering the wall on the Axis Motor Pillar Assembly to allow larger range of movement
+// added mounting holes for extra rigidity
+// Through holes on NEMA plate to allow pillar screw overtravel
+
+version_string="MAUS V0.04";
 
 include <../library/m3_parts.scad>
 include <../library/nema17lib.scad>
@@ -70,6 +76,28 @@ module version_text() {
     }
 }
 
+// Selection of holes that line up with the pillars supporting
+// the complete axis over the motor
+module pillar_screw_holes() {
+    translate([metriccano_unit,-3*metriccano_unit,-0.001]) {
+        cylinder(h=axis_motor_pillar_height*3,r=metriccano_screw_rad,$fn=16,center=true);
+        metriccano_nut_cavity_tapered(captive=true) ;
+    }
+    translate([metriccano_unit,3*metriccano_unit,-0.001]) {
+        cylinder(h=axis_motor_pillar_height*3,r=metriccano_screw_rad,$fn=16,center=true);
+        metriccano_nut_cavity_tapered(captive=true) ;
+    }
+    translate([2*metriccano_unit,3*metriccano_unit,-0.001]) {
+        cylinder(h=axis_motor_pillar_height*3,r=metriccano_screw_rad,$fn=16,center=true);
+        metriccano_nut_cavity_tapered(captive=true) ;
+    }
+    translate([2*metriccano_unit,-3*metriccano_unit,-0.001]) {
+        cylinder(h=axis_motor_pillar_height*3,r=metriccano_screw_rad,$fn=16,center=true);
+        metriccano_nut_cavity_tapered(captive=true) ;
+    }
+}
+
+
 // Mounting plate for a NEMA17 motor with rounded corners,
 // Extended width for metriccano mounting
 // nema_late_thick - Thickness of NEMA mounting plate
@@ -97,20 +125,22 @@ module nema17_plate(nema_plate_thick=5,nema_corner_rad=2) difference() {
     translate([-nema17_screw_sep/2,-nema17_screw_sep/2,0]) cylinder(h=nema_plate_thick*3,r=m3_screw_rad,$fn=16,center=true);
      // Collar hole
     cylinder(h=nema_plate_thick*3,r=nema17_collar_rad,center=true);
+    // Relief holes for over-travel of pillar screws
+    pillar_screw_holes();
 }
 
 // A NEMA17 plate with nutted Metriccano mounting holes, pillars to prop up the axis flexure mechanism,
 // and hold a limit switch.
 // Why does it have a separate base plate? Because M3 screws come in standard lengths and it needs a spacer.
-axis_motor_pillar_height=35;
-limit_switch_level=30.3;    // Height to the top of the limit switch bar
+axis_motor_pillar_height=34;
+limit_switch_level=28.0;    // Height to the top of the limit switch bar
 motor_pillar_spacing=6*metriccano_unit;     // Pillar holes, centre to centre
 motor_base_thick=10;
 
 module axis_motor_pillar_assy() {
     difference() {
         union() {
-            nema17_plate(motor_base_thick);
+           nema17_plate(motor_base_thick);
             // Mounting hole pillars, joined for strength
             hull() {
                 // Screw pillars
@@ -136,54 +166,54 @@ module axis_motor_pillar_assy() {
                 difference() {
                     // Body of limit switch block
                     cube([metriccano_unit/2,motor_pillar_spacing,limit_switch_level],center=true);
+                    // Chamfer to the top edge near the limit switch to ensure good backing to switch wires
+                    // (rotation is a Wild-arsed guess)
+                    translate([metriccano_unit/4,0,limit_switch_level/2]) rotate([0,-9,0])
+                        translate([0,0,metriccano_unit])
+                            cube([metriccano_unit*2,axis_arm_width,metriccano_unit*2],center=true);
                     // Gaps for NEAM moutn screws & washers
                     translate([0,nema17_screw_sep/2,-limit_switch_level/2]) rotate([0,90,0]) rotate([0,0,45])
                         cube([6,6,metriccano_unit],center=true);
                     translate([0,-nema17_screw_sep/2,-limit_switch_level/2]) rotate([0,90,0]) rotate([0,0,45])
                         cube([6,6,metriccano_unit],center=true);
-                    // Captive nuts and holes, and wire slots to hold limit switch wires in place ???
-                    translate([0,metriccano_unit/2,limit_switch_level/2-5]) {
-                        rotate([0,-90,0]) {
-                            translate([0,0,-metriccano_unit/4]) m3_nut_cavity_tapered(captive=true);
-                            m3_screw_hole(metriccano_unit);
+                    
+                    // Captive nuts and holes, and wire slots to hold limit switch wires in place
+                    translate([0,0,limit_switch_level/2-7]) {
+                        translate([0,metriccano_unit/2,0]) {
+                            rotate([0,-90,0]) {
+                                translate([0,0,-metriccano_unit/4]) m3_nut_cavity_tapered(captive=true);
+                                m3_screw_hole(metriccano_unit);
+                            }
+                            // Wire slot
+                            translate([-metriccano_unit/4,-1-metriccano_screw_rad,-metriccano_unit/2])
+                                cylinder(h=limit_switch_level/2,r=0.5,$fn=24);
+                            // Wire via
+                            translate([0,8,-8]) rotate([0,90,0]) m3_screw_hole(metriccano_unit*2);
                         }
-                        // Wire slot
-                        translate([-metriccano_unit/4,-1-metriccano_screw_rad,-metriccano_unit/2])
-                            cylinder(h=limit_switch_level/2,r=0.5,$fn=24);
-                        // Wire via
-                        translate([0,8,-8]) rotate([0,90,0]) m3_screw_hole(metriccano_unit*2);
-                    }
-                    translate([0,-metriccano_unit/2,limit_switch_level/2-5]) {
-                        rotate([0,-90,0]) {
-                            translate([0,0,-metriccano_unit/4]) m3_nut_cavity_tapered(captive=true);
-                            m3_screw_hole(metriccano_unit);
+                        translate([0,-metriccano_unit/2,0]) {
+                            rotate([0,-90,0]) {
+                                translate([0,0,-metriccano_unit/4]) m3_nut_cavity_tapered(captive=true);
+                                m3_screw_hole(metriccano_unit);
+                            }
+                            // Wire slot
+                            translate([-metriccano_unit/4,1+metriccano_screw_rad,-metriccano_unit/2])
+                                cylinder(h=limit_switch_level/2,r=0.5,$fn=24);
+                            // Wire via
+                            translate([0,-8,-8]) rotate([0,90,0]) m3_screw_hole(metriccano_unit*2);
                         }
-                        // Wire slot
-                        translate([-metriccano_unit/4,1+metriccano_screw_rad,-metriccano_unit/2])
-                            cylinder(h=limit_switch_level/2,r=0.5,$fn=24);
-                        // Wire via
-                        translate([0,-8,-8]) rotate([0,90,0]) m3_screw_hole(metriccano_unit*2);
                     }
                 }
         }
-        // Mounting rail screw holes
-        translate([metriccano_unit,-3*metriccano_unit,-0.001]) {
-            cylinder(h=axis_motor_pillar_height*3,r=m3_screw_rad,$fn=16,center=true);
-            m3_nut_cavity_tapered(captive=true) ;
+        // Screw Pillar holes
+        pillar_screw_holes();
+        // Some extra attachment holes for bracing on the face of the limit switch holder
+        translate([metriccano_unit*2,metriccano_unit*2,axis_motor_pillar_height+motor_base_thick-metriccano_unit*1.5]) {
+            rotate([0,-90,0]) metriccano_screw_cavity();
+            translate([0,0,-metriccano_unit]) rotate([0,-90,0]) metriccano_screw_cavity();
         }
-        translate([metriccano_unit,3*metriccano_unit,-0.001]) {
-            cylinder(h=axis_motor_pillar_height*3,r=m3_screw_rad,$fn=16,center=true);
-            m3_nut_cavity_tapered(captive=true) ;
-        }
-        // A line of holes in a strip, half the thickness of the hole spacing, headed in -X
-        // The number of holes will be rounded up to an integer.
-        translate([2*metriccano_unit,3*metriccano_unit,-0.001]) {
-            cylinder(h=axis_motor_pillar_height*3,r=m3_screw_rad,$fn=16,center=true);
-            m3_nut_cavity_tapered(captive=true) ;
-        }
-        translate([2*metriccano_unit,-3*metriccano_unit,-0.001]) {
-            cylinder(h=axis_motor_pillar_height*3,r=m3_screw_rad,$fn=16,center=true);
-            m3_nut_cavity_tapered(captive=true) ;
+        translate([metriccano_unit*2,-metriccano_unit*2,axis_motor_pillar_height+motor_base_thick-metriccano_unit*1.5]) {
+            rotate([0,-90,0]) metriccano_screw_cavity();
+            translate([0,0,-metriccano_unit]) rotate([0,-90,0]) metriccano_screw_cavity();
         }
     }
 }
@@ -623,9 +653,8 @@ module test_flexure() {
 //test_flexure();
 // Postioned plate under axis mechanism for try-fitting
 //translate([-axis_drive_nut_x,0,-30])
-//    axis_motor_pillar_assy();
+//axis_motor_pillar_assy();
 //*****
-
 // All the axis drive parts on one plate. Will also need a coupling from flexure_linear_coupling.scad
 if (true) {
     translate([10,10,0]) axis_complete();
