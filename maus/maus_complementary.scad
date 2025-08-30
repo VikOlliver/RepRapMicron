@@ -11,7 +11,8 @@
 //      Corrected frame and table parallel flexures so that flexure pairs are the same length
 //      Added captive nut cavities to frame sides
 //      Y Drive Flexure now connexts directly to Flexure Table
-//      X Flexure not complementary to allow Y movement
+//      X Flexure now complementary to allow Y movement
+// 3-unit Metriccano strips no longer needed as boosters. Removed.
 
 include <../library/m3_parts.scad>
 include <../library/metriccano.scad>
@@ -703,6 +704,4 @@ if (plate==1) {
     translate([190,26,0]) m3_thumbscrew_knob(7);
     translate([190,42,0]) m3_thumbscrew_knob(7);
     translate([190,58,0]) m3_thumbscrew_knob(7);
-    translate([10,10,0]) metriccano_strip(3);      // Used as a booster
-    translate([50,10,0]) metriccano_strip(3);      // Used as a booster
 }
