@@ -1,8 +1,9 @@
 // maus_axis_driver.scad - RepRapMicron motion stage
 // (c)2025 vik@diamondage.co.nz, released under the terms of the GPL V3 or later
 // Prototype Linear Maus Axis Diver, non-functional
-// This is the initial hack of a  V0.04 driver
-// and contains much unsorted/unnecessary fluff.
+// Tries to use a pantograph-like mechanism, paralleled up to provide stable
+// drive, anchor, and effector ends.
+// This contains much unsorted/unnecessary fluff.
 //
 // UNDER EARLY DEVELOPMENT
 
@@ -16,6 +17,7 @@ flexure_width=4;        // Reduced from original 7.
 flexure_length=2.5;
 flexure_height=1.0;     // Thickness of the flexure block including footings
 flexure_thickness=0.6;  // Thickness of the actual flexure part
+flexure_tab_length=flexure_length+2;    // Distance between two attachment zones.
 vertical_flexure_length=8;
 vertical_flexure_height=6;
 vertical_flexure_width=8;   // Width of the anchor block
@@ -25,10 +27,10 @@ vertical_flexure_thick=8.2; // Width of the actual flexing bit
 layer_height=0.21;
 wall=2;                         // Arbitrary rigid wall thickness
 
-reduction_ratio=0.4;    //  Amount we want to reduce the movement by
+reduction_ratio=0.5;    //  Amount we want to reduce the movement by
 
 // Length of a parallelogram main arm
-pll_main_arm_length=90;
+pll_main_arm_length=70;
 pll_main_arm_at_45=sqrt(pll_main_arm_length*pll_main_arm_length/2);
 pll_beam_end_flat_height=flexure_height+1.5;
 pll_beam_x=8;  // Parallelogram beam width along the X axis
@@ -38,7 +40,7 @@ pll_platform_beam_length=metriccano_unit;
 pll_top_beam_height=3;
 pll_bottom_beam_height=10;
 // Distance between the two most distant flexures
-pll_flexure_to_flexure=(pll_main_arm_at_45+flexure_length)*2+pll_platform_beam_length;
+pll_flexure_to_flexure=pll_main_arm_at_45*2+flexure_tab_length+pll_platform_beam_length;
 
 pll_arm_a_length=pll_main_arm_length*(1-reduction_ratio);
 pll_arm_a_45=sqrt(pll_arm_a_length*pll_arm_a_length/2);
@@ -46,14 +48,14 @@ pll_arm_b_length=pll_main_arm_length*-reduction_ratio;
 pll_arm_b_45=sqrt(pll_arm_b_length*pll_arm_b_length/2);
 
 // Distance from frame center to frame center (leave gap so they dont rub).
-pll_frame_spacing=2;
-pll_frame_centres=pll_beam_y+pll_frame_spacing;
-
+pll_frame_centres=metriccano_nut_max_width+2;
+// Calculate the gap between frames
+pll_frame_spacing=pll_frame_centres-pll_beam_y;
 
 // A flexure joint for printing it on the surface of the print bed. Footings extend 1mm.
 // "flat" will print without an undercut
 module flexure_tab(flat=false) difference() {
-    translate([0,0,flexure_height/2]) cube([flexure_length+2,flexure_width,flexure_height],center=true);
+    translate([0,0,flexure_height/2]) cube([flexure_tab_length+2,flexure_width,flexure_height],center=true);
     if (flat) {
         // Hollow just the top of the flexure
         translate([0,0,flexure_height]) 
@@ -69,7 +71,7 @@ module flexure_tab(flat=false) difference() {
 
 // A flexure join that will be printed suspended in air
 module flexure_tab_unsupported() difference() {
-    translate([0,0,flexure_height/2]) cube([flexure_length+1,flexure_width,flexure_height],center=true);
+    translate([0,0,flexure_height/2]) cube([flexure_tab_length+1,flexure_width,flexure_height],center=true);
     // Scalop the top of the flexure
     translate([0,0,flexure_height]) cube([flexure_length*0.6,flexure_width*3,flexure_height],center=true);
 }
@@ -101,45 +103,44 @@ module pll_flexure_arm(x,y,reverse=false)  {
     // First flexure, placed on 0,0
     flexure_tab();
     if (reverse)
-        translate([(pll_beam_x+flexure_length)/2,0,0]) pll_beam_end();
+        translate([(pll_beam_x+flexure_tab_length)/2,0,0]) pll_beam_end();
     else
-        translate([(-pll_beam_x-flexure_length)/2,0,0]) pll_beam_end();
+        translate([(-pll_beam_x-flexure_tab_length)/2,0,0]) pll_beam_end();
     // The beam bit
     hull() {
         if (reverse) {
-            translate([(pll_beam_x+flexure_length)/2,0,pll_beam_end_flat_height]) pll_beam_end();
-            translate([x+(-pll_beam_x-flexure_length)/2,0,y]) pll_beam_end(flexure_height);
+            translate([(pll_beam_x+flexure_tab_length)/2,0,pll_beam_end_flat_height]) pll_beam_end();
+            translate([x+(-pll_beam_x-flexure_tab_length)/2,0,y]) pll_beam_end(flexure_height);
         } else {
-            translate([(-pll_beam_x-flexure_length)/2,0,pll_beam_end_flat_height]) pll_beam_end();
-            translate([x+(-pll_beam_x-flexure_length)/2,0,y]) pll_beam_end(flexure_height);
+            translate([(-pll_beam_x-flexure_tab_length)/2,0,pll_beam_end_flat_height]) pll_beam_end();
+            translate([x+(-pll_beam_x-flexure_tab_length)/2,0,y]) pll_beam_end(flexure_height);
         }
     }
     // Second flexure  placed on the mark
-    translate([x,0,y]) flexure_tab(flat=true);
+  
+  translate([x,0,y]) flexure_tab(flat=true);
 }
 
-// Just for development, testing flexures etc.
-module simple_test_pantograph() {
-    pll_flexure_arm(pll_main_arm_at_45,pll_main_arm_at_45);
-    translate([pll_main_arm_at_45*2,0,0])
-        rotate([0,0,180]) pll_flexure_arm(pll_main_arm_at_45,pll_main_arm_at_45);
-    translate([pll_arm_b_45*2,0,0]) pll_flexure_arm(pll_arm_a_45,pll_arm_a_45,true);
-    translate([pll_arm_b_45*2,0,0]) rotate([0,0,180]) pll_flexure_arm(pll_arm_b_45,pll_arm_b_45,true);
+// Main arm wiht a kink where the centre flexure goes
+module bent_pll_arm(ratio) {
+    pll_flexure_arm(pll_main_arm_at_45*(1-ratio),pll_main_arm_at_45*(1-ratio),true);
+    translate([pll_main_arm_at_45*(1-ratio),0,pll_main_arm_at_45*(1-ratio)])
+        pll_flexure_arm(pll_main_arm_at_45*ratio,pll_main_arm_at_45*ratio);
 }
 
-// Pantograph arm with platforms on
+// Pantograph arm with platforms in the middle and at each end
 module centre_pll_arm() {
-// The -X arm
-    pll_flexure_arm(pll_main_arm_at_45,pll_main_arm_at_45);
+    // The -X arm
+    bent_pll_arm(reduction_ratio) ;
     // The +X arm, with Arm B and beam platform on it.
-    translate([pll_main_arm_at_45*2+pll_platform_beam_length+flexure_length,0,0])
+    translate([pll_main_arm_at_45*2+pll_platform_beam_length+flexure_tab_length,0,0])
         rotate([0,0,180]) {
             // Main arm
-            pll_flexure_arm(pll_main_arm_at_45,pll_main_arm_at_45);
+            bent_pll_arm(1-reduction_ratio);
             // Arm B
             translate([pll_arm_b_45*2,0,0]) rotate([0,0,180])
                 pll_flexure_arm(pll_arm_b_45,pll_arm_b_45,true);
-            translate([pll_arm_b_45*2+(flexure_length+pll_platform_beam_length)/2,0,pll_bottom_beam_height/2])
+            translate([pll_arm_b_45*2+(flexure_tab_length+pll_platform_beam_length)/2,0,pll_bottom_beam_height/2])
                 cube([pll_platform_beam_length,pll_beam_y,pll_bottom_beam_height],center=true);
     }
             
@@ -148,38 +149,23 @@ module centre_pll_arm() {
         pll_flexure_arm(pll_arm_a_45,pll_arm_a_45,true);
         
     // The top beam. Make sure it rests on top of the flexure...
-    translate([pll_main_arm_at_45+pll_platform_beam_length/2+flexure_length/2,0,pll_main_arm_at_45+pll_top_beam_height/2]) 
+    translate([pll_main_arm_at_45+pll_platform_beam_length/2+flexure_tab_length/2,0,pll_main_arm_at_45+pll_top_beam_height/2]) 
         cube([pll_platform_beam_length,flexure_width,pll_top_beam_height],center=true);
 }
 
-// Trio of pll frames
-translate([0,pll_frame_centres,0]) centre_pll_arm();
-translate([-pll_platform_beam_length,0,0]) centre_pll_arm();
-translate([0,-pll_frame_centres,0]) centre_pll_arm();
-
-// Join the bottom beams
-translate([pll_flexure_to_flexure/2+pll_platform_beam_length/2+flexure_length,0,pll_bottom_beam_height-2]) rotate([90,0,0]) rotate([0,0,30])
-    cylinder(h=pll_beam_y*3+pll_frame_spacing*2,r=4,center=true,$fn=3);
-// Lugs on the bottom beams
-translate([pll_flexure_to_flexure/2+pll_platform_beam_length+flexure_length/2,0,0]) {
-    translate([0,-metriccano_unit*2,0]) rotate([0,0,-90]) metriccano_strip_flatend(1,nutted=true,extend_end=4.1);
-    translate([0,2*metriccano_unit,0]) rotate([0,0,90]) metriccano_strip_flatend(1,nutted=true,extend_end=4.5);
-}
-
 // Join the top beams.
-translate([pll_flexure_to_flexure/2-flexure_length/2,
+translate([pll_flexure_to_flexure/2,
     0,pll_main_arm_at_45+metriccano_plate_height/2+pll_top_beam_height]) {
         // Start by linking the two outer ones.
-//       cube([pll_platform_beam_length,pll_beam_y+2*flexure_width+pll_frame_spacing*2,metriccano_plate_height],center=true);
        cube([pll_platform_beam_length,2*pll_frame_centres+flexure_width,metriccano_plate_height],center=true);
        // Now put a plate on the centre top beam.
         hull() {
            // This stops the slicer slicing the beam and the link to the centre simultaneously.
            translate([-pll_platform_beam_length,0,-metriccano_plate_height/4-2])
-                cube([pll_platform_beam_length,pll_beam_y,2],center=true);
+                cube([pll_platform_beam_length,flexure_width,2],center=true);
             // This bit sticks on the vertical face of the bridge
             translate([-pll_platform_beam_length/2,0,0])
-                cube([2,pll_beam_y,metriccano_plate_height],center=true);
+                cube([2,flexure_width,metriccano_plate_height],center=true);
         }
 }
 
@@ -187,115 +173,57 @@ translate([pll_flexure_to_flexure/2-flexure_length/2,
 module fixed_arm_flexure_tag() {
     // This bit goes on the flexure
     hull() {
-//    translate([pll_flexure_to_flexure-flexure_length*2,0,0]) hull() {
         translate([1,(metriccano_unit-flexure_width*1.5)/2,flexure_height/2])
             cube([1,flexure_width,flexure_height],center=true);
         // This bit hides inside the metriccano strip
-        translate([0.2-pll_platform_beam_length+flexure_length/2+metriccano_screw_rad,0,metriccano_unit/4])
+        translate([0.2-pll_platform_beam_length+flexure_tab_length/2+metriccano_screw_rad,0,metriccano_unit/4])
             cube([0.1,metriccano_unit/2,metriccano_unit/2],center=true);
     }
 }
 
-// Metriccano 2 unit strip with a bevelled end.
-module bevelled_2_strip() difference() {
-    union() {
-        metriccano_strip(2);
-        // Rotate an extra lug 90 degrees out to the side
-        rotate([0,0,90]) metriccano_strip(2,nutted=true);
-        // Last hole weakens it too much. Blank off.
-        translate([metriccano_unit,0,0])
-            cylinder(h=metriccano_plate_height,r=metriccano_screw_rad+1);
-    }
-    translate([metriccano_unit*1.9,0,metriccano_plate_height]) rotate([0,45,0]) cube(metriccano_unit,center=true);
+// Create an anchor for the end where the centre points is recessed
+module anchor_pointed_in() translate([metriccano_unit/2,0,0]) {
+    // Bevel this off for pivoting arm clearance
+    translate([0,-metriccano_unit,0]) rotate([0,0,90])
+        metriccano_strip(3,nutted=true);
+    // Add a cavity for the drive nut
+    translate([-metriccano_unit,0,0]) rotate([0,0,180]) metriccano_strip_flatend(1,nutted=true);
+}
+
+// An anchor where the centre flexure protrudes, aligned on X=0
+// Anchor holes in -X direction
+module anchor_pointed_out() union() {
+     translate([-metriccano_unit*1.5,-metriccano_unit,0]) metriccano_strip(2,squared=true,nutted=true);    
+     translate([-metriccano_unit*1.5,metriccano_unit,0]) metriccano_strip(2,squared=true,nutted=true);    
+     translate([-metriccano_unit*1.5,0,0]) metriccano_strip(1,squared=true,nutted=true);    
+ }
+
+
+// Trio of pll frames
+translate([0,pll_frame_centres,0]) centre_pll_arm();
+translate([-pll_platform_beam_length,0,0]) centre_pll_arm();
+translate([0,-pll_frame_centres,0]) centre_pll_arm();
+
+// Join the bottom beams
+translate([pll_arm_a_45*2+(flexure_tab_length)/2,0,0]) {
+        translate([0,0,pll_bottom_beam_height-2])
+         rotate([90,0,0]) rotate([0,0,30]) cylinder(h=pll_beam_y*3+pll_frame_spacing*2,r=4,center=true,$fn=3);
+    // Lugs on the bottom beams
+    translate([pll_platform_beam_length/2,-metriccano_unit*2,0]) rotate([0,0,-90]) metriccano_strip_flatend(1,nutted=true,extend_end=4.1);
+    translate([pll_platform_beam_length/2,2*metriccano_unit,0]) rotate([0,0,90]) metriccano_strip_flatend(1,nutted=true,extend_end=4.5);
 }
 
 // Create a base to anchor the anchored end
-translate([pll_flexure_to_flexure,0,0]) union() {
-        translate([-flexure_length*1.5-pll_platform_beam_length-metriccano_unit,-metriccano_unit,0]) difference() {
-           union() {
-                // bevel the inside of the Metriccano strip to give pivoting arm some room
-                difference() {
-                    metriccano_plate(1,3);
-                    translate([metriccano_unit,metriccano_unit,metriccano_plate_height]) rotate([0,45,0])
-                        cube(metriccano_unit,center=true);
-                }
-                scale([1,-1,1]) bevelled_2_strip();
-                translate([0,metriccano_unit*2,0]) bevelled_2_strip();
-            }
-            // Nut holes
-            translate([0,0,metriccano_plate_height]) rotate([180,0,0]) 
-                metriccano_nut_cavity_tapered(captive=true);
-            translate([0,metriccano_unit,metriccano_plate_height]) rotate([180,0,0]) 
-                metriccano_nut_cavity_tapered(captive=true);
-            translate([0,metriccano_unit*2,metriccano_plate_height]) rotate([180,0,0]) 
-                metriccano_nut_cavity_tapered(captive=true);
-        }
-        // Tag onto the flexures
-         translate([-flexure_length*2,-metriccano_unit,0]) fixed_arm_flexure_tag();
-         translate([-flexure_length*2,metriccano_unit,0]) scale([1,-1,1])  
-            fixed_arm_flexure_tag();
-        // This tag anchor is supported and can be fairly flat
-        translate([1-pll_platform_beam_length-metriccano_unit/4-flexure_length*2,0,flexure_height/2+0.5])
-            cube([metriccano_unit/2,metriccano_unit,flexure_height+1],center=true);
- }
-
-// Create a base for the driven end
-translate([metriccano_unit/2+flexure_length/2,0,0]) {
-    // Bevel this off for pivoting arm clearance
-    translate([0,-metriccano_unit*2,0]) rotate([0,0,90]) difference() {
-        metriccano_strip(5,nutted=true);
-        translate([metriccano_unit*2,metriccano_unit/2,metriccano_unit]) rotate([45,0,0])
-            cube([metriccano_unit*3,metriccano_unit,metriccano_unit],center=true);
-    }
+translate([pll_flexure_to_flexure+flexure_tab_length/2,0,0]) {
+    anchor_pointed_in();
 }
-// Poke a strip out to the centre flexure. Slope the end on that too.
-hull() {
-    translate([flexure_length/2+2,0,metriccano_plate_height/2])
-        cube([0.1,flexure_width+pll_frame_spacing+1,metriccano_plate_height],center=true);
-    translate([-pll_platform_beam_length+flexure_length/2,0,flexure_height/2+0.5])
-        cube([0.1,flexure_width,+flexure_height+1],center=true);
-}
-
+// Anchor at X=0
+translate([-flexure_tab_length/2,0,0]) anchor_pointed_out();
 
 /*****************************************************************************
 Code below is unused at this point.
 *****************************************************************************/
 
-
-// These define the size and mechanical advantage of the whole mechanism. Overall dimensions change to suit.
-/*axis_arm_ratio=2.5;
-axis_lifter_length=25;
-axis_arm_length=axis_lifter_length*axis_arm_ratio;*/
-axis_lifter_length=24;
-axis_arm_length=72;
-axis_arm_ratio=axis_arm_length/axis_lifter_length;
-echo(str("Arm ratio=",axis_arm_ratio));
-
-
-axis_probe_depression=2;       // Shouldn't this be 4 not 2?
-
-axis_motion_clearance=axis_probe_depression+0.5;    // This should clear moving parts...
-axis_arm_width=12;
-axis_lifter_width=flexure_width;
-axis_lifter_height=4;
-axis_platform_height=40;   // Height of the Z platform with mounting holes in.
-axis_platform_thick=3;        // Thickness of Z platform with holes in.
-platform_pivot_width=30;    // Maximum horizontal separation of flexures (edge to edge) on platform
-platform_surface_width=40;  // Horizontal dimension of platform surface (Y axis)
-
-// The fixed block on which the platform pivots
-axis_anchor_block_length=platform_pivot_width;
-axis_anchor_block_width=8;
-axis_anchor_block_height=7;
-axis_arm_height=axis_anchor_block_height+axis_motion_clearance;
-axis_drive_pivot_x=axis_arm_length-axis_arm_length/axis_arm_ratio;  // Z drive flexure on X
-axis_nut_holder_rad=6;                 // Diameter of the thing that holds the drive nut
-axis_drive_nut_x=axis_drive_pivot_x+flexure_length/2+axis_nut_holder_rad;           // Z drive nut on X
-drive_lug_length=18;                    // Length of the transverse drive lug bar.
-axis_top_bearing_z=29;             // Bottom of the bearing block is this far off the base
-
-// Where the flat, long arm starts near the anchor
-axis_end_bend_x=axis_anchor_block_width+flexure_length/2+axis_motion_clearance;
 
 // Function to calculate the distance between two points
 function distance(x1,y1,x2,y2) = sqrt(pow(x1-x2, 2) + pow(y1-y2, 2));
@@ -737,105 +665,4 @@ module nema17_horizontal_mount() {
          // Collar hole
         cylinder(h=metriccano_plate_height*3,r=nema17_collar_rad,center=true);
     }
-}
-// Metriccano NEMA17 mount, 5 hole horizontal strips.
-// Might not be a good idea to mount it by the motor, but here's one if you need it...
-module metriccano_nema17_horizontal_mount() {
-        union() {
-            nema17_horizontal_mount() ;
-            // Stick a strip of Metriccano on each side
-            translate([-2*metriccano_unit,4*metriccano_unit,0]) metriccano_strip(5);
-            translate([-2*metriccano_unit,-4*metriccano_unit,0]) metriccano_strip(5);
-        }
-}
-
-
-
-// Integrated stage. Has XY linkages and long flexures to connect XY drivers.
-module integrated_stage() difference() {
-    union() {
-        difference() {
-            // Join up the flexure blocks and the mounting plate
-            union() {
-                metriccano_flexure_block_bidirectional(4);
-                translate([0,metriccano_unit*4.5,0]) 
-                    scale([1,-1,1]) metriccano_flexure_block_bidirectional(4);
-                translate([-metriccano_unit,metriccano_unit*0.75,0]) metriccano_plate(6,4);
-                // Slap another mounting plate on top
-                translate([-metriccano_unit,metriccano_unit*0.75,metriccano_unit/2])
-                    metriccano_plate(6,4);
-                // Fill the holes in the block that the flexure passes through
-                translate([metriccano_unit*0.75,metriccano_unit*4.75,0])
-                    cube([metriccano_unit*1.5,metriccano_unit,metriccano_unit]);
-                translate([metriccano_unit*0.5,metriccano_unit*3.25,0])
-                    cube([metriccano_unit*1.75,metriccano_unit,metriccano_unit]);
-                translate([metriccano_unit*2.5,metriccano_unit*1.5,0])
-                    cube([metriccano_unit*2,metriccano_unit*1.5,metriccano_unit]);
-                // Version text
-                translate([-metriccano_unit*1.5,metriccano_unit*2.25,metriccano_unit/2]) rotate([90,0,-90])
-                    version_text();
-            }
-            // Slots for felxure beams. Take out slightly extra to stop bridges contacting
-            translate([metriccano_unit*5.5,metriccano_unit*2.25,layer_height+1])
-                cube([metriccano_unit*6,metriccano_unit,metriccano_unit],center=true);
-            translate([metriccano_unit*1.5,metriccano_unit*6,layer_height+1])
-                cube([metriccano_unit,metriccano_unit*6,metriccano_unit],center=true);
-            // Nut sockets in the corners
-            translate([0,metriccano_unit*0.75,metriccano_unit-m3_nut_height+0.001])
-                m3_nut_cavity();
-            translate([-metriccano_unit,metriccano_unit*0.75,metriccano_unit-m3_nut_height+0.001])
-                m3_nut_cavity();
-            translate([3*metriccano_unit,metriccano_unit*0.75,metriccano_unit-m3_nut_height+0.001])
-                m3_nut_cavity();
-            translate([4*metriccano_unit,metriccano_unit*0.75,metriccano_unit-m3_nut_height+0.001])
-                m3_nut_cavity();
-            translate([0,metriccano_unit*3.75,metriccano_unit-m3_nut_height+0.001])
-                m3_nut_cavity();
-            translate([-metriccano_unit,metriccano_unit*3.75,metriccano_unit-m3_nut_height+0.001])
-                m3_nut_cavity();
-            translate([3*metriccano_unit,metriccano_unit*3.75,metriccano_unit-m3_nut_height+0.001])
-                m3_nut_cavity();
-            translate([4*metriccano_unit,metriccano_unit*3.75,metriccano_unit-m3_nut_height+0.001])
-                m3_nut_cavity();
-        }
-
-        // Side flexure modules
-        translate([metriccano_unit,metriccano_unit*1.75,0]) joined_mettricano_2_via_flexures(5*metriccano_unit);
-        translate([metriccano_unit*2,metriccano_unit*1.75,0])
-            rotate([0,0,90]) joined_mettricano_2_via_flexures(5*metriccano_unit);
-    }
-    // Cut light well (a Metriccano unit-ish hole with rounded corners)
-    well_size=metriccano_unit/2+0.5;
-    translate([metriccano_unit*1.5,metriccano_unit*2.25,0])
-        hull() {
-            translate([well_size,well_size,0])
-                cylinder(h=metriccano_unit*3,r=metriccano_screw_rad,$fn=20,center=true);
-            translate([-well_size,well_size,0])
-                cylinder(h=metriccano_unit*3,r=metriccano_screw_rad,$fn=20,center=true);
-            translate([well_size,-well_size,0])
-                cylinder(h=metriccano_unit*3,r=metriccano_screw_rad,$fn=20,center=true);
-            translate([-well_size,-well_size,0])
-                cylinder(h=metriccano_unit*3,r=metriccano_screw_rad,$fn=20,center=true);
-        }
-}
-
-// 100mm long beam for testing flexure deflection with a 10g weight (.38 cal bullet)
-test_pan_rad=10; // Radius of test pan cavity for weights
-test_arm_len=100;
-module test_flexure() {
-    flexure_tab();
-    // 100mm beam with pan on the end
-    difference() {
-        union() {
-            translate([flexure_length/2,-4,0]) cube([100,8,8]);
-            translate([flexure_length/2+test_arm_len,0]) cylinder(h=10,r=test_pan_rad+wall);
-            // Wee spike on the end.
-            translate([flexure_length/2+test_arm_len+test_pan_rad+wall-0.5,0,0.5])
-                rotate([0,0,45]) cube([4,4,1],center=true);
-        }
-        // Scalop it out
-        translate([flexure_length/2+test_arm_len,0,1]) cylinder(h=100,r=test_pan_rad);
-    }
-    // Anchor plate
-    translate([-flexure_length/2-metriccano_unit*1.5,-metriccano_unit/2,0]) metriccano_plate(2,2);
 }
