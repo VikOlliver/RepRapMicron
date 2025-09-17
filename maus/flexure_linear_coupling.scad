@@ -7,6 +7,7 @@ include <../library/nema17lib.scad>
 
 flex_tube_height=13;
 flex_tube_spring_width=0.6;
+flex_linkage_thick=1.0;     // Short bits that join the curved flexures. Need to be robust.
 max_gap=1.2;
 flex_link_width=max_gap+flex_tube_spring_width;
 wall=2;     // Minimal rigid wall
@@ -27,9 +28,10 @@ module flex_quadrant(radius,height=flex_tube_height) {
         }
         translate([0,flex_tube_spring_width,-1]) cube([radius*2,radius*2,height+2]);
     }
-    translate([radius,flex_tube_spring_width,0]) cube([flex_link_width,flex_tube_spring_width,height]);
-    translate([0,radius-flex_link_width,0]) cube([flex_tube_spring_width,flex_link_width,height]);
-    translate([0,radius+flex_link_width,0]) cube([flex_tube_spring_width,flex_link_width,height]);
+    // These are the short, straight bits that join up the flexures.
+    translate([radius,flex_tube_spring_width,0]) cube([flex_link_width,flex_linkage_thick,height]);
+    translate([0,radius-flex_link_width,0]) cube([flex_linkage_thick,flex_link_width,height]);
+    translate([0,radius+flex_link_width,0]) cube([flex_linkage_thick,flex_link_width,height]);
 }
 
 // Stepper motor coupling.
