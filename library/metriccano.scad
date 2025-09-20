@@ -92,8 +92,8 @@ module metriccano_nut_slot(l=100) {
         translate([-metriccano_nut_max_width/2-0.5,-metriccano_nut_min_width/2,0])
             cube([metriccano_nut_max_width+l,metriccano_nut_min_width,metriccano_nut_height]);
         // Small knobs to retain nut
-        translate([0.2,metriccano_nut_min_width/2,metriccano_nut_height/2]) sphere(0.5);
-        translate([0.2,-metriccano_nut_min_width/2,metriccano_nut_height/2]) sphere(0.5);
+        translate([0.2,metriccano_nut_min_width/2,metriccano_nut_height/2]) sphere(0.6);
+        translate([0.2,-metriccano_nut_min_width/2,metriccano_nut_height/2]) sphere(0.6);
     }
 }
 
@@ -165,12 +165,12 @@ module metriccano_strip_flatend(h,squared=false,nutted=false,extend_end=0) {
 
 // A straight strip of Metriccano with a vertical slot along it allowing adjustment
 // h    length of slot in merticcano units - can be fractional
-module metriccano_slot_strip(h=0) {
+module metriccano_slot_strip(h=0,squared=false) {
     holes=floor(h+0.5);
     difference() {
         hull() {
-            translate([(holes-1)*metriccano_hole_spacing,0,0]) metriccano_round_unit();
-            metriccano_round_unit();
+            translate([(holes-1)*metriccano_hole_spacing,0,0]) round_square(squared);
+            round_square(squared);
         }
         hull() {
             metriccano_screw_hole();
