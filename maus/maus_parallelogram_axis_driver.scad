@@ -190,6 +190,9 @@ module anchor_pointed_in() translate([metriccano_unit/2,0,0]) {
                 cube([metriccano_unit,pll_frame_centres+1,metriccano_plate_height],center=true);
             translate([0,metriccano_unit/2+pll_frame_spacing,metriccano_plate_height/2])
                 cube([metriccano_unit,pll_frame_centres+1,metriccano_plate_height],center=true);
+            // Tab that in theory will hit the limit switch
+            translate([metriccano_unit/2,-metriccano_unit/2,0])
+                cube([metriccano_unit,metriccano_unit,metriccano_plate_height]);
         }
         // Fixing screw holes. Keeping my options open...
         translate([0,metriccano_unit,0]) metriccano_screw_hole();
@@ -198,11 +201,18 @@ module anchor_pointed_in() translate([metriccano_unit/2,0,0]) {
 }
 
 // An anchor where the centre flexure protrudes, aligned on X=0
-// Anchor holes in -X direction
+// Anchor holes in -X direction, nuts underneath.
 module anchor_pointed_out() union() {
-     translate([-metriccano_unit*1.5,-metriccano_unit,0]) metriccano_strip(2,squared=true,nutted=true);    
-     translate([-metriccano_unit*1.5,metriccano_unit,0]) metriccano_strip(2,squared=true,nutted=true);    
-     translate([-metriccano_unit*1.5,0,0]) metriccano_strip(1,squared=true,nutted=true);    
+    // U-Shaped block with nut holes underneath
+    difference() {
+        translate([-metriccano_unit,0,metriccano_plate_height/2])
+            cube([metriccano_unit*2,metriccano_unit*3,metriccano_plate_height],center=true);
+        // Notch
+        cube([metriccano_unit*2,metriccano_unit,metriccano_unit*2],center=true);
+        // Nutted holes underneath
+        for (x=[0:1]) for (y=[-1:1])
+        translate([-metriccano_unit/2-metriccano_unit*x,metriccano_unit*y,metriccano_nut_height]) rotate([180,0,0]) metriccano_screw_cavity(inverted=true);
+    }
  }
  
  bb_hook_x=3;
@@ -734,6 +744,28 @@ module manual_thumbscrew() difference() {
     translate([0,0,4]) m3_nut_cavity();
 }
 
+// Components for a temporary adjustable switch support
+module switch_support_bits() difference() {
+    union() {
+        translate([metriccano_unit*2,metriccano_unit+1,0]) difference() {
+            metriccano_strip(3);
+            translate([0,0,metriccano_nut_height]){
+                rotate([180,0,0]) metriccano_nut_cavity_tapered(captive=true);
+                translate([metriccano_unit*2,0,0])
+                    rotate([180,0,0]) metriccano_nut_cavity_tapered(captive=true);
+            }
+        }
+        metriccano_strip(7);
+    }
+    // Grooves for wires
+    translate([metriccano_unit*2,0,metriccano_plate_height]) {
+        translate([metriccano_unit-3,0,0])
+            rotate([90,0,0]) cylinder(h=metriccano_unit*10,r=0.5,$fn=12,center=true);
+        translate([metriccano_unit+3,0,0])
+            rotate([90,0,0]) cylinder(h=metriccano_unit*10,r=0.5,$fn=12,center=true);
+    }
+}
+
 // This is a yardstick for when estimating hole positions
 //%translate([-pll_platform_beam_length-flexure_tab_length/2-metriccano_unit/2,-metriccano_unit*2,0]) metriccano_strip(15);
 
@@ -741,4 +773,15 @@ module manual_thumbscrew() difference() {
 //nut_bar();
 //translate([20,15,0]) metriccano_square_strip(2);
 //translate([20,0,0]) metriccano_square_strip(2);
-frame_trio();
+//frame_trio();
+
+// 3x3 square strip bock, a temporary fitting for putting the lash-up driver on a V0.04
+/*metriccano_square_strip(2);
+translate([0,metriccano_unit,0]) metriccano_square_strip(3);
+translate([0,metriccano_unit*2,0]) metriccano_square_strip(3);*/
+
+// Temporary bracket to join Parallelogram Axis Driver to XY Table flexure
+//scale([1,1,2]) metriccano_slot_strip(4,squared=true);
+//translate([0,metriccano_unit,metriccano_unit/2]) rotate([0,-90,0]) metriccano_slot_strip(2,squared=true);
+
+switch_support_bits();
