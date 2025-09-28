@@ -64,14 +64,12 @@ module  metriccano_screw_cavity(screw_len=metriccano_unit,inverted=false) {
 // Hole for a nut to be lowered in from the top, or pushed into the bottom.
 // Has a conical top to print without support. Projects very slightly down to remove boolean issues.
 // Making it captive adds little bumps inside that make it hard to insert and remove the nut
-module metriccano_nut_cavity_tapered(captive=false) union() {
+module metriccano_nut_cavity_tapered(captive=false,inverted=false) union() {
     difference() {
-        union() {
-            // Tapered cavity for m3 nut. Slight protrusion for clean booleans.
-            translate([0,0,-0.01]) cylinder(h=metriccano_nut_height+0.02,r=metriccano_nut_max_width/2,$fn=6);
-            translate([0,0,metriccano_nut_height])
-                cylinder(h=1,r1=metriccano_nut_max_width/2,r2=metriccano_screw_rad*1.2,$fn=6);
-        }
+        // Cavity for m3 nut. Slight protrusion for clean booleans.
+        translate([0,0,-0.01])
+            cylinder(h=metriccano_nut_height+0.02,r1=metriccano_nut_max_width/2,r2=metriccano_nut_max_width/2-0.05,$fn=6);
+
         if (captive) {
             divot_rad=0.5;
             rotate([0,0,30]) translate([metriccano_nut_max_width*0.42,0,metriccano_nut_height/2])
@@ -82,8 +80,20 @@ module metriccano_nut_cavity_tapered(captive=false) union() {
                 sphere(divot_rad);
 
         }
+        // If it's inverted, add a removable support for the centre of the hole.
+        if (inverted) {
+            // Translate down by approx one layer so temp support will detatch
+            translate([0,0,0.2]) rotate([0,0,360/16]) {
+                // Hollow cylinder
+                difference() {
+                    cylinder(h=metriccano_nut_height,r=metriccano_screw_rad*1.2+0.3,$fn=8);
+                    cylinder(h=metriccano_nut_height*3,r=metriccano_screw_rad*1.2,$fn=8,center=true);
+                }
+            }
+        }
     }
 }
+
 
 // Nut  slot for Metriccano nut with bumps to hold nut in place
 module metriccano_nut_slot(l=100) {
@@ -162,19 +172,35 @@ module metriccano_strip_flatend(h,squared=false,nutted=false,extend_end=0) {
     }
 }
 
+// A straight slotted strip of Metriccano. Vertical slot goes along the X axis
+// Nearest end always squared, shifted slightly for a good boolean join.
+// h    number of holes length of slot (can be fractional)
+// extend_end Extends the flat, plain end on the -X
+module metriccano_slot_flatend(h,squared=false,extend_end=0) {
+    difference() {
+        hull() {
+            translate([(h-1)*metriccano_hole_spacing,0,0]) round_square(squared);
+            translate([-0.01-metriccano_unit/2-extend_end,-metriccano_unit/2,0]) cube([1,metriccano_unit,metriccano_plate_height]);
+        }
+        // Add the slot
+        hull() {
+            metriccano_screw_hole();
+            translate([(h-1)*metriccano_hole_spacing,0,0]) metriccano_screw_hole();
+        }
+    }
+}
 
 // A straight strip of Metriccano with a vertical slot along it allowing adjustment
 // h    length of slot in merticcano units - can be fractional
 module metriccano_slot_strip(h=0,squared=false) {
-    holes=floor(h+0.5);
     difference() {
         hull() {
-            translate([(holes-1)*metriccano_hole_spacing,0,0]) round_square(squared);
+            translate([(h-1)*metriccano_hole_spacing,0,0]) round_square(squared);
             round_square(squared);
         }
         hull() {
             metriccano_screw_hole();
-            translate([(holes-1)*metriccano_hole_spacing,0,0]) metriccano_screw_hole();
+            translate([(h-1)*metriccano_hole_spacing,0,0]) metriccano_screw_hole();
         }
     }
 }
