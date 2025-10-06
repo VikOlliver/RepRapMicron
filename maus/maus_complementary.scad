@@ -18,7 +18,7 @@ include <../library/m3_parts.scad>
 include <../library/metriccano.scad>
 include <../library/nema17lib.scad>
 
-version_string="MAUSC V0.04";
+version_string="MAUSC V0.05";
 
 flexure_width=0.8;  // Width of a flexure beam, that's the very thin direction
 flexure_max=8+flexure_width;      // Maximum desired flexing distance off centre
@@ -659,13 +659,72 @@ module y_transfer_bar(fl) {
      }
 }
 
+// Flexure to rigidly constrain the Z axis to vertical motion only.
+// X=0,Y=0 centred on the free end of the anchor hole on the end of the Axis Driver
+// Turned on its side for zero support printing.
+zflex_beam_thick=frame_thick;
+zflex_inner_beam_length=metriccano_unit+2*(flexure_max+flexure_width);
+zflex_outer_beam_length=zflex_inner_beam_length+flexure_max*2+flexure_width;
+zflex_flexure_length=40;
+
+module zflex_outer_beam_frame() {
+    // Outer beam, attached to free end of Axis Driver
+    translate([-metriccano_unit/2,-zflex_outer_beam_length/2,0])
+        cube([zflex_beam_thick,zflex_outer_beam_length,flexure_height]);
+    // Inner flexures
+    translate([0,-zflex_outer_beam_length/2+flexure_width,0]) rotate([0,0,-90]) generic_flexure(zflex_flexure_length);
+    translate([0,zflex_outer_beam_length/2,0]) rotate([0,0,-90]) generic_flexure(zflex_flexure_length);
+    // Outer beam, attached to inner flexures.
+    // Needs to be translated out to allow clearance for inner beam
+    translate([zflex_flexure_length,0,0]) {
+        translate([flexure_clearance+zflex_beam_thick,-zflex_outer_beam_length/2,0])
+            cube([zflex_beam_thick,zflex_outer_beam_length,flexure_height]);
+        // Support blocks for outer inner_flexures
+        translate([0,-zflex_outer_beam_length/2,0])
+            cube([flexure_clearance+zflex_beam_thick,flexure_max/2,flexure_height]);
+        translate([0,zflex_outer_beam_length/2-flexure_max/2,0])
+            cube([flexure_clearance+zflex_beam_thick,flexure_max/2,flexure_height]);
+    }
+}
+
+// Inner beam and flexures for Z flexure
+module zflex_inner_beam_frame() {
+    // Beam that attaches to Axis Driver frame
+    translate([-metriccano_unit/2,-zflex_inner_beam_length/2,0])
+        cube([zflex_beam_thick,zflex_inner_beam_length,flexure_height]);
+    // Inner flexures
+    translate([0,-zflex_inner_beam_length/2+flexure_width,0]) rotate([0,0,-90]) generic_flexure(zflex_flexure_length);
+    translate([0,zflex_inner_beam_length/2,0]) rotate([0,0,-90]) generic_flexure(zflex_flexure_length);
+}
+
+// Assembled Z flexure
+module z_flexure() union() {
+    // Attachment under plate of Axis Driver
+    translate([-metriccano_unit*2,0,0]) {
+        translate([zflex_beam_thick,metriccano_plate_height,metriccano_unit/2+flexure_clearance+flexure_height]) rotate([90,0,0]) metriccano_plate(2,2,squared=true);
+        // Mounting plate link
+        cube([metriccano_unit*2,metriccano_plate_height,flexure_height+flexure_clearance]);
+    }
+
+    // Outer flexures
+    zflex_outer_beam_frame();
+    // Inner flexures
+    translate([flexure_clearance+zflex_beam_thick,0,0]) zflex_inner_beam_frame();
+    // Attachment point to side of Axis Driver. Fill with holes
+    difference() {
+        translate([zflex_beam_thick+flexure_clearance,-metriccano_unit/2]) cube([zflex_flexure_length-flexure_clearance,metriccano_unit,flexure_height+flexure_clearance]);
+        for (i=[1:floor(zflex_flexure_length/metriccano_unit)])
+            translate([i*metriccano_unit-zflex_beam_thick,0,metriccano_unit/2]) metriccano_screw_hole();
+    }
+}
+
 // Assembly in 3D for visual test fit
 if (false) {
     translate([0,0,structure_height]) rotate([-90,0,0]) outer_frame_unit();
     translate([(inner_mf_offset+metriccano_unit*2-1+edge_clearance),flexure_height+0.5,structure_height-flexure_clearance]) rotate([0,-90,0]) rotate([0,0,90]) table_frame_unit();
 }
 
-plate=1;
+plate=3;
 
 // Build plate A
 if (plate==1) {
@@ -704,4 +763,8 @@ if (plate==1) {
     translate([190,26,0]) m3_thumbscrew_knob(7);
     translate([190,42,0]) m3_thumbscrew_knob(7);
     translate([190,58,0]) m3_thumbscrew_knob(7);
+} else if (plate==3) {
+    // Z Axis parts
+    z_flexure();
+    translate([0,60,0]) scale([1,-1,1]) z_flexure();
 }
