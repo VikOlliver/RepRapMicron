@@ -13,7 +13,7 @@
 
 include <../library/metriccano.scad>
 
-version_string="MAUSC V0.04";
+version_string="MAUSL V0.05";
 
 
 
@@ -47,13 +47,11 @@ module crossed_span(width) translate([metriccano_unit/2,-metriccano_unit/2,0]) {
 union() {
     // Metriccano-based tower to support Z axis
     translate([metriccano_unit,0,0]) {
-        translate([0,-metriccano_unit,0]) vertical_strip(11);        // Solid strip support
+        translate([0,-metriccano_unit,0]) vertical_strip(12);        // Solid strip support
         //  Pillar closest to motor 
-        translate([0,-metriccano_unit*2,0])  rotate([0,0,90]) vertical_strip(11);
+        translate([0,-metriccano_unit*2,0])  rotate([0,0,90]) vertical_strip(7);
         // Outside pillarto improve stability
-        translate([-metriccano_unit,-metriccano_unit*2,0])  rotate([0,0,90]) vertical_strip(11);
-        // Upper extended part
-        translate([metriccano_unit*4,-metriccano_unit*2,metriccano_unit*7])  rotate([0,0,180]) vertical_strip(4);
+        translate([-metriccano_unit,-metriccano_unit*2,0])  rotate([0,0,90]) vertical_strip(9);
         translate([metriccano_unit*3.5,-metriccano_unit*2.5,0]) {
             // Versioning
             translate([metriccano_unit/2,metriccano_unit/2-1,metriccano_unit*4]) rotate([0,90,0]) version_text();
@@ -65,11 +63,26 @@ union() {
             }
         }
     // Spans linking the two
-     translate([0,-metriccano_unit*1.75,metriccano_unit*5]) crossed_span(3);
-     translate([0,-metriccano_unit*1.75,metriccano_unit]) crossed_span(3);
+     translate([0,-metriccano_unit*1,metriccano_unit*8]) crossed_span(3);
+     translate([0,-metriccano_unit*1.25,metriccano_unit]) crossed_span(3);
     }
-    // Angled strip that attaches to the flexure frams
-     translate([metriccano_unit*5,-metriccano_unit,0])  rotate([0,0,-45]) vertical_strip(11);
+    // Angled strip that attaches to the flexure frame, at 45 degrees at the bottom
+     translate([metriccano_unit*5,-metriccano_unit,0])  rotate([0,0,-45]) vertical_strip(7);
+    // Twist between two square strips at 45 degrees to each other
+     translate([metriccano_unit*5,-metriccano_unit,metriccano_unit*7]) difference() {
+         // The twist
+        hull() {
+             rotate([0,0,-45]) cube([metriccano_unit,metriccano_unit,0.01],center=true);
+             translate([-metriccano_unit/2,-metriccano_unit/2,metriccano_unit])
+                cube([metriccano_unit,metriccano_unit,0.01]);
+         }
+         // Level offone side of the twist
+         translate([-metriccano_unit/2,-metriccano_unit*1.5,0]) cube(metriccano_unit);
+     }
+     // Top of "twisted" pillar that points aling Z Axis driver
+     translate([metriccano_unit*4.5,-metriccano_unit,metriccano_unit*11.5])  rotate([0,90-0,0]) metriccano_square_strip(4);
+
+     
     // Base plate
     translate([metriccano_unit*5,-metriccano_unit,0])  rotate([0,0,135])    difference() {
         union() {
