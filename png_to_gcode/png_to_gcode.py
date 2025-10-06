@@ -24,8 +24,8 @@ import sys
 from PIL import Image
 
 # === Movement speed configuration ===
-FEED_MOVE = 1500    # XY movement speed (CNC units/min)
-FEED_Z = 2400       # Z-axis movement speed (CNC units/min)
+FEED_MOVE = 10000    # XY movement speed (CNC units/min)
+FEED_Z = 3400       # Z-axis movement speed (CNC units/min)
 SLOW_FEED_Z = 900   # Movement speed for a slow touchdown with less vibration.
 
 def parse_arguments():
@@ -35,7 +35,7 @@ def parse_arguments():
     )
     parser.add_argument("input", help="Input PNG file (use '-' to read from stdin)")
     parser.add_argument("-o", "--output", help="Output GCODE file (use '-' for stdout)", default="-")
-    parser.add_argument("-d", "--distance", help="Distance per pixel in CNC units", type=float, default=10.0)
+    parser.add_argument("-d", "--distance", help="Distance per pixel in CNC units", type=float, default=30.0)
     parser.add_argument("--safe-z", help="Safe travel height in mm", type=float, default=50.0)
     parser.add_argument("--draw-z", help="Drawing/contact height in mm", type=float, default=0.0)
     parser.add_argument("--light", action="store_true", help="Plot light pixels instead of dark ones")
@@ -93,3 +93,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
