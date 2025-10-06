@@ -52,6 +52,14 @@ The main repository of knowledge is the wiki on the [main project page](https://
 GPL V3 or later
 
 ## Project status
-V0.05  Third Alpha release, most functional device. Currently the head but short on documentation.
-V0.04  The prefereble build if documentation is required. V0.04 documentation is currently a list of fixups for V0.03 docs.
-V0.03  Tested build with a few known flaws and full build documentation on wiki.
+### V0.05
+
+Third Alpha release, most functional device. Currently the head but short on documentation.
+
+### V0.04
+
+The prefereble build if documentation is required. V0.04 documentation is currently a list of fixups for V0.03 docs.
+
+### V0.03
+
+First ever Alpha release. Tested build with a few known flaws and full build documentation on wiki.
