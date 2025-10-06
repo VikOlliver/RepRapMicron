@@ -13,7 +13,8 @@
         metriccano_l_beam(holes)             Two strips of holes joined in an L-shaped beam
         metriccano_square_strip(holes)     A square section strip with vert & horiz holes, ends slotted for nuts.
         metriccano_plate(x,y)                    Plate with X holes in one direction, Y in the other.
-        metriccano_base_anchor(holes)     Upended angle beam with a 3x3 base plate
+    metriccano_tab_module(h,squared)   Attachment lugs to add to other models
+    metriccano_base_anchor(holes)     Upended angle beam with a 3x3 base plate
         metriccano_woodscrew_clip(holes) Allows fixing 1u tall objects with C/S woodscrews
         metriccano_triangular_plate(h)         Equilateral triangle with 3 holes
         metriccano_adjustment_bracket()     A right angle bracket with slotted holes to mount poorly-aligned parts
@@ -24,7 +25,7 @@ metriccano_hole_spacing=metriccano_unit;  // Nice 10mm grid for holes
 metriccano_plate_height=metriccano_unit/2;
 metriccano_strip_width=metriccano_unit;
 // Yes, this is repeating an M3 library but in theory you can change this to M4 etc.
-metriccano_screw_rad=3.3/2; // M3 screw hole radius
+metriccano_screw_rad=3.2/2; // M3 screw hole radius
 metriccano_screw_head_rad=5.9/2;    // Radius of the average M3 posi screw head
 metriccano_screw_head_height=2.1;   // Height of a screw head
 metriccano_nut_max_width=6.6;     // Nut from point to point
@@ -48,9 +49,10 @@ module  metriccano_screw_cavity(screw_len=metriccano_unit,inverted=false) {
             rotate([0,0,360/16]) translate([0,0,-0.001])
                 cylinder(h=10,r=metriccano_screw_head_rad*1.2,$fn=8);
         }
-        // If it's inverted, put a hollow cylinder in the head cavity lined up with the screw hole as support.
+        // If it's inverted, put a hollow cylinder in the head cavity lined up with the screw
+       // hole as support. Stand off a bit so that it iwll separate cleanly.
         if (inverted) {
-            translate([0,0,0.01]) rotate([0,0,360/16]) {
+            translate([0,0.2]) rotate([0,0,360/16]) {
                 // Hollow cylinder
                 difference() {
                     cylinder(h=screw_len,r=metriccano_screw_rad*1.2+0.3,$fn=8);
@@ -192,11 +194,11 @@ module metriccano_slot_flatend(h,squared=false,extend_end=0) {
 
 // A straight strip of Metriccano with a vertical slot along it allowing adjustment
 // h    length of slot in merticcano units - can be fractional
-module metriccano_slot_strip(h=0,squared=false) {
+module metriccano_slot_strip(h=0,squared=false,extend_end=0) {
     difference() {
         hull() {
             translate([(h-1)*metriccano_hole_spacing,0,0]) round_square(squared);
-            round_square(squared);
+            translate([-extend_end,0,0]) round_square(squared);
         }
         hull() {
             metriccano_screw_hole();
@@ -224,7 +226,7 @@ module metriccano_tab_module(h,squared=false) {
             // Rounded near end
             metriccano_round_unit();
         }
-        if (holes>1)
+        if (holes>0)
             for (i=[0:holes-1]) translate([i*metriccano_hole_spacing,0,0]) metriccano_screw_hole();
     }
 }
