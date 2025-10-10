@@ -56,8 +56,9 @@ module nut_slots() {
     rotate([0,0,180]) nut_slot();
 }
 
+lug_height=6;   // Height of the lug the probe arm's screw sits on.
 // Box without bottom or lid, but with hole to anchor probe by its screw
-difference() {
+module box_body() difference() {
     union() {
         // Make a hole with a lug inside
         difference() {
@@ -66,7 +67,7 @@ difference() {
             // Chop out the interior
             cube([box_interior_width,box_interior_width,box_inside_height*3],center=true);
         }
-        translate([0,anchor_hole_y,0]) cylinder(h=6,r=lug_rad,$fn=30);
+        translate([0,anchor_hole_y,0]) cylinder(h=lug_height,r=lug_rad,$fn=30);
     }
     translate([0,anchor_hole_y,0]) {
         // Put in an anchor screw hole
@@ -75,11 +76,11 @@ difference() {
         translate([0,0,3])
             cylinder(h=box_inside_height*3,r=m3_nut_max_width/2+0.1,$fn=30);
         // A cavity for the probe body
-        translate([0,0,6])
+        translate([0,0,lug_height])
             cylinder(h=box_inside_height*3,r=lug_rad,$fn=30);
         // Holes for tweezers to get a grip
-        translate([0,0,6+box_inside_height/2])
-            cube([lug_rad*2+6,3,box_inside_height],center=true);
+        translate([0,0,lug_height+box_inside_height/2])
+            cube([lug_rad*2+lug_height,3,box_inside_height],center=true);
     }
     // Holes for lower nuts
     translate([0,0,4]) nut_slots();
@@ -87,6 +88,22 @@ difference() {
     translate([0,0,box_inside_height-4]) scale([-1,1,1]) nut_slots();
 }
 
+// A keeper to hold the probe in place when the lid is on.
+module probe_keeper() difference() {
+    // Leave room for lug and thickness of a probe, washers etc.
+    cylinder(h=box_inside_height-lug_height-3.5,r=lug_rad-0.5);
+    // Make it hollow, leaving room for screw head and to make it easy to remove.
+    cylinder(h=box_inside_height*3,r=lug_rad-2,center=true);
+}
 
 // A lid if you need it, though these look so much cooler lasercut.
-// box_section(3);
+ module box_lid() difference() {
+     box_section(3);
+    // Put in an anchor screw hole
+     translate([0,anchor_hole_y,0])
+        cylinder(h=box_inside_height*3,r=m3_screw_rad,center=true,$fn=30);
+ }
+ 
+box_body();
+probe_keeper();
+//translate([box_side+5,0,0]) box_lid();
