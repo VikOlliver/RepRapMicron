@@ -14,45 +14,7 @@ module version_text() {
     }
 }
 
-// The rails that grip the probe holder and hold it to the Z axis platform
-probe_holder_rail_len=metriccano_unit*4;
-probe_holder_rail_width=metriccano_unit*1.5;
-module probe_holder_rail() difference() {
-    cube([probe_holder_rail_width,probe_holder_rail_len,probe_holder_wall]);
-    // Rail that retains sliding probe holder
-    translate([probe_holder_rail_width-1.2,-1,probe_holder_wall-1.2])
-        cube([metriccano_unit+2,probe_holder_rail_len+2,2]);
-    // Mounting holes for mating axis plate
-    translate([metriccano_unit/2,metriccano_unit/2,0]) m3_screw_hole(metriccano_unit*2);
-    translate([metriccano_unit/2,probe_holder_rail_len-metriccano_unit/2,0]) m3_screw_hole(metriccano_unit*2);
-    // Now a cavity containg a nut, used to temporarily lock probe slide in place
-    translate([probe_holder_rail_width/2,probe_holder_rail_len/2,probe_holder_wall/2])
-        rotate([0,-90,0]) m3_nut_slot();
-    // The screw that will lock the sliding probe arm in place
-    translate([0,probe_holder_rail_len/2,probe_holder_wall/2])
-        rotate([0,90,0]) m3_screw_hole(probe_holder_rail_width*3);
-}
-
-// Probe holder
-probe_holder_wall=8;    // Thick enough to hide an M3 nut in
-probe_holder_pivot_offset=14;   // Location of hole that holds the pivot arm on
-module probe_holder() difference() {
-    union() {
-        // Sliding bar
-        cube([metriccano_unit,probe_holder_rail_len,probe_holder_wall]);
-        translate([-1,0,0]) cube([metriccano_unit+2,probe_holder_rail_len,1]);
-        // Probe holder on the end of the sliding bar
-        translate([metriccano_unit/2,0,probe_holder_pivot_offset]) rotate([-90,0,0]) cylinder(h=metriccano_unit/2,r=metriccano_unit/2);
-        cube([metriccano_unit,metriccano_unit/2,probe_holder_pivot_offset]);
-        translate([metriccano_unit/2,probe_holder_rail_len/2+2,probe_holder_wall]) rotate([0,0,90]) version_text();
-    }
-     // Hole to hold screw in the probe tip assembly
-    translate([metriccano_unit/2,0,probe_holder_pivot_offset])
-        rotate([90,0,0]) m3_screw_hole(metriccano_unit*2);
-}
-    
-
-// Probe tip
+// Probe tip. Now with handling notches for tweezers
 probe_tip_thick=2.5;
 probe_tip_len=17;   // Length of probe from centre of securing pivot.
 module probe_tip_arm() difference() {
@@ -67,6 +29,9 @@ module probe_tip_arm() difference() {
     // Notch to retain probe wire
     translate([0,-0.4,probe_tip_thick-1])
         cube([probe_tip_len*2,0.8,probe_tip_thick]);
+    // Handling notches
+    translate([0,metriccano_unit/2,0]) cube([1,1.6,10],center=true);
+    translate([0,-metriccano_unit/2,0]) cube([1,1.6,10],center=true);
 }
 
 // 100mm long beam for testing flexure deflection with a 10g weight (.38 cal bullet)
@@ -162,12 +127,8 @@ module probe_shuttle() {
 // Probe tip and holder parts, slide holding parts.
 if (true) {
     // Commented out parts not used in V0.05
-    //translate([20,0,0]) probe_holder();
-    //probe_holder_rail();
-    //translate([40,0,0]) probe_holder_rail();
     translate([0,-10,0]) probe_tip_arm();
     translate([31,-10,0]) probe_tip_arm();
-    //translate([65,-10,0]) m3_thumbscrew_knob(7);
-    translate([0,50,0]) probe_beam();
-    translate([65,15,0]) probe_shuttle();
+    translate([0,10,0]) probe_beam();
+    translate([35,10,0]) probe_shuttle();
 }
