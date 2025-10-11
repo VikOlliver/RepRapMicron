@@ -14,25 +14,79 @@ module version_text() {
     }
 }
 
-// Probe tip. Now with handling notches for tweezers
+// This section covers the little arm that holds the probe, and the jig for assembling same.
 probe_tip_thick=2.5;
-probe_tip_len=17;   // Length of probe from centre of securing pivot.
-module probe_tip_arm() difference() {
+probe_held_in_arm=17;   // Length of probe arm from centre of securing pivot.
+probe_tip_len=23;           // Total length of a wire probe tip, butts up to the central screw
+
+module probe_tip_arm_hull() {
     hull() {
         cylinder(h=probe_tip_thick,r=metriccano_unit/2,$fn=32);
-        translate([probe_tip_len,0,probe_tip_thick/2]) rotate([0,0,45]) cube(probe_tip_thick,center=true);
+        translate([probe_held_in_arm,0,probe_tip_thick/2])
+            rotate([0,0,45]) cube(probe_tip_thick,center=true);
     }
-    // Retaining pivot hole
-    m3_screw_hole(probe_tip_thick*3);
-    // Nut well
-    translate([0,0,probe_tip_thick-1]) m3_nut_cavity();
-    // Notch to retain probe wire
-    translate([0,-0.4,probe_tip_thick-1])
-        cube([probe_tip_len*2,0.8,probe_tip_thick]);
-    // Handling notches
-    translate([0,metriccano_unit/2,0]) cube([1,1.6,10],center=true);
-    translate([0,-metriccano_unit/2,0]) cube([1,1.6,10],center=true);
 }
+
+// Probe tip. Now with handling notches for tweezers.
+module probe_tip_arm() {
+    difference() {
+         probe_tip_arm_hull();
+        // Retaining pivot hole
+        m3_screw_hole(probe_tip_thick*3);
+        // Nut well
+        translate([0,0,probe_tip_thick-1]) m3_nut_cavity();
+        // Notch to retain probe wire
+        translate([0,-0.4,probe_tip_thick-1])
+            cube([probe_held_in_arm*2,0.8,probe_tip_thick]);
+        // Handling notches
+        translate([0,metriccano_unit/2,0]) cube([1,1.6,10],center=true);
+        translate([0,-metriccano_unit/2,0]) cube([1,1.6,10],center=true);
+    }
+}
+
+// Device to hold Probe Tip Arm while you fit a probe tip to it
+// V0.05 expects a ~23mm long probe when the tip is angled down at approx 45 degrees
+pj_width=15;
+pj_height=10;
+pj_handle=25;   // Something to grab hold of
+pj_length=pj_handle+metriccano_unit/2+probe_tip_len+10; // Overall jig length
+pj_protective_slot=5;
+
+module probe_assembly_jig() {
+    // Dummy probe for fit test
+    //%translate([m3_screw_rad,0,pj_height]) rotate([0,90,0]) cylinder(h=probe_held_in_arm,r=0.8);
+    //%translate([m3_screw_rad,0,pj_height]) rotate([0,90,0]) cylinder(h=probe_tip_len,r=0.5);
+    
+    // Create a jig block and chop out cavity for arm, screw heads etc.
+    difference() {
+        // Body of jig
+        translate([-pj_handle,-pj_width/2,0]) cube([pj_length,pj_width,pj_height]);
+        // Hole to access screw head
+        cylinder(h=pj_height*3,r=m3_screw_head_rad+0.5,center=true);
+        // Recess for the arm, slightly enlarged
+        translate([0,0,pj_height-probe_tip_thick]) minkowski() {
+            probe_tip_arm_hull();
+            sphere(0.2,$fn=16);
+        }
+        // Slot for probe wire to run along
+        translate([0,0,pj_height-1])
+            cube([pj_length*3,0.8,probe_tip_thick],center=true);
+        // Notch where tip should be
+        translate([probe_tip_len+m3_screw_rad,0,pj_height])
+            rotate([0,45,0]) cube([0.6,pj_width*3,0.6],center=true);
+        // Protective slot for probe tip
+        translate([probe_held_in_arm+m3_screw_rad+pj_protective_slot/2,0,0]) {
+            cylinder(h=pj_height*3,r=pj_protective_slot/2,center=true,$fn=32);
+            translate([pj_length/2,0,0])
+                cube([pj_length,pj_protective_slot,pj_height*3],center=true);
+        }
+        // Tell people what this curious thing is
+        translate([5,-pj_width/2,pj_height/2])
+            rotate([90,0,0]) translate([0,0,-0.3]) linear_extrude(0.6) 
+            text(str(version_string," Probe Jig ",probe_tip_len,"mm"), size = 3, halign = "center", valign = "center", $fn = 16);
+    }
+}
+
 
 // 100mm long beam for testing flexure deflection with a 10g weight (.38 cal bullet)
 test_pan_rad=10; // Radius of test pan cavity for weights
@@ -124,11 +178,12 @@ module probe_shuttle() {
     }
 }
 
+
 // Probe tip and holder parts, slide holding parts.
 if (true) {
-    // Commented out parts not used in V0.05
-    translate([0,-10,0]) probe_tip_arm();
-    translate([31,-10,0]) probe_tip_arm();
-    translate([0,10,0]) probe_beam();
+    translate([50,25,0]) probe_tip_arm();
+    translate([50,10,0]) probe_tip_arm();
+    translate([10,10,0]) probe_beam();
     translate([35,10,0]) probe_shuttle();
+    translate([30,40,0]) probe_assembly_jig();
 }
