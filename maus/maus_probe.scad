@@ -44,50 +44,6 @@ module probe_tip_arm() {
     }
 }
 
-// Device to hold Probe Tip Arm while you fit a probe tip to it
-// V0.05 expects a ~23mm long probe when the tip is angled down at approx 45 degrees
-pj_width=15;
-pj_height=10;
-pj_handle=25;   // Something to grab hold of
-pj_length=pj_handle+metriccano_unit/2+probe_tip_len+10; // Overall jig length
-pj_protective_slot=5;
-
-module probe_assembly_jig() {
-    // Dummy probe for fit test
-    //%translate([m3_screw_rad,0,pj_height]) rotate([0,90,0]) cylinder(h=probe_held_in_arm,r=0.8);
-    //%translate([m3_screw_rad,0,pj_height]) rotate([0,90,0]) cylinder(h=probe_tip_len,r=0.5);
-    
-    // Create a jig block and chop out cavity for arm, screw heads etc.
-    difference() {
-        // Body of jig
-        translate([-pj_handle,-pj_width/2,0]) cube([pj_length,pj_width,pj_height]);
-        // Hole to access screw head
-        cylinder(h=pj_height*3,r=m3_screw_head_rad+0.5,center=true);
-        // Recess for the arm, slightly enlarged
-        translate([0,0,pj_height-probe_tip_thick]) minkowski() {
-            probe_tip_arm_hull();
-            sphere(0.2,$fn=16);
-        }
-        // Slot for probe wire to run along
-        translate([0,0,pj_height-1])
-            cube([pj_length*3,0.8,probe_tip_thick],center=true);
-        // Notch where tip should be
-        translate([probe_tip_len+m3_screw_rad,0,pj_height])
-            rotate([0,45,0]) cube([0.6,pj_width*3,0.6],center=true);
-        // Protective slot for probe tip
-        translate([probe_held_in_arm+m3_screw_rad+pj_protective_slot/2,0,0]) {
-            cylinder(h=pj_height*3,r=pj_protective_slot/2,center=true,$fn=32);
-            translate([pj_length/2,0,0])
-                cube([pj_length,pj_protective_slot,pj_height*3],center=true);
-        }
-        // Tell people what this curious thing is
-        translate([5,-pj_width/2,pj_height/2])
-            rotate([90,0,0]) translate([0,0,-0.3]) linear_extrude(0.6) 
-            text(str(version_string," Probe Jig ",probe_tip_len,"mm"), size = 3, halign = "center", valign = "center", $fn = 16);
-    }
-}
-
-
 // 100mm long beam for testing flexure deflection with a 10g weight (.38 cal bullet)
 test_pan_rad=10; // Radius of test pan cavity for weights
 test_arm_len=100;
@@ -127,8 +83,24 @@ pbr_blade_setback=6;        // Move the blade this far off centre
 
 probe_shuttle_length=20;    // Length of the shuttle (not including probe mount) WAG
 
-// A runner bracket for the probe beam, attaching to the Z Axis Driver
-module probe_beam_runner() {
+// The bit that holds the Probe Arm Tip and clamps onto the Probe Beam Blade
+// Uses Metriccano thicknesses except for the blade slot.
+module probe_shuttle() {
+    difference() {
+        // Body of the shuttle
+        union() {
+            translate([-metriccano_unit/2-0.3,0,0])
+                cube([metriccano_unit+0.6,probe_shuttle_length,metriccano_unit]);
+            // Mounting hole to screw the probe arm to.
+            translate([0,-metriccano_unit/2,0]) rotate([0,0,180]) metriccano_tab_module(1);
+        }
+        // Blade slot
+        translate([0,probe_shuttle_length/2,0]) 
+            cube([pbr_blade_thick+2*pbr_clearance,probe_shuttle_length+0.01,metriccano_unit*3],center=true);
+        // Screw slots (do not make too long, or it'll all collapse when printed...)
+        translate([0,probe_shuttle_length/2,metriccano_unit/2]) 
+            cube([metriccano_unit*3,probe_shuttle_length-metriccano_unit,metriccano_screw_rad*2],center=true);        
+    }
 }
 
 // The beam that is clamped  underneath the Z Driver.
@@ -158,26 +130,62 @@ module probe_beam() {
     }
 }
 
-// The bit that holds the Probe Arm Tip and clamps onto the Probe Beam Blade
-// Uses Metriccano thicknesses except for the blade slot.
-module probe_shuttle() {
+// Device to hold Probe Tip Arm while you fit a probe tip to it
+// V0.05 expects a ~23mm long probe when the tip is angled down at approx 45 degrees
+pj_width=15;
+pj_height=10;
+pj_handle=30;   // Something to grab hold of
+pj_length=pj_handle+metriccano_unit/2+probe_tip_len+10; // Overall jig length
+pj_protective_slot=5;
+
+module probe_assembly_jig() {
+    // Dummy probe for fit test
+    //%translate([m3_screw_rad,0,pj_height]) rotate([0,90,0]) cylinder(h=probe_held_in_arm,r=0.8);
+    //%translate([m3_screw_rad,0,pj_height]) rotate([0,90,0]) cylinder(h=probe_tip_len,r=0.5);
+
+/* Model of probe holding parts to check spacing on Probe Assembly Jig
+    %translate([0,0,pj_height]) rotate([0,0,90]) {    translate([0,2*metriccano_screw_rad-metriccano_unit/2+probe_shuttle_length,metriccano_unit*2]) rotate([180,0,0]) probe_beam();
+        translate([0,metriccano_unit/2,0]) probe_shuttle();
+    }
+*/
+
+    // Create a jig block and chop out cavity for arm, screw heads etc.
     difference() {
-        // Body of the shuttle
-        union() {
-            translate([-metriccano_unit/2-0.3,0,0])
-                cube([metriccano_unit+0.6,probe_shuttle_length,metriccano_unit]);
-            // Mounting hole to screw the probe arm to.
-            translate([0,-metriccano_unit/2,0]) rotate([0,0,180]) metriccano_tab_module(1);
+        // Body of jig
+        translate([-pj_handle,-pj_width/2,0]) cube([pj_length,pj_width,pj_height]);
+        // Hole to access screw head
+        cylinder(h=pj_height*3,r=m3_screw_head_rad+0.5,center=true);
+        // Relief to allow user to hold/push screw head in
+        rotate([0,45,0]) cube([6,pj_width*3,6],center=true);
+        // Recess for the arm, slightly enlarged
+        translate([0,0,pj_height-probe_tip_thick]) minkowski() {
+            probe_tip_arm_hull();
+            sphere(0.2,$fn=16);
         }
-        // Blade slot
-        translate([0,probe_shuttle_length/2,0]) 
-            cube([pbr_blade_thick+2*pbr_clearance,probe_shuttle_length+0.01,metriccano_unit*3],center=true);
-        // Screw slots (do not make too long, or it'll all collapse when printed...)
-        translate([0,probe_shuttle_length/2,metriccano_unit/2]) 
-            cube([metriccano_unit*3,probe_shuttle_length-metriccano_unit,metriccano_screw_rad*2],center=true);        
+        // Slot for probe wire to run along
+        translate([0,0,pj_height-1])
+            cube([pj_length*3,0.8,probe_tip_thick],center=true);
+        // Notch where tip should be
+        translate([probe_tip_len+m3_screw_rad,0,pj_height])
+            rotate([0,45,0]) cube([0.6,pj_width*3,0.6],center=true);
+        // Protective slot for probe tip
+        translate([probe_held_in_arm+m3_screw_rad+pj_protective_slot/2,0,0]) {
+            cylinder(h=pj_height*3,r=pj_protective_slot/2,center=true,$fn=32);
+            translate([pj_length/2,0,0])
+                cube([pj_length,pj_protective_slot,pj_height*3],center=true);
+        }
+        // Gap for Probe Beam to fit in when fixing Probe Arm
+        // Lots of locating magic...
+        translate([2*-metriccano_screw_rad+metriccano_unit/2-probe_shuttle_length-pbr_blade_setback,0])
+            translate([-0.5,-pbr_blade_thick/2,pj_height-metriccano_unit/4])
+                cube([pbr_blade_width+1,pbr_blade_thick+0.3,pbr_blade_height]);
+        
+        // Tell people what this curious thing is
+        translate([5,-pj_width/2,pj_height/2+2])
+            rotate([90,0,0]) translate([0,0,-0.3]) linear_extrude(0.6) 
+            text(str(version_string," Probe Jig ",probe_tip_len,"mm"), size = 3, halign = "center", valign = "center", $fn = 16);
     }
 }
-
 
 // Probe tip and holder parts, slide holding parts.
 if (true) {
