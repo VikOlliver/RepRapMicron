@@ -2,7 +2,7 @@
 
 ## Overview
 
-The RepRapMicron Project, or μRepRap, is an extension of the Open Source RepRap 3D printer project that aims to bring micron-scale fabrication into very widespread adoption. The main project page is [here](https://reprap.org/wiki/RepRapMicron) and currently the assembly instructions are on the Github wiki. It uses hardware and software familiar to 3D printer developers (GCODE, NEMA17 steppers etc.), and materials that are easily and inexpensively available.
+The RepRapMicron Project, or μRepRap, is an extension of the Open Source RepRap 3D printer project that aims to bring micron-scale fabrication into very widespread adoption. The main project page is [here](https://reprap.org/wiki/RepRapMicron) and currently the assembly instructions are on the Github wiki. It uses hardware and software familiar to 3D printer developers (GCODE, GRBL, NEMA17 steppers etc.), and materials that are easily and inexpensively available.
 
 As of V0.05 pixels can be placed or engraved on a 10μm grid in 2D without difficulty. Repeatable positioning is better than 5μm, and a resin deposition system for <10μm droplets is functional if not complete.
 
