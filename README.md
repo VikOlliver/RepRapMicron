@@ -54,7 +54,7 @@ GPL V3 or later
 ## Project status
 ### V0.05
 
-Third Alpha release, most functional device. Currently the head but short on documentation.
+Third Alpha release candidate, most functional device. Currently the head but short on documentation and long on improvements in progress.
 
 ### V0.04
 
