@@ -23,10 +23,6 @@
 #
 # TODO
 #
-# Tidy up SAFE_Z and Z probing so that multiple layers can be implemented
-# Detect layers
-# Turn "Coolant Flood" (pin 10) on/off to activate UV with M8/M9
-
 
 import argparse
 import sys
