@@ -4,6 +4,7 @@
 # A tool to process GCODE, subdividing toolpaths below a safe Z height into smaller segments.
 # It moves the tool to safe Z height, touches down to original Z, and returns to safe Z
 # for each segment. After a configurable number of points, it simulates a dip probe operation.
+# This accepts GCODE made on a scale of 1mm = 10 microns and converts to 1mm = 1 micron
 #
 # Copyright (C) 2025 Vik Olliver
 #
@@ -27,33 +28,83 @@
 # Turn "Coolant Flood" (pin 10) on/off to activate UV with M8/M9
 
 
+import argparse
 import sys
 import math
 
 # Configuration parameters
-SAFE_Z = 50.0  # Safe Z height
-SEGMENT_LENGTH = 15.0  # Length of segments
-PROBE_POINT_LIMIT = 15  # Number of points before calling dip_probe()
+SAFE_Z = 30.0   # Safe Z height over layers when moving around with the probe
+DIP_SAFE_Z = 200.0   # Safe Z height when dipping (must clear dip reservoir edge)
+FAST_Z = 15000  # Fastest speed we want to move Z axis
+SEGMENT_LENGTH = 8  # Length of segments (def 8)
+PROBE_POINT_LIMIT = 30  # Number of points before calling dip_probe(). Set to zero for no dip (def 15)
 # Location of the dipping reservoir
 RESERVOIR_X = 0
-RESERVOIR_Y =1100
-RESERVOIR_Z=35;
+RESERVOIR_Y = 0
+RESERVOIR_Z= 13
+SCALE_FACTOR=10
+uv_enabled = True # Usually you will want this enabled, but I put this here for testing.
+
+# NOTE: Not implemented yet.
+def parse_arguments():
+    parser = argparse.ArgumentParser(
+        description="Convert PrusaSlicer GCODE into GCODE dots for plotting or engraving.",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter
+    )
+    parser.add_argument("input", help="Input PNG file (use '-' to read from stdin)")
+    parser.add_argument("-o", "--output", help="Output GCODE file (use '-' for stdout)", default="-")
+    parser.add_argument("-d", "--distance", help="Distance per pixel in CNC units", type=float, default=30.0)
+    parser.add_argument("--safe-z", help="Safe travel height in mm", type=float, default=50.0)
+    parser.add_argument("--draw-z", help="Drawing/contact height in mm", type=float, default=0.0)
+    parser.add_argument("--dipify", help="Dip probe after this many pixels (>=0)", type=int, default=-1)   
+
+    return parser.parse_args()
+
+
+# NOTE: ??? Flaw in algorithm. If the object is tallet than DIP_SAFE_Z we'll have a collision!
+def move_probe_to_reservoir(current_position,output_stream):
+    """
+    Move the probe to the reservoir. Does not dip. Used for dipping and when turning on the UV
+    to put the probe in a location where it will not be solidified.
+    """
+    output_stream.write(f"G1 Z{max(DIP_SAFE_Z,current_position[2]):.3f} F{FAST_Z:.3f} ; Moving to dip-safe Z\n")
+    output_stream.write(f"G0 X{RESERVOIR_X:.3f} Y{RESERVOIR_Y:.3f} ; Moving to reservoir\n")         
+
+def dip_positioned_probe(current_position,output_stream):
+    """
+    Just dip the probe in the reservoir. This must only be called when the probe is in place.
+    """
+    output_stream.write(f"G1 Z{RESERVOIR_Z:.3f} F{FAST_Z:.3f} ; Dip the probe\n")
+    output_stream.write(f"G1 Z{DIP_SAFE_Z:.3f} F{FAST_Z:.3f} ; Move probe above reservoir\n")
+    output_stream.write(f"G0 X{current_position[0]:.3f} Y{current_position[1]:.3f} ; Return probe\n")
+    # Note: The caller will sort the Z height out
 
 def dip_probe(current_position,output_stream):
     """
-    Move the probe to the reservoir and dip the tip. Restore probe position after dip.
+    Move the probe to the reservoir and dip the tip. Restore XY probe position after dip.
     """
-    output_stream.write(f"G1 Z{SAFE_Z:.3f} ; Moving to safe Z before dipping\n")
-    output_stream.write(f"G1 X{RESERVOIR_X:.3f} Y{RESERVOIR_Y:.3f} ; Moving to reservoir\n")         
-    output_stream.write(f"G1 Z{RESERVOIR_Z:.3f} ; Dip the probe\n")
-    output_stream.write(f"G1 Z{(SAFE_Z+30):.3f} ; Restoring probe position to safe Z\n")
-    output_stream.write(f"G1 Z{SAFE_Z:.3f}\n")
-    output_stream.write(f"G1 X{current_position[0]:.3f} Y{current_position[1]:.3f} Z{current_position[2]:.3f} ; Return probe\n")
+    move_probe_to_reservoir(current_position,output_stream)
+    dip_positioned_probe(current_position,output_stream)
+    # Note: The caller will sort the Z height out
 
-def parse_gcode_line(line):
+def expose_to_uv(current_z,output_stream):
+    """
+    While slowly raising the probe 10 microns, leave the UV LED on. This gives us
+    the LED exposure time.
+    """
+    if uv_enabled:
+      # Now turn on the UV LED, and do a move that will take 10 seconds while the UV gels a bit
+      output_stream.write(f"M8 ; UV On, slow move\n");
+      output_stream.write(f"G1 Z{max(DIP_SAFE_Z,current_z)+10} F10\n");
+      # OK, LED can go off now
+      output_stream.write(f"M9 ; UV Off\n");
+
+
+def parse_gcode_line(line,scaling):
     """
     Parses a line of GCODE into a dictionary of commands and their values.
     Preserves any trailing comments.
+    scaling - multiplies all input command values by this factor
     """
     parts = line.split(';', 1)  # Split into GCODE and comment
     gcode_part = parts[0].strip()
@@ -64,8 +115,25 @@ def parse_gcode_line(line):
 
     tokens = gcode_part.split()
     command = tokens[0]
-    params = {token[0]: float(token[1:]) for token in tokens[1:]}
+    params = {token[0]: float(token[1:])*SCALE_FACTOR for token in tokens[1:]}
     return command, params, comment_part
+
+def reconstruct_gcode(command, params, comment_part):
+    """
+    Takes the parsed output from parse_gcode_line and turns it back
+    into a GCODE string again.
+    But it keeps the scaling and throws away any attempt to move A axis (extruder)
+    """
+    param_str = " ".join(
+        f"{k}{v:.5f}" for k, v in params.items() if k != "A"
+    )
+
+    line = f"{command} {param_str}".strip()
+
+    if comment_part:
+        line += f" ;{comment_part}"
+
+    return line
 
 def distance_xy(point1, point2):
     """
@@ -100,16 +168,19 @@ def process_gcode(input_stream, output_stream):
     """
     Processes GCODE lines and breaks toolpaths into segments that can be drawn with a dip pen
     """
-    current_position = [0.0, 0.0, SAFE_Z]
+    current_safe_z = SAFE_Z
+    current_position = [0.0, 0.0, current_safe_z]
+    current_layer = 0    # The max height at which we consider we're in the current layer.
     last_probe_position = None
-    point_count = 0
+    point_count = PROBE_POINT_LIMIT  # Ensure the probe gets dipped before first point is plotted.
+    printed_something = False        # We don't expose the layer before we've printed something
 
     for line in input_stream:
         line = line.strip()
         # Just pass blank lines through
         if not line:
-            output_stream.write(line + '\n')
-            continue
+          output_stream.write(line + '\n')
+          continue
 
         # Strip out all "M" codes
         if line.startswith('M') == True:
@@ -119,13 +190,41 @@ def process_gcode(input_stream, output_stream):
         if line.startswith('G1 A') == True:
           continue
 
-        # Parse the next GCODE line
-        command, params, comment = parse_gcode_line(line)
+        # Parse the next GCODE line (Scaling of 1 for now)A
+        command, params, comment = parse_gcode_line(line,1.0)
 
-        # Line contains only a comment, pass it through
+        # Line contains only a comment. If it indicates layer change, expose layer and change safe Z
         if command is None:
-            output_stream.write(f"; {comment}\n")
-            continue
+          output_stream.write(f"; {comment}\n")
+          if comment.startswith("Z:"):
+            possible_new_layer_ht = None
+            try:
+              possible_new_layer_ht = float(comment[2:])*SCALE_FACTOR
+            except ValueError:
+              pass
+            # If we detected a Z value (a) expose the previous layer, and (b) adjust safe Z height.
+            if possible_new_layer_ht is not None:
+              current_safe_z = possible_new_layer_ht + SAFE_Z
+              current_layer = possible_new_layer_ht
+              # Now move the probe over the reservoir to protect it from UV
+              move_probe_to_reservoir(current_position,output_stream)
+              if printed_something:
+                # If we have printed something, expose it.
+                # Note: on first layer start there is no output yet!
+                expose_to_uv(current_position[2],output_stream);
+              # May as well dip the probe while we're here...
+              # We're dipping. Reset the dip count
+              point_count = 0
+              # Do the dip
+              dip_positioned_probe(current_position,output_stream)
+          elif comment.startswith("*END"):
+            # This is the end of the print. We need to move to the reservoir location and do a UV exposure
+            move_probe_to_reservoir(current_position,output_stream)
+            expose_to_uv(current_position[2],output_stream);
+            # Nothing else *should* happen after this except turnign the motors off.
+            # If it does it's out of spec.
+            # End of comment handler
+          continue
 
         if command == "G1":
             # Ah, a G1 movement. We're interested in those. Where are we going?
@@ -136,7 +235,7 @@ def process_gcode(input_stream, output_stream):
             ]
 
             # Only modify the command if we're close to the work surface.
-            if new_position[2] < SAFE_Z:
+            if new_position[2] <= current_layer:
                 segments = segment_path(current_position, new_position, SEGMENT_LENGTH)
 
                 # Flag indicating we are definitely at safe height, to raise probe for first move.
@@ -147,34 +246,43 @@ def process_gcode(input_stream, output_stream):
                       # We have not probed near this point before. Output it.
                       # Move to safe Z height if not there already
                       if segment_move_flag == 0:
-                        output_stream.write(f"G1 Z10 F900 ; Moving to safe Z\n")
-                        output_stream.write(f"G1 Z{SAFE_Z:.3f} F2400\n")
+                        output_stream.write(f"G1 Z{current_safe_z:.3f} F{FAST_Z:.3f} ; Moving to safe Z\n")
+
+                      # We're probing a new point. Do we need to check probe dipping?
+                      if PROBE_POINT_LIMIT > 0:
+                        # See if we've worn all the ink off and need to dip
+                        point_count += 1
+                        if point_count >= PROBE_POINT_LIMIT:
+                            dip_probe(segment,output_stream)
+                            # Reset the point count and move to skimming height as we are now at SAFE_Z
+                            point_count = 0
+                            output_stream.write(f"G1 Z{(segment[2]+10):.3f} F{FAST_Z:.3f} ; Move to skim\n")
+
+
                       # Move to segment point
-                      output_stream.write(f"G1 X{segment[0]:.3f} Y{segment[1]:.3f} ; Moving to segment point\n")
-                      # Touch down to original height
-                      output_stream.write(f"G1 Z{segment[2]+10:.3f} F2400 ; Touching down to original height\n")
-                      output_stream.write(f"G1 Z{segment[2]:.3f} F900\n")
-                      output_stream.write(f"G1 Z{segment[2]+10:.3f} F900\n")
-                      output_stream.write(f"G1 Z{SAFE_Z:.3f} F2400 ; Returning to safe Z\n")
-                      segment_move_flag = 1 # Definitely at a SAFE_Z
+                      output_stream.write(f"G0 X{segment[0]:.3f} Y{segment[1]:.3f} F{FAST_Z:.3f} ; Moving to segment point\n")
+                      # Touch down to skimming height if still at SAFE_Z
+                      if segment_move_flag == 0:
+                        output_stream.write(f"G1 Z{(segment[2]+10):.3f} F{FAST_Z:.3f} ; Move to skim\n")
+                      output_stream.write(f"G1 Z{segment[2]:.3f} F900 ; Touching down gently\n")
+                      output_stream.write(f"G1 Z{segment[2]+10:.3f} F{FAST_Z:.3f} ; Raise probe slightly\n")
+                      segment_move_flag = 1 # No longer need to move to SAFE_Z before printing anything
+                      printed_something = True
                       # Set the last probed position so we don't touch near it again.
-                      last_probe_position = current_position
-
-                      # We probed a point. See if we've worn all the ink off and need to dip
-                      point_count += 1
-                      if point_count >= PROBE_POINT_LIMIT:
-                          dip_probe(last_probe_position,output_stream)
-                          # Dipping probe resets the point count and also raises it to SAFE_Z
-                          point_count = 0
-
+                      last_probe_position = segment
+                # We have printed a segment of some kind.
+                # If we've printed a dot, return to a safe Z height and note new line start position
+                if segment_move_flag != 0:
+                  output_stream.write(f"G1 Z{current_safe_z:.3f} F{FAST_Z:.3f} ; Returning to safe Z.\n")
                 current_position = new_position
             else:
-                # We're above Safe Z, so just execute the existing GCODE
+                # We're above Safe Z, so just execute the existing GCODE with any scaling
                 current_position = new_position
-                output_stream.write(line + (' ; ' + comment if comment else '') + '\n')
+                output_stream.write(reconstruct_gcode(command, params, comment) + '\n')
         else:
             # This is not a G1 code, so just pass it through.
-            output_stream.write(line + (' ; ' + comment if comment else '') + '\n')
+            output_stream.write(line + '\n')
+
 
 def main():
     """
@@ -191,19 +299,32 @@ def main():
         print(usage)
         sys.exit(0)
 
+    infile = sys.stdin  # Default to standard input and output
+    outfile = sys.stdout
     input_file = None
     output_file = None
 
+    # Ugly argument parser to get first input GCODE filename, then the output one.
     if len(sys.argv) > 1:
         input_file = sys.argv[1]
-        if len(sys.argv) > 2:
-            output_file = sys.argv[2]
+    if len(sys.argv) > 2:
+        output_file = sys.argv[2]
 
+    # Try to open the IO.
     if input_file:
-        with open(input_file, 'r') as infile, open(output_file, 'w') if output_file else sys.stdout as outfile:
-            process_gcode(infile, outfile)
-    else:
-        process_gcode(sys.stdin, sys.stdout)
+        infile = open(input_file, 'r')
+
+    if output_file:
+        outfile = open(output_file, 'w')
+
+    outfile.write('; File processed by dipify_gcode.py\n')
+    process_gcode(infile, outfile)
+
+    # If not using standard input, close the files
+    if input_file:
+      infile.close()
+    if output_file:
+      outfile.close()
 
 if __name__ == "__main__":
     main()
