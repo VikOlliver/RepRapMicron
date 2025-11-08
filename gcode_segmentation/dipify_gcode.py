@@ -24,6 +24,7 @@
 # TODO
 #
 
+
 import argparse
 import sys
 import math
@@ -31,7 +32,7 @@ import math
 # Configuration parameters
 SAFE_Z = 30.0   # Safe Z height over layers when moving around with the probe
 DIP_SAFE_Z = 200.0   # Safe Z height when dipping (must clear dip reservoir edge)
-FAST_Z = 15000  # Fastest speed we want to move Z axis
+FAST_Z = 8000  # Fastest speed we want to move Z axis
 SEGMENT_LENGTH = 8  # Length of segments (def 8)
 PROBE_POINT_LIMIT = 30  # Number of points before calling dip_probe(). Set to zero for no dip (def 15)
 # Location of the dipping reservoir
@@ -57,13 +58,12 @@ def parse_arguments():
     return parser.parse_args()
 
 
-# NOTE: ??? Flaw in algorithm. If the object is tallet than DIP_SAFE_Z we'll have a collision!
 def move_probe_to_reservoir(current_position,output_stream):
     """
     Move the probe to the reservoir. Does not dip. Used for dipping and when turning on the UV
     to put the probe in a location where it will not be solidified.
     """
-    output_stream.write(f"G1 Z{max(DIP_SAFE_Z,current_position[2]):.3f} F{FAST_Z:.3f} ; Moving to dip-safe Z\n")
+    output_stream.write(f"G1 Z{max(DIP_SAFE_Z,current_position[2]+SAFE_Z):.3f} F{FAST_Z:.3f} ; Moving to dip-safe Z\n")
     output_stream.write(f"G0 X{RESERVOIR_X:.3f} Y{RESERVOIR_Y:.3f} ; Moving to reservoir\n")         
 
 def dip_positioned_probe(current_position,output_stream):
@@ -71,13 +71,13 @@ def dip_positioned_probe(current_position,output_stream):
     Just dip the probe in the reservoir. This must only be called when the probe is in place.
     """
     output_stream.write(f"G1 Z{RESERVOIR_Z:.3f} F{FAST_Z:.3f} ; Dip the probe\n")
-    output_stream.write(f"G1 Z{DIP_SAFE_Z:.3f} F{FAST_Z:.3f} ; Move probe above reservoir\n")
+    output_stream.write(f"G1 Z{max(DIP_SAFE_Z,current_position[2]+SAFE_Z):.3f} F{FAST_Z:.3f} ; Move probe above reservoir\n")
     output_stream.write(f"G0 X{current_position[0]:.3f} Y{current_position[1]:.3f} ; Return probe\n")
     # Note: The caller will sort the Z height out
 
 def dip_probe(current_position,output_stream):
     """
-    Move the probe to the reservoir and dip the tip. Restore XY probe position after dip.
+    Move the probe to the reservoir and dip the tip. Restore XY probe position after dip BUT NOT Z.
     """
     move_probe_to_reservoir(current_position,output_stream)
     dip_positioned_probe(current_position,output_stream)
@@ -120,10 +120,18 @@ def reconstruct_gcode(command, params, comment_part):
     into a GCODE string again.
     But it keeps the scaling and throws away any attempt to move A axis (extruder)
     """
-    param_str = " ".join(
-        f"{k}{v:.5f}" for k, v in params.items() if k != "A"
-    )
+    modified_parts = []
 
+    for k, v in params.items():
+        if k == "A":
+            continue  # skip A-axis entirely
+
+        if k == "F":
+            v = min(FAST_Z, v)  # Clampspeed to max Z speed
+
+        modified_parts.append(f"{k}{v:.5f}")
+
+    param_str = " ".join(modified_parts)
     line = f"{command} {param_str}".strip()
 
     if comment_part:
@@ -250,9 +258,9 @@ def process_gcode(input_stream, output_stream):
                         point_count += 1
                         if point_count >= PROBE_POINT_LIMIT:
                             dip_probe(segment,output_stream)
-                            # Reset the point count and move to skimming height as we are now at SAFE_Z
+                            # Reset the point count and move a SAFE_Z
                             point_count = 0
-                            output_stream.write(f"G1 Z{(segment[2]+10):.3f} F{FAST_Z:.3f} ; Move to skim\n")
+                            output_stream.write(f"G1 Z{current_safe_z:.3f} F{FAST_Z:.3f}\n")
 
 
                       # Move to segment point
