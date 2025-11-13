@@ -32,15 +32,19 @@ import math
 # Configuration parameters
 SAFE_Z = 30.0   # Safe Z height over layers when moving around with the probe
 DIP_SAFE_Z = 200.0   # Safe Z height when dipping (must clear dip reservoir edge)
-FAST_Z = 8000  # Fastest speed we want to move Z axis
+FAST_Z = 14000  # Fastest speed we want to move Z axis
 SEGMENT_LENGTH = 8  # Length of segments (def 8)
 PROBE_POINT_LIMIT = 30  # Number of points before calling dip_probe(). Set to zero for no dip (def 15)
 # Location of the dipping reservoir
 RESERVOIR_X = 0
-RESERVOIR_Y = 0
-RESERVOIR_Z= 13
+RESERVOIR_Y = -1000
+RESERVOIR_Z= 18
 SCALE_FACTOR=10
+SKIM_HEIGHT = 10  # We move this much above the deposition height between dots to stop the tip dragging
 uv_enabled = True # Usually you will want this enabled, but I put this here for testing.
+
+UV_EXPOSURE_LONG = 5;
+UV_EXPOSURE_SHORT = 80;
 
 # NOTE: Not implemented yet.
 def parse_arguments():
@@ -58,20 +62,20 @@ def parse_arguments():
     return parser.parse_args()
 
 
-def move_probe_to_reservoir(current_position,output_stream):
+def probe_into_reservoir(current_position,output_stream):
     """
-    Move the probe to the reservoir. Does not dip. Used for dipping and when turning on the UV
-    to put the probe in a location where it will not be solidified.
+    Just poke the probe into the reservoir.
     """
+    # Move the probe to the reservoir.
     output_stream.write(f"G1 Z{max(DIP_SAFE_Z,current_position[2]+SAFE_Z):.3f} F{FAST_Z:.3f} ; Moving to dip-safe Z\n")
     output_stream.write(f"G0 X{RESERVOIR_X:.3f} Y{RESERVOIR_Y:.3f} ; Moving to reservoir\n")         
-
-def dip_positioned_probe(current_position,output_stream):
-    """
-    Just dip the probe in the reservoir. This must only be called when the probe is in place.
-    """
     output_stream.write(f"G1 Z{RESERVOIR_Z:.3f} F{FAST_Z:.3f} ; Dip the probe\n")
-    output_stream.write(f"G1 Z{max(DIP_SAFE_Z,current_position[2]+SAFE_Z):.3f} F{FAST_Z:.3f} ; Move probe above reservoir\n")
+
+def probe_out_of_reservoir_and_return(current_position,output_stream):
+    """
+    Lift the probe back out of the reservoir to a safe height, then send it back to current print position
+    """
+    output_stream.write(f"G1 Z{max(DIP_SAFE_Z,current_position[2]+SAFE_Z):.3f} F{FAST_Z:.3f} ; Moving to dip-safe Z\n")
     output_stream.write(f"G0 X{current_position[0]:.3f} Y{current_position[1]:.3f} ; Return probe\n")
     # Note: The caller will sort the Z height out
 
@@ -79,19 +83,22 @@ def dip_probe(current_position,output_stream):
     """
     Move the probe to the reservoir and dip the tip. Restore XY probe position after dip BUT NOT Z.
     """
-    move_probe_to_reservoir(current_position,output_stream)
-    dip_positioned_probe(current_position,output_stream)
-    # Note: The caller will sort the Z height out
+    probe_into_reservoir(current_position,output_stream)
+    # May as well give a quick UV blast while we're there
+    expose_to_uv(output_stream,UV_EXPOSURE_SHORT);
+    probe_out_of_reservoir_and_return(current_position,output_stream)
+        # Note: The caller will sort the Z height out
 
-def expose_to_uv(current_z,output_stream):
+def expose_to_uv(output_stream,exposure_factor):
     """
     While slowly raising the probe 10 microns, leave the UV LED on. This gives us
     the LED exposure time.
+    Delay is achieved by slowly raising from reservoir Z height to Z+10
     """
     if uv_enabled:
-      # Now turn on the UV LED, and do a move that will take 10 seconds while the UV gels a bit
+      # Now turn on the UV LED, and do a move that will take 20 seconds while the UV gels a bit
       output_stream.write(f"M8 ; UV On, slow move\n");
-      output_stream.write(f"G1 Z{max(DIP_SAFE_Z,current_z)+10} F10\n");
+      output_stream.write(f"G1 Z{(RESERVOIR_Z+10):.3f} F{exposure_factor:.3f}\n");
       # OK, LED can go off now
       output_stream.write(f"M9 ; UV Off\n");
 
@@ -210,22 +217,24 @@ def process_gcode(input_stream, output_stream):
             if possible_new_layer_ht is not None:
               current_safe_z = possible_new_layer_ht + SAFE_Z
               current_layer = possible_new_layer_ht
-              # Now move the probe over the reservoir to protect it from UV
-              move_probe_to_reservoir(current_position,output_stream)
+              # Now move the probe into the reservoir to protect it from UV
+              probe_into_reservoir(current_position,output_stream)
               if printed_something:
                 # If we have printed something, expose it.
                 # Note: on first layer start there is no output yet!
-                expose_to_uv(current_position[2],output_stream);
+                expose_to_uv(output_stream,UV_EXPOSURE_LONG);
               # May as well dip the probe while we're here...
               # We're dipping. Reset the dip count
               point_count = 0
-              # Do the dip
-              dip_positioned_probe(current_position,output_stream)
+              # Return from the dip
+              probe_out_of_reservoir_and_return(current_position,output_stream)
           elif comment.startswith("*END"):
-            # This is the end of the print. We need to move to the reservoir location and do a UV exposure
-            move_probe_to_reservoir(current_position,output_stream)
-            expose_to_uv(current_position[2],output_stream);
-            # Nothing else *should* happen after this except turnign the motors off.
+            # This is the end of the print. We need to move to the reservoir location and do a Xlong UV exposure
+            probe_into_reservoir(current_position,output_stream)
+            expose_to_uv(output_stream,UV_EXPOSURE_LONG*2);
+            # Take the probe out of the reservoir in case some idiot moves it.
+            output_stream.write(f"G1 Z{DIP_SAFE_Z:.3f} F{FAST_Z:.3f} ; Moving to dip-safe Z\n")
+            # Nothing else *should* happen after this except turning the motors off.
             # If it does it's out of spec.
             # End of comment handler
           continue
@@ -267,9 +276,9 @@ def process_gcode(input_stream, output_stream):
                       output_stream.write(f"G0 X{segment[0]:.3f} Y{segment[1]:.3f} F{FAST_Z:.3f} ; Moving to segment point\n")
                       # Touch down to skimming height if still at SAFE_Z
                       if segment_move_flag == 0:
-                        output_stream.write(f"G1 Z{(segment[2]+10):.3f} F{FAST_Z:.3f} ; Move to skim\n")
+                        output_stream.write(f"G1 Z{(segment[2]+SKIM_HEIGHT):.3f} F{FAST_Z:.3f} ; Move to skim\n")
                       output_stream.write(f"G1 Z{segment[2]:.3f} F900 ; Touching down gently\n")
-                      output_stream.write(f"G1 Z{segment[2]+10:.3f} F{FAST_Z:.3f} ; Raise probe slightly\n")
+                      output_stream.write(f"G1 Z{segment[2]+SKIM_HEIGHT:.3f} F{FAST_Z:.3f} ; Raise probe slightly\n")
                       segment_move_flag = 1 # No longer need to move to SAFE_Z before printing anything
                       printed_something = True
                       # Set the last probed position so we don't touch near it again.
