@@ -1,11 +1,8 @@
 // maus_axis_driver.scad - RepRapMicron motion stage
 // (c)2025 vik@diamondage.co.nz, released under the terms of the GPL V3 or later
-// Prototype Linear Maus Axis Diver, non-functional
-// Tries to use a pantograph-like mechanism, paralleled up to provide stable
+// Prototype Linear Maus Axis Diver
+// Uses a pantograph-like mechanism, paralleled up to provide stable
 // drive, anchor, and effector ends.
-// This contains much unsorted/unnecessary fluff.
-//
-// UNDER EARLY DEVELOPMENT
 //
 // Note: It is a Very Good Idea(TM) to keep all the mounting and fixing points
 // close to 10mm centres. If necessary, tweak angles, ratios, and arm lengths to do this.
