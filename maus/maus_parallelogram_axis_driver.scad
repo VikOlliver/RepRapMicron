@@ -63,6 +63,11 @@ pll_frame_centres=metriccano_nut_max_width+2;
 // Calculate the gap between frames
 pll_frame_spacing=pll_frame_centres-pll_beam_y;
 
+side_beam_length=metriccano_unit*11;
+side_beam_width=metriccano_unit;
+side_beam_height=metriccano_unit;
+side_band_indent=2.5;      // Indent sides by this much to allow band hooks to pass
+ 
 // A flexure joint for printing it on the surface of the print bed. Footings extend 1mm.
 // "flat" will print without an undercut
 module flexure_tab(flat=false) difference() {
@@ -240,9 +245,6 @@ module anchor_pointed_out() union() {
         }
  }
  
- side_beam_length=metriccano_unit*11;
- side_beam_width=metriccano_unit;
- side_beam_height=metriccano_unit;
  // One on each side, screws to motor mount
  module side_beam() {
      //%metriccano_square_strip(11);
@@ -276,7 +278,7 @@ module anchor_pointed_out() union() {
                 metriccano_screw_hole();
             }
          // Cutout to stop the anti-backlash band hook rubbing if it distorts under load
-         translate([pll_flexure_to_flexure-metriccano_unit*1.5-1.5,metriccano_unit-2.5,0])
+         translate([pll_flexure_to_flexure-metriccano_unit*1.5-1.5,metriccano_unit-side_band_indent,0])
                 rotate([0,0,180/8])
                     cylinder(h=metriccano_unit*3,r=metriccano_unit/2,$fn=8,center=true);
     }
@@ -402,6 +404,15 @@ module tension_band_grooves() {
         cylinder(h=nut_bar_height*2,r=nut_bar_width*0.6,center=true,$fn=32);
 }
 
+// A pillar that props up the Nut Bars. The side is cut off to allow the band hooks to pass.
+module nut_bar_pillar(length) {
+    difference() {
+        cylinder(h=length,r=nut_bar_width/2);
+        translate([0,nut_bar_width/2,0]) 
+            cube([metriccano_unit,side_band_indent*2,length*3],center=true);
+    }
+}
+
 // Block across the top of the supports that holds the bearing. Bearing is an M3 nut drilled out to 3mm.
 // Made removable for ease of assembly
 module upper_nut_bar() {
@@ -411,8 +422,8 @@ module upper_nut_bar() {
             // Bearing block
             nut_bar_body();
             // Support arms
-                translate([0,nut_bar_length/2,0]) cylinder(h=nut_bar_arm_height,r=nut_bar_width/2);
-                translate([0,-nut_bar_length/2,0]) cylinder(h=nut_bar_arm_height,r=nut_bar_width/2);
+                translate([0,nut_bar_length/2,0]) scale([1,-1,1]) nut_bar_pillar(nut_bar_arm_height);
+                translate([0,-nut_bar_length/2,0]) nut_bar_pillar(nut_bar_arm_height);
         }
             
         // Bearing hole
@@ -428,6 +439,31 @@ module upper_nut_bar() {
          
         // Groves to hold tension bands
         tension_band_grooves();
+    }
+}
+
+// Lower nut bearing. No anti-backlash band loops.
+lower_nut_bar_arm_height=20;
+module lower_nut_bar() {
+    // Bar with central nut hole
+    difference() {
+        union() {
+            metriccano_strip(5);
+            // Support arms
+            rotate([0,0,-90]) nut_bar_pillar(lower_nut_bar_arm_height);
+            translate([nut_bar_length,0,0]) rotate([0,0,90]) nut_bar_pillar(lower_nut_bar_arm_height);
+        }
+        // Anchor screw holes
+        metriccano_screw_hole(lower_nut_bar_arm_height*4);
+        translate([nut_bar_length,0,0])
+            metriccano_screw_hole(lower_nut_bar_arm_height*4);
+        // Anchor nut holes
+        metriccano_nut_cavity_tapered(,captive=true,inverted=true);
+        translate([nut_bar_length,0,0])
+            metriccano_nut_cavity_tapered(,captive=true,inverted=true);
+         // Captive nut
+        translate([metriccano_unit*2,0,metriccano_plate_height-metriccano_nut_height])
+            metriccano_nut_cavity_tapered(captive=true);
     }
 }
 
@@ -746,31 +782,6 @@ module switch_support_bits() difference() {
             rotate([90,0,0]) cylinder(h=metriccano_unit*10,r=0.5,$fn=12,center=true);
         translate([metriccano_unit+3,0,0])
             rotate([90,0,0]) cylinder(h=metriccano_unit*10,r=0.5,$fn=12,center=true);
-    }
-}
-
-// Lower nut bearing. No anti-backlash band loops.
-lower_nut_bar_arm_height=20;
-module lower_nut_bar() {
-    // Bar with central nut hole
-    difference() {
-        union() {
-            metriccano_strip(5);
-            // Support arms
-            translate([0,0,0]) cylinder(h=lower_nut_bar_arm_height,r=nut_bar_width/2);
-            translate([nut_bar_length,0,0]) cylinder(h=lower_nut_bar_arm_height,r=nut_bar_width/2);
-        }
-        // Anchor screw holes
-        metriccano_screw_hole(lower_nut_bar_arm_height*4);
-        translate([nut_bar_length,0,0])
-            metriccano_screw_hole(lower_nut_bar_arm_height*4);
-        // Anchor nut holes
-        metriccano_nut_cavity_tapered(,captive=true,inverted=true);
-        translate([nut_bar_length,0,0])
-            metriccano_nut_cavity_tapered(,captive=true,inverted=true);
-         // Captive nut
-        translate([metriccano_unit*2,0,metriccano_plate_height-metriccano_nut_height])
-            metriccano_nut_cavity_tapered(captive=true);
     }
 }
 
