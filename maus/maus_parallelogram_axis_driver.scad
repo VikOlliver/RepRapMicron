@@ -548,6 +548,10 @@ module nema17_plate(nema_plate_thick=5,nema_corner_rad=2) difference() {
     cylinder(h=nema_plate_thick*3,r=nema17_collar_rad,center=true);
     // Relief holes for over-travel of pillar screws
     pillar_screw_holes();
+    // Thickness legend
+    translate([rad_loc-1,0,nema_plate_thick-0.3]) rotate([0,0,90]) linear_extrude(0.6) {
+        text(str(nema_plate_thick,"mm"), size = 4, halign = "center", valign = "center", $fn = 16);
+    }
 }
 
 // A NEMA17 plate with nutted Metriccano mounting holes, pillars to prop up the axis flexure mechanism,
@@ -802,7 +806,7 @@ if (true) {
     translate([30,-5,0]) axis_driver_link_bracket();
     translate([70,33,0]) switch_support_bits();
     translate([25,105,0]) frame_trio();
-    translate([30,40,0]) nema17_plate();
-    translate([145,20,0]) rotate([0,0,180]) nema17_plate();
+    translate([30,40,0]) nema17_plate(4);
+    translate([145,20,0]) rotate([0,0,180]) nema17_plate(5);
     translate([170,85,0]) axis_motor_pillar_assy();
 }
