@@ -764,9 +764,9 @@ module switch_support_bits() difference() {
         translate([metriccano_unit,-metriccano_unit-1,0]) difference() {
             metriccano_strip(3);
             translate([0,0,metriccano_nut_height]){
-                rotate([180,0,0]) metriccano_nut_cavity_tapered(captive=true);
+                rotate([180,0,0]) metriccano_nut_cavity_tapered(captive=true,inverted=true);
                 translate([metriccano_unit*2,0,0])
-                    rotate([180,0,0]) metriccano_nut_cavity_tapered(captive=true);
+                    rotate([180,0,0]) metriccano_nut_cavity_tapered(captive=true,inverted=true);
             }
         }
         // U-Shaped part
