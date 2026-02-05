@@ -2,7 +2,7 @@
 // (C) 2025 vik@diamondage.co.nz Released under the GPLV3 or later.
 // Notes:
 // Requires 3 standard Maus axis drivers and probe holder parts
-// Base should be secured to 10mm pitch perforated sheet, 13 x 11 holes
+// Base should be secured to 10mm pitch perforated sheet, 13 x 16 holes
 //  avaliable as metriccano_baseboard.svg for lasercutting
 // It is a Very Good Idea(TM) to keep the width in Metriccano (10mm) units.
 // Printed on Prusa Mk4, 0.2mm layers, 20% infill, 2 v shells, 5 h shells
@@ -12,7 +12,11 @@
 //      Added captive nut cavities to frame sides
 //      Y Drive Flexure now connexts directly to Flexure Table
 //      X Flexure now complementary to allow Y movement
-// 3-unit Metriccano strips no longer needed as boosters. Removed.
+//      3-unit Metriccano strips no longer needed as boosters. Removed.
+//
+//  V0.05
+//      Added flexures to stabilize the new Z Axis Driver
+
 
 include <../library/m3_parts.scad>
 include <../library/metriccano.scad>
@@ -85,15 +89,15 @@ module version_text() {
 // allows excessive torsion so apply a limit and thicken the rest.
 // Later this will acquire tapering, etc.
 flex_limit_len=10;
-module generic_flexure(length) {
-    cube([flexure_width,length,flexure_height]);
+module generic_flexure(length,ht=flexure_height) {
+    cube([flexure_width,length,ht]);
     if (length>flex_limit_len*2) {
         // Put in an elongated stiff bit
         hull() {
-            translate([flexure_width/2,flex_limit_len,flexure_height/2]) 
-                rotate([0,0,45]) cube([flexure_width*2,flexure_width*2,flexure_height],center=true);
-            translate([flexure_width/2,length-flex_limit_len,flexure_height/2]) 
-                rotate([0,0,45]) cube([flexure_width*2,flexure_width*2,flexure_height],center=true);
+            translate([flexure_width/2,flex_limit_len,ht/2]) 
+                rotate([0,0,45]) cube([flexure_width*2,flexure_width*2,ht],center=true);
+            translate([flexure_width/2,length-flex_limit_len,ht/2]) 
+                rotate([0,0,45]) cube([flexure_width*2,flexure_width*2,ht],center=true);
         }
     }
 }
@@ -355,7 +359,7 @@ module x_stage_flexure() {
         translate([-frame_thick/2,0,0])
             cube([frame_thick,xsf_beam_length-metriccano_unit,xsf_thick]);
         // Anchor slot
-        translate([-metriccano_unit/2,xsf_beam_length-metriccano_unit/2,0]) metriccano_slot_strip(1.5);
+        translate([-metriccano_unit/2,xsf_beam_length-metriccano_unit/2,0]) metriccano_slot_strip(2);
                 // Legend
         translate([-5,xsf_beam_length,0])
             difference() {
@@ -639,7 +643,7 @@ module y_transfer_bar(fl) {
             // Anchor point on actuator
             translate([fl+metriccano_unit/2,-metriccano_unit/2,0]) {
                 // Anchor slot for attaching Y Axis flexure to Y Axis Driver
-                rotate([0,0,90]) metriccano_slot_strip(1.5);
+                rotate([0,0,90]) metriccano_slot_strip(2);
                 // Y Axis marker
                 translate([metriccano_unit/2,0,0])
                     difference() {
@@ -649,7 +653,7 @@ module y_transfer_bar(fl) {
                         }
              }
             // Very thin flexure joining them. Slightly short so as not to rub overhanging parts
-            translate([0,-0.4,0]) cube([fl,0.8,metriccano_plate_height]);
+            translate([0,-metriccano_unit/2,0]) cube([fl,metriccano_unit,metriccano_plate_height]);
             // Stress relief
             translate([0,0,metriccano_plate_height/2])
                 rotate([0,0,45]) cube([2,2,metriccano_plate_height],center=true);
@@ -666,53 +670,61 @@ zflex_beam_thick=frame_thick;
 zflex_inner_beam_length=metriccano_unit+2*(flexure_max+flexure_width);
 zflex_outer_beam_length=zflex_inner_beam_length+flexure_max*2+flexure_width;
 zflex_flexure_length=40;
+z_flexure_height=flexure_height+3.2;  // Make the Z flexures wider for stability
 
-module zflex_outer_beam_frame() {
+// If flipped, we flip the version text
+module zflex_outer_beam_frame(flipped=1){
     // Outer beam, attached to free end of Axis Driver
     translate([-metriccano_unit/2,-zflex_outer_beam_length/2,0])
-        cube([zflex_beam_thick,zflex_outer_beam_length,flexure_height]);
+        cube([zflex_beam_thick,zflex_outer_beam_length,z_flexure_height]);
     // Inner flexures
-    translate([0,-zflex_outer_beam_length/2+flexure_width,0]) rotate([0,0,-90]) generic_flexure(zflex_flexure_length);
-    translate([0,zflex_outer_beam_length/2,0]) rotate([0,0,-90]) generic_flexure(zflex_flexure_length);
+    translate([0,-zflex_outer_beam_length/2+flexure_width,0]) rotate([0,0,-90]) generic_flexure(zflex_flexure_length,z_flexure_height);
+    translate([0,zflex_outer_beam_length/2,0]) rotate([0,0,-90]) generic_flexure(zflex_flexure_length,z_flexure_height);
     // Outer beam, attached to inner flexures.
     // Needs to be translated out to allow clearance for inner beam
     translate([zflex_flexure_length,0,0]) {
-        translate([flexure_clearance+zflex_beam_thick,-zflex_outer_beam_length/2,0])
-            cube([zflex_beam_thick,zflex_outer_beam_length,flexure_height]);
+        translate([flexure_clearance+zflex_beam_thick,-zflex_outer_beam_length/2,0]) {
+            cube([zflex_beam_thick,zflex_outer_beam_length,z_flexure_height]);
+            // Version data
+            translate([zflex_beam_thick,zflex_outer_beam_length/2,z_flexure_height/2])
+                rotate([0,90,0]) rotate([0,0,90]) scale([flipped,1,1]) version_text();
+        }
         // Support blocks for outer inner_flexures
         translate([0,-zflex_outer_beam_length/2,0])
-            cube([flexure_clearance+zflex_beam_thick,flexure_max/2,flexure_height]);
+            cube([flexure_clearance+zflex_beam_thick,flexure_max/2,z_flexure_height]);
         translate([0,zflex_outer_beam_length/2-flexure_max/2,0])
-            cube([flexure_clearance+zflex_beam_thick,flexure_max/2,flexure_height]);
+            cube([flexure_clearance+zflex_beam_thick,flexure_max/2,z_flexure_height]);
     }
 }
+
 
 // Inner beam and flexures for Z flexure
 module zflex_inner_beam_frame() {
     // Beam that attaches to Axis Driver frame
     translate([-metriccano_unit/2,-zflex_inner_beam_length/2,0])
-        cube([zflex_beam_thick,zflex_inner_beam_length,flexure_height]);
+        cube([zflex_beam_thick,zflex_inner_beam_length,z_flexure_height]);
     // Inner flexures
-    translate([0,-zflex_inner_beam_length/2+flexure_width,0]) rotate([0,0,-90]) generic_flexure(zflex_flexure_length);
-    translate([0,zflex_inner_beam_length/2,0]) rotate([0,0,-90]) generic_flexure(zflex_flexure_length);
+    translate([0,-zflex_inner_beam_length/2+flexure_width,0]) rotate([0,0,-90]) generic_flexure(zflex_flexure_length,z_flexure_height);
+    translate([0,zflex_inner_beam_length/2,0]) rotate([0,0,-90]) generic_flexure(zflex_flexure_length,z_flexure_height);
 }
 
 // Assembled Z flexure
-module z_flexure() union() {
+// Flipped = -1 mirrors the assembly and keeps version text legible.
+module z_flexure(flipped=1) union()  scale([1,flipped,1]) {
     // Attachment under plate of Axis Driver
     translate([-metriccano_unit*2,0,0]) {
-        translate([zflex_beam_thick,metriccano_plate_height,metriccano_unit/2+flexure_clearance+flexure_height]) rotate([90,0,0]) metriccano_plate(2,2,squared=true);
+        translate([zflex_beam_thick,metriccano_plate_height,metriccano_unit/2+flexure_clearance+z_flexure_height]) rotate([90,0,0]) metriccano_plate(2,2,squared=true);
         // Mounting plate link
-        cube([metriccano_unit*2,metriccano_plate_height,flexure_height+flexure_clearance]);
+        cube([metriccano_unit*2,metriccano_plate_height,z_flexure_height+flexure_clearance]);
     }
 
     // Outer flexures
-    zflex_outer_beam_frame();
+    zflex_outer_beam_frame(flipped);
     // Inner flexures
     translate([flexure_clearance+zflex_beam_thick,0,0]) zflex_inner_beam_frame();
     // Attachment point to side of Axis Driver. Fill with holes
     difference() {
-        translate([zflex_beam_thick+flexure_clearance,-metriccano_unit/2]) cube([zflex_flexure_length-flexure_clearance,metriccano_unit,flexure_height+flexure_clearance]);
+        translate([zflex_beam_thick+flexure_clearance,-metriccano_unit/2]) cube([zflex_flexure_length-flexure_clearance,metriccano_unit,z_flexure_height+flexure_clearance]);
         for (i=[1:floor(zflex_flexure_length/metriccano_unit)])
             translate([i*metriccano_unit-zflex_beam_thick,0,metriccano_unit/2]) metriccano_screw_hole();
     }
@@ -724,7 +736,7 @@ if (false) {
     translate([(inner_mf_offset+metriccano_unit*2-1+edge_clearance),flexure_height+0.5,structure_height-flexure_clearance]) rotate([0,-90,0]) rotate([0,0,90]) table_frame_unit();
 }
 
-plate=3;
+plate=1;
 
 // Build plate A
 if (plate==1) {
@@ -734,13 +746,9 @@ if (plate==1) {
     translate([125,75,0]) table_frame_unit();
     translate([95,190,0]) rotate([0,0,-90]) flexured_stage();
     translate([77,95,0]) stage_top();
-    // Triple height strip
     translate([35,100,0]) metriccano_adjustment_bracket(2,1.5);
     translate([160,100,0]) metriccano_adjustment_bracket(2,1.5);
     translate([85,140,0]) rotate([0,0,90]) y_transfer_bar(24);
-    // Mounts for X Axis Driver
-    translate([45,50,0]) metriccano_square_strip(2);
-    translate([45,30,0]) metriccano_square_strip(2);
 } else if (plate==2) {
     // Build plate B
     translate([5,50,0]) x_axis_mount();
@@ -766,5 +774,5 @@ if (plate==1) {
 } else if (plate==3) {
     // Z Axis parts
     z_flexure();
-    translate([0,60,0]) scale([1,-1,1]) z_flexure();
+    translate([0,60,0]) z_flexure(-1);
 }
