@@ -72,7 +72,8 @@ module test_flexure() {
 // A screw driven in from above locks the beam in place.
 
 probe_beam_standoff=3;  // Keep this far away from the Driver to avoid flexing flexures
-pbr_clearance=0.65;      // Clearance on sliding probe beam parts (washer+0.05)
+pb_washer_thick=0.6;
+pbr_clearance=pb_washer_thick+0.05;      // Clearance on sliding probe beam parts
 pbr_length=12;
 pbr_width=metriccano_unit-2*pbr_clearance;
 pbr_height=metriccano_unit-2*pbr_clearance;
@@ -82,6 +83,10 @@ pbr_blade_height=14;        // WAG
 pbr_blade_setback=6;        // Move the blade this far off centre
 
 probe_shuttle_length=20;    // Length of the shuttle (not including probe mount) WAG
+
+pbs_wire_support_x=3.5;   // Length of the wire support
+pbs_wire_support_width=4;   // Width of wire support (holds wire, has rails)
+pbs_wire_dia=1.2;           // Diameter of grounding wire
 
 // The bit that holds the Probe Arm Tip and clamps onto the Probe Beam Blade
 // Uses Metriccano thicknesses except for the blade slot.
@@ -93,13 +98,25 @@ module probe_shuttle() {
                 cube([metriccano_unit+0.6,probe_shuttle_length,metriccano_unit]);
             // Mounting hole to screw the probe arm to.
             translate([0,-metriccano_unit/2,0]) rotate([0,0,180]) metriccano_tab_module(1);
+            // Block to support exiting ground wire, tapered to minimise impact around stage.
+            translate([-metriccano_unit/2-pbs_wire_support_x/2,-metriccano_unit/2,0]) hull() {
+                translate([0,-pbs_wire_support_width/2,metriccano_plate_height])
+                    cube([pbs_wire_support_x,pbs_wire_support_width,0.01]);
+                translate([pbs_wire_support_x/2,-pbs_wire_support_width/2,0])
+                    cube([0.01,pbs_wire_support_width,0.01]);
+            }
         }
         // Blade slot
         translate([0,probe_shuttle_length/2,0]) 
-            cube([pbr_blade_thick+2*pbr_clearance,probe_shuttle_length+0.01,metriccano_unit*3],center=true);
+            cube([pbr_blade_thick+pbr_clearance*2,probe_shuttle_length+0.01,metriccano_unit*3],center=true);
         // Screw slots (do not make too long, or it'll all collapse when printed...)
         translate([0,probe_shuttle_length/2,metriccano_unit/2]) 
-            cube([metriccano_unit*3,probe_shuttle_length-metriccano_unit,metriccano_screw_rad*2],center=true);        
+            cube([metriccano_unit*3,probe_shuttle_length-metriccano_unit,metriccano_screw_rad*2],center=true);
+        // Recess for a spring washer
+        translate([0,-metriccano_unit/2,metriccano_plate_height-1]) cylinder(h=2,r=7/2,$fn=24);
+        // Slot for a ground wire to access the washer
+        translate([-metriccano_unit,-metriccano_unit/2,metriccano_plate_height-pbs_wire_dia/2+0.02])
+            cube([metriccano_unit*2,pbs_wire_dia,pbs_wire_dia],center=true);
     }
 }
 
@@ -121,6 +138,14 @@ module probe_beam() {
         union() {
             translate([-pbr_blade_thick/2,0,0])
                 cube([pbr_blade_thick,pbr_blade_width,pbr_blade_height]);
+            // Slightly wider bit that allows washers to be inserted
+            translate([-pbr_blade_thick/2-pbr_clearance,0,pbr_blade_height-pbr_blade_width])
+                difference() {
+                    cube([pbr_blade_thick+2*pbr_clearance,pbr_blade_width/2,pbr_blade_width]);
+                    // Put a semicircular notch in it
+                    translate([0,pbr_blade_width/2,pbr_blade_width/2]) rotate([0,90,0]) 
+                        cylinder(h=pbr_blade_thick*3,r=pbr_blade_width/2,$fn=24,center=true);
+                }
             // Angled lead-in to overhanging blade
             translate([-pbr_blade_thick/2,0,0]) rotate([-45,0,0]) cube([pbr_blade_thick,pbr_blade_setback*1.5,pbr_blade_setback*1.5]);
         }
@@ -133,7 +158,7 @@ module probe_beam() {
 // Device to hold Probe Tip Arm while you fit a probe tip to it
 // V0.05 expects a ~23mm long probe when the tip is angled down at approx 45 degrees
 pj_width=15;
-pj_height=10;
+pj_height=9;
 pj_handle=30;   // Something to grab hold of
 pj_length=pj_handle+metriccano_unit/2+probe_tip_len+10; // Overall jig length
 pj_protective_slot=5;
@@ -167,8 +192,7 @@ module probe_assembly_jig() {
             cube([pj_length*3,0.8,probe_tip_thick],center=true);
         // Notch where tip should be
         translate([probe_tip_len+m3_screw_rad,0,pj_height])
-            rotate([0,45,0]) cube([0.6,pj_width*3,0.6],center=true);
-        // Protective slot for probe tip
+           rotate([0,45,0]) cube([0.6,pj_width*3,0.6],center=true);
         translate([probe_held_in_arm+m3_screw_rad+pj_protective_slot/2,0,0]) {
             cylinder(h=pj_height*3,r=pj_protective_slot/2,center=true,$fn=32);
             translate([pj_length/2,0,0])
@@ -181,9 +205,14 @@ module probe_assembly_jig() {
                 cube([pbr_blade_width+1,pbr_blade_thick+0.3,pbr_blade_height]);
         
         // Tell people what this curious thing is
-        translate([5,-pj_width/2,pj_height/2+2])
-            rotate([90,0,0]) translate([0,0,-0.3]) linear_extrude(0.6) 
-            text(str(version_string," Probe Jig ",probe_tip_len,"mm"), size = 3, halign = "center", valign = "center", $fn = 16);
+        translate([1,-pj_width/2,pj_height/2+2]) {
+            rotate([90,0,0]) translate([0,0,-0.3]) linear_extrude(0.6) {
+                text(str("Probe Jig ",probe_tip_len,"mm"), size = 3, halign = "right", valign = "center", $fn = 16);
+            }
+            rotate([90,0,0]) translate([-5,-4,-0.3]) linear_extrude(0.6) {
+                text(str(version_string), size = 3, halign = "right", valign = "center", $fn = 16);
+            }
+        }
     }
 }
 
