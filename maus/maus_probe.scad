@@ -139,19 +139,22 @@ module probe_beam() {
             translate([-pbr_blade_thick/2,0,0])
                 cube([pbr_blade_thick,pbr_blade_width,pbr_blade_height]);
             // Slightly wider bit that allows washers to be inserted
-            translate([-pbr_blade_thick/2-pbr_clearance,0,pbr_blade_height-pbr_blade_width])
+            translate([-pbr_blade_thick/2-pbr_clearance,0,pbr_blade_height-pbr_blade_width/2])
                 difference() {
-                    cube([pbr_blade_thick+2*pbr_clearance,pbr_blade_width/2,pbr_blade_width]);
+                    cube([pbr_blade_thick+2*pbr_clearance,pbr_blade_width/2,pbr_blade_width/2]);
                     // Put a semicircular notch in it
-                    translate([0,pbr_blade_width/2,pbr_blade_width/2]) rotate([0,90,0]) 
+                    translate([0,pbr_blade_width/2,0]) rotate([0,90,0]) 
                         cylinder(h=pbr_blade_thick*3,r=pbr_blade_width/2,$fn=24,center=true);
                 }
             // Angled lead-in to overhanging blade
             translate([-pbr_blade_thick/2,0,0]) rotate([-45,0,0]) cube([pbr_blade_thick,pbr_blade_setback*1.5,pbr_blade_setback*1.5]);
         }
         // The slot for the screw
-        translate([-pbr_blade_thick*2,pbr_blade_width/2-metriccano_screw_rad,3])
+        translate([-pbr_blade_thick*2,pbr_blade_width/2-metriccano_screw_rad,3]) {
             cube([pbr_blade_thick*4,metriccano_screw_rad*2,pbr_blade_height-6]);
+            translate([pbr_blade_thick,metriccano_screw_rad,0])
+                rotate([0,90,0]) cylinder(h=pbr_blade_thick*4,r=metriccano_screw_rad,center=true,$fn=24);
+        }
     }
 }
 
