@@ -25,7 +25,7 @@ lower_beam_height=10;       // Height of the lower hollow square bracing beams
 structure_height=60;    // Maximum height of the total structure
 frame_thick=5;              // Thickness of the notionally inflexible frame parts
 // Dimensions of the box-like outer wall. If we can get x & y down to 120 that would be nice...
-outer_wall_x=130;       
+outer_wall_x=120;       
 outer_wall_y=120;
 box_wall=2;
 
@@ -34,13 +34,14 @@ table_flexure_length=2*flexure_length+beam_thick;
 table_flexure_pair_length=4*flexure_length+2*beam_thick+horizontal_beam_width;
 
 // Dimensions of the lower square frame in the X flexures
-outer_frame_x=outer_wall_x-2*box_wall-2*table_flexure_length;
+outer_frame_x=outer_wall_x-2*box_wall-2*table_flexure_length+2*horizontal_beam_width;
 outer_frame_y=outer_wall_y-2*box_wall-2*flexure_clearance;
+outer_frame_stub=2*horizontal_beam_width+beam_flexure_side+2*flexure_clearance;
 
 // Dimensions of the inner wall
-inner_wall_x=outer_wall_x-2*table_flexure_pair_length-2*box_wall;
+inner_wall_x=outer_wall_x-4*table_flexure_length-2*box_wall;
 inner_wall_y=outer_frame_y-2*flexure_clearance-2*horizontal_beam_width;
-inner_wall_at_x=box_wall+table_flexure_pair_length;
+inner_wall_at_x=(outer_wall_x-inner_wall_x)/2;
 inner_wall_at_y=box_wall+2*flexure_clearance+horizontal_beam_width;
 
 // Dimensions of the central box that suspends the Y axis
@@ -72,29 +73,47 @@ module version_text() {
 }
 
 // Flexure used to join beams on the integrated XY Table
-module beam_flexure() {
+module horizontal_flexure() {
     translate([0,0,flexure_height-flexure_thick]) cube([flexure_length,flexure_width,flexure_thick]);
 }
 
-// A pair of the flexures used on the integrated XY Table
+// A pair of the flexures used on the integrated XY Table X axis.
+// These are staggered about X=0
+module staggered_flexure_pair() {
+        translate([0,(beam_flexure_side-flexure_width)/2,0]) horizontal_flexure();
+        translate([flexure_length,0,0]) cube([beam_thick,beam_flexure_side,structure_height]);
+        translate([flexure_length+beam_thick,(beam_flexure_side-flexure_width)/2,structure_height-flexure_height-0.5]) horizontal_flexure();
+    translate([0,beam_flexure_side+horizontal_beam_width+3*flexure_clearance,0]) {
+        // Ascending flexure and beam
+        translate([-flexure_length,(beam_flexure_side-flexure_width)/2,0]) horizontal_flexure();
+        translate([-flexure_length-beam_thick,0,0])
+            cube([beam_thick,beam_flexure_side,structure_height]);
+        // Top flexure on far end
+        translate([-2*flexure_length-beam_thick,(beam_flexure_side-flexure_width)/2,structure_height-flexure_height-0.5])
+            horizontal_flexure();
+    }
+}
+
+// A pair of the flexures used on the integrated XY Table Y axis
 module table_flexure_pair() {
-    translate([0,(beam_flexure_side-flexure_width)/2,structure_height-flexure_height-0.5]) beam_flexure();
+    translate([0,(beam_flexure_side-flexure_width)/2,structure_height-flexure_height-0.5]) horizontal_flexure();
     translate([flexure_length,0,0]) cube([beam_thick,beam_flexure_side,structure_height]);
-    translate([flexure_length+beam_thick,(beam_flexure_side-flexure_width)/2,0]) beam_flexure();
+    translate([flexure_length+beam_thick,(beam_flexure_side-flexure_width)/2,0]) horizontal_flexure();
     // Leave a gap for a central beam here
     // ...
     // Ascending flexure and beam
-    translate([2*flexure_length+beam_thick+horizontal_beam_width,(beam_flexure_side-flexure_width)/2,0]) beam_flexure();
+    translate([2*flexure_length+beam_thick+horizontal_beam_width,(beam_flexure_side-flexure_width)/2,0]) horizontal_flexure();
     translate([3*flexure_length+beam_thick+horizontal_beam_width,0,0])
         cube([beam_thick,beam_flexure_side,structure_height]);
     // Top flexure on far end
     translate([3*flexure_length+2*beam_thick+horizontal_beam_width,(beam_flexure_side-flexure_width)/2,structure_height-flexure_height-0.5])
-        beam_flexure();
+        horizontal_flexure();
 }
 
 module x_flexure_pair() {
-    table_flexure_pair();
-    translate([outer_wall_x-table_flexure_pair_length-2*box_wall,0,0]) table_flexure_pair();
+    translate([0,horizontal_beam_width+flexure_clearance,0]) staggered_flexure_pair();
+    translate([outer_frame_x-2*horizontal_beam_width,horizontal_beam_width+flexure_clearance,0])
+       scale([-1,1,1])  staggered_flexure_pair();
 }
 
 module y_flexure_pair() {
@@ -125,17 +144,28 @@ module inside_box() {
 %outside_box();
 translate([box_wall,box_wall+flexure_clearance,0]) {
     // The X axis flexures onna square
-    translate([0,horizontal_beam_width+flexure_clearance,0])
-        x_flexure_pair();
-    translate([0,outer_frame_y-beam_flexure_side-horizontal_beam_width-flexure_clearance,0])
-        x_flexure_pair();
+    translate([table_flexure_length,0,0]) x_flexure_pair();
+    translate([table_flexure_length,outer_frame_y,0]) 
+        scale([1,-1,1]) x_flexure_pair();
 
 
-    // Make the outer hollow square bracing beam
-    translate([table_flexure_length,0,0]) difference() {
-        cube([outer_frame_x,outer_frame_y,lower_beam_height]);
-        translate([horizontal_beam_width,horizontal_beam_width,-1])
-            cube([outer_frame_x-2*horizontal_beam_width,outer_frame_y-2*horizontal_beam_width,lower_beam_height*2]);
+    // Make the outer hollow square bracing beam with staggered edges
+    translate([(outer_wall_x-outer_frame_x)/2-box_wall,0,0]) {
+        difference() {
+            // Square frame
+            cube([outer_frame_x,outer_frame_y,lower_beam_height]);
+            // Hollow it out
+            translate([horizontal_beam_width,horizontal_beam_width,-1])
+                cube([outer_frame_x-2*horizontal_beam_width,outer_frame_y-2*horizontal_beam_width,lower_beam_height*2]);
+            // Cut away two sides where we stagger it
+            translate([-outer_frame_x/2,outer_frame_stub,-1])
+                cube([outer_frame_x*2,outer_frame_y-2*outer_frame_stub,lower_beam_height*2]);
+        }
+        // Kink back in towards the centre
+        translate([horizontal_beam_width,outer_frame_stub-horizontal_beam_width,0])
+            cube([horizontal_beam_width,outer_frame_y-2*outer_frame_stub+2*horizontal_beam_width,lower_beam_height]);
+        translate([outer_frame_x-2*horizontal_beam_width,outer_frame_stub-horizontal_beam_width,0])
+            cube([horizontal_beam_width,outer_frame_y-2*outer_frame_stub+2*horizontal_beam_width,lower_beam_height]);
     }
 }
 
