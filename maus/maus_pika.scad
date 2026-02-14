@@ -8,6 +8,12 @@
 // Largely constrained by the attachment point for the Stage, located in the middle.
 // If Y size is <120 it overhangs the bar at the top of the Y flexures and won't print.
 // If X size <120 it overhangs the sides of the bar and interferes with the Y flexures.
+//
+// NOTE: Use Axis Drivers with mb_length_in_holes set to 2
+//
+// TODO
+//
+// Create base lower
 
 include <../library/m3_parts.scad>
 include <../library/metriccano.scad>
@@ -235,7 +241,7 @@ module x_linkage() translate([x_linkage_x_at,outer_wall_y/2,0]) {
 }
 
 module pika_flexure_assembly() {
-    %outside_box();
+    outside_box();
     translate([box_wall,box_wall+flexure_clearance,0]) {
         // The X axis flexures onna square
         translate([table_flexure_length,0,0]) x_flexure_pair();
@@ -264,7 +270,7 @@ module pika_flexure_assembly() {
     }
 
     translate([inner_wall_at_x,inner_wall_at_y,0]) {
-       %inside_box();
+       inside_box();
         translate([box_wall+flexure_clearance,box_wall,0]) y_flexure_pair();
         translate([inner_wall_x-box_wall-flexure_clearance-beam_flexure_side,box_wall,0]) y_flexure_pair();
         // Two beams linking the pairs of flexures
@@ -281,17 +287,157 @@ module pika_flexure_assembly() {
     }
     centre_platform();
     x_linkage();
-    translate([outer_wall_x/2,0,structure_height/2]) rotate([90,0,0]) version_text();
+    translate([outer_wall_x/2,0,structure_height-5]) rotate([90,0,0]) version_text();
 }
 
 
-pika_flexure_assembly();
-
+show_dummy_drivers=true;
 // Dummy Axis Drivers for model positioning (there is a 2mm offset of Metriccano holes in the
 // model. My bad. Doesn't matter when you're actually printing one but too lazy to fix today.
-// Y Driver
-%translate([metriccano_unit*4.8,outer_wall_y+metriccano_unit*2,metriccano_unit*3.5]) rotate([-90,180,0]) import("frame_trio.stl");
-// X Driver
-%translate([outer_wall_x+metriccano_unit*2,metriccano_unit*(floor(outer_wall_y_holes/2)-1.2),metriccano_unit*3.5]) rotate([-90,0,-90]) import("frame_trio.stl");
-// Z Driver
-%translate([outer_wall_x/2+3*metriccano_unit,outer_wall_y/2+3*metriccano_unit,11*metriccano_unit]) rotate([0,0,45]) import("frame_trio.stl");
+module axis_driver() {
+    if (show_dummy_drivers) {
+        import("frame_trio.stl");
+        translate([metriccano_unit*9.3,0,-metriccano_unit*4.5]) rotate([0,0,180]) import("motor_pillar_pika.stl");
+    }
+}
+
+if (show_dummy_drivers) {
+    // Y Driver
+    %translate([metriccano_unit*4.8,outer_wall_y+metriccano_unit*2,metriccano_unit*3.5]) rotate([-90,180,0]) axis_driver();
+    // X Driver
+    %translate([outer_wall_x+metriccano_unit*2,metriccano_unit*(floor(outer_wall_y_holes/2)-1.2),metriccano_unit*3.5]) rotate([-90,0,-90]) axis_driver();
+    // Z Driver
+    %translate([outer_wall_x/2+3*metriccano_unit,outer_wall_y/2+3*metriccano_unit,12*metriccano_unit]) rotate([0,0,45]) axis_driver();
+}
+
+// Tapered Axis Driver mount for near the driving end that should be printable without support
+module generic_mount(driver_front_mount_width_mu=1) {
+    union() {
+        // Raise the top mounting point to the top of the axes structure
+        translate([0,0,structure_height-metriccano_unit]) hull() {
+            // Form a Metriccano compliant beam with a 45 degree tapered underside, extending 2U
+            cube([metriccano_unit*2,driver_front_mount_width_mu*metriccano_unit,metriccano_unit]);
+            translate([0,0,-metriccano_unit*2]) cube([0.01,driver_front_mount_width_mu*metriccano_unit,0.01]);
+        }
+        // Create a rigid backing
+        cube([metriccano_unit/2,driver_front_mount_width_mu*metriccano_unit,structure_height]);
+        // A base for anchoring the lower edge of the Axis Driver
+        cube([metriccano_unit*2,driver_front_mount_width_mu*metriccano_unit,metriccano_unit*2]);    
+    }
+}
+
+module driver_front_mount() {
+    difference() {
+        generic_mount();
+        // Holes for Axis Driver attachment screws and nuts.
+        translate([metriccano_unit/2,metriccano_unit/2,metriccano_unit*1.5])
+            rotate([0,90,0]) metriccano_screw_hole(metriccano_unit*10);
+        translate([metriccano_unit/2,metriccano_unit/2,metriccano_unit*5.5])
+            rotate([0,90,0]) metriccano_screw_hole(metriccano_unit*10);
+        // Nut slots
+        // Top
+        translate([metriccano_unit,metriccano_unit/2,metriccano_unit*5.5])
+            rotate([0,-90,0])metriccano_nut_slot();
+        // Bottom
+        translate([metriccano_unit,metriccano_unit/2,metriccano_unit*1.5])
+            rotate([0,-90,0])metriccano_nut_slot();
+    }
+}
+
+// Axis Driver mount for attaching to the Motor Pillar
+module driver_rear_mount(l=structure_height) {
+    difference() {
+        translate([0,0,l/2])
+            cube([metriccano_unit,metriccano_unit,l],center=true);
+        // Two screw holes
+        translate([0,0,l-metriccano_unit/2])
+            rotate([0,90,0]) metriccano_screw_hole();
+        translate([0,0,l-metriccano_unit*4.5])
+            rotate([0,90,0]) metriccano_screw_hole();
+    }
+}
+
+// Mounting point for microscope supports
+module microscope_mount() {
+    difference() {
+        // Body of the mounting block
+        generic_mount(2);
+        // Couple of screw holes going all the way through
+        translate([metriccano_unit*1.5,metriccano_unit/2,0])
+            metriccano_screw_hole(3*structure_height);
+        translate([metriccano_unit*1.5,metriccano_unit*1.5,0])
+            metriccano_screw_hole(3*structure_height);
+        // Four nut slots, two on the top, two on the bottom
+        translate([metriccano_unit*1.5,0,0]) {
+            translate([0,metriccano_unit/2,structure_height-6]) metriccano_nut_slot();
+            translate([0,metriccano_unit*1.5,structure_height-6]) metriccano_nut_slot();
+            translate([0,metriccano_unit/2,12]) metriccano_nut_slot();
+            translate([0,metriccano_unit*1.5,12]) metriccano_nut_slot();
+        }
+    }
+}
+
+//Z  Axis Driver mount for attaching to the front of the Motor Pillar
+module z_driver_front_mount(l=120) {
+    difference() {
+        translate([0,0,l/2])
+            cube([metriccano_unit,metriccano_unit,l],center=true);
+        translate([0,0,l-metriccano_unit])
+            metriccano_nut_slot();
+        // Two screw holes, first one in the top
+        translate([0,0,l-metriccano_unit/2])
+            metriccano_screw_hole();
+        // Second one in the side
+        translate([0,0,l-metriccano_unit*2.5]) {
+            rotate([90,0,0]) metriccano_screw_hole();
+            translate([0,metriccano_unit/2,0]) rotate([90,0,0]) metriccano_nut_cavity_tapered(true);
+        }
+    }
+}
+
+//Z  Axis Driver mount for attaching to the rear of the Motor Pillar
+module z_driver_rear_mount(l=90) {
+    difference() {
+        translate([0,0,l/2])
+            cube([metriccano_unit,metriccano_unit,l],center=true);
+        translate([0,0,l-metriccano_unit/2])
+            rotate([90,0,-90]) metriccano_nut_slot();
+        // Screw hole at the top
+        translate([0,0,l-metriccano_unit/2])
+            rotate([0,90,0]) metriccano_screw_hole();
+    }
+}
+module pika_z_tower() union() {
+    translate([-metriccano_unit*2,0,0]) scale([-1,1,1]) z_driver_front_mount();
+    translate([metriccano_unit*2,0,0]) z_driver_front_mount();
+    translate([-metriccano_unit,-metriccano_unit*2,0]) z_driver_rear_mount();
+    translate([metriccano_unit,-metriccano_unit*2,0]) scale([-1,1,1]) z_driver_rear_mount();
+    // Rigid box
+    box_ht=75;
+    translate([0,-metriccano_unit,box_ht/2]) difference() {
+        cube([metriccano_unit*4,metriccano_unit*2.5,box_ht],center=true);
+        translate([0,0,metriccano_unit/2])
+            cube([metriccano_unit*3,metriccano_unit*2,box_ht],center=true);
+    }
+}
+
+union() {
+    pika_flexure_assembly();
+    // X Axis Driver front mount
+    translate([outer_wall_x,metriccano_unit*1,0]) driver_front_mount();
+    // Y Axis Driver front mount
+    translate([metriccano_unit*2,outer_wall_y,0]) rotate([0,0,90]) driver_front_mount();
+    // X Axis Driver rear mount (closer to motor)
+    translate([outer_wall_x-3*metriccano_unit,-metriccano_unit/2,0])
+        driver_rear_mount();
+    // Y Axis Driver rear mount (closer to motor)
+    translate([-metriccano_unit/2,outer_wall_y-3*metriccano_unit,0])
+        rotate([0,0,90]) driver_rear_mount();
+    // Piece of bracing on the same side as the Y Axis Driver motor
+    translate([-metriccano_unit/2,3.5*metriccano_unit,0])
+        rotate([0,0,90]) driver_rear_mount();
+    // Microscope mount
+    translate([metriccano_unit,0,0]) rotate([0,0,-90]) microscope_mount();
+    // Tower to attach Z Axis Driver
+    translate([outer_frame_x+1.5*metriccano_unit,metriccano_unit*12,0]) rotate([0,0,135])pika_z_tower();
+}
