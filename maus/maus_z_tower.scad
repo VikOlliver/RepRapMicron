@@ -50,8 +50,9 @@ union() {
         translate([0,-metriccano_unit,0]) vertical_strip(12);        // Solid strip support
         //  Pillar closest to motor 
         translate([0,-metriccano_unit*2,0])  rotate([0,0,90]) vertical_strip(7);
-        // Outside pillarto improve stability
-        translate([-metriccano_unit,-metriccano_unit*2,0])  rotate([0,0,90]) vertical_strip(9);
+        // Outside pillar to improve stability (Due to whatever, this will not come out as manifold
+        // without the 0.01 displacement.
+        translate([-metriccano_unit,-metriccano_unit*2+0.01,0])  rotate([0,0,90]) vertical_strip(9);
         translate([metriccano_unit*3.5,-metriccano_unit*2.5,0]) {
             // Versioning
             translate([metriccano_unit/2,metriccano_unit/2-1,metriccano_unit*4]) rotate([0,90,0]) version_text();
@@ -62,9 +63,9 @@ union() {
                 translate([0,0,metriccano_unit]) cube([metriccano_unit,metriccano_unit,0.01]);
             }
         }
-    // Spans linking the two
-     translate([0,-metriccano_unit*1,metriccano_unit*8]) crossed_span(3);
-     translate([0,-metriccano_unit*1.25,metriccano_unit]) crossed_span(3);
+        // Spans linking the two
+         translate([0,-metriccano_unit*1,metriccano_unit*8]) crossed_span(3);
+         translate([0,-metriccano_unit*1.25,metriccano_unit]) crossed_span(3);
     }
     // Angled strip that attaches to the flexure frame, at 45 degrees at the bottom
      translate([metriccano_unit*5,-metriccano_unit,0])  rotate([0,0,-45]) vertical_strip(7);
