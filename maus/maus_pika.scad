@@ -51,14 +51,16 @@ table_flexure_pair_length=4*flexure_length+2*beam_thick+horizontal_beam_width;
 outer_frame_x=outer_wall_x-2*box_wall-2*table_flexure_length+2*horizontal_beam_width;
 outer_frame_y=outer_wall_y-2*box_wall-2*flexure_clearance;
 outer_frame_stub=2*horizontal_beam_width+beam_flexure_side+2*flexure_clearance;
-// Translation for start of the X Linkage
-x_linkage_x_at=outer_wall_x-(outer_wall_x-outer_frame_x)/2-2*horizontal_beam_width;
 
 // Dimensions of the inner wall
 inner_wall_x=outer_wall_x-4*table_flexure_length-2*box_wall;
 inner_wall_y=outer_frame_y-2*flexure_clearance-2*horizontal_beam_width;
 inner_wall_at_x=(outer_wall_x-inner_wall_x)/2;
 inner_wall_at_y=box_wall+2*flexure_clearance+horizontal_beam_width;
+// Translation for start of the X Linkage
+x_linkage_x_at=outer_wall_x-inner_wall_at_x;
+// The length of the bit that slopes up to the inner wall
+x_beam_sloping_section=(outer_wall_x-outer_frame_x)/2+horizontal_beam_width+flexure_clearance;
 
 // Dimensions of the central box that suspends the Y axis
 muckedup_box_x=0;
@@ -110,13 +112,6 @@ module staggered_flexure_pair() {
         translate([-2*flexure_length-beam_thick,(beam_flexure_side-flexure_width)/2,structure_height-flexure_height-0.5])
             horizontal_flexure();
     }
-    // Stringer joining them together half way up
-    hull() {
-        translate([flexure_length+1,beam_flexure_side-1,structure_height/2])
-            cube([stringer_width,stringer_width,stringer_height],center=true);
-        translate([-flexure_length-1,beam_flexure_side+horizontal_beam_width+3*flexure_clearance+1,structure_height/2])
-            cube([stringer_width,stringer_width,stringer_height],center=true);
-    }
 }
 
 // A pair of the flexures used on the integrated XY Table Y axis
@@ -124,8 +119,8 @@ module staggered_flexure_pair() {
 // This needs to be cut after printing.
 module table_flexure_pair() {
     translate([0,(beam_flexure_side-flexure_width)/2,structure_height-flexure_height-0.5]) horizontal_flexure();
-    translate([flexure_length,0,0]) cube([beam_thick,beam_flexure_side,structure_height]);
     translate([flexure_length+beam_thick,(beam_flexure_side-flexure_width)/2,0]) horizontal_flexure();
+    translate([flexure_length,0,0]) cube([beam_thick,beam_flexure_side,structure_height]);
     // Leave a gap for a central beam here
     // ...
     // Ascending flexure and beam
@@ -135,11 +130,6 @@ module table_flexure_pair() {
     // Top flexure on far end
     translate([3*flexure_length+2*beam_thick+horizontal_beam_width,(beam_flexure_side-flexure_width)/2,structure_height-flexure_height-0.5])
         horizontal_flexure();
-    // Join the two with a couple of very thin beams.
-    translate([table_flexure_pair_length/2,stringer_width/2,structure_height/2])
-        cube([horizontal_beam_width+2*flexure_width,stringer_width,stringer_height],center=true);
-    translate([table_flexure_pair_length/2,beam_flexure_side-stringer_width/2,structure_height/2])
-        cube([horizontal_beam_width+2*flexure_width,stringer_width,stringer_height],center=true);
 }
 
 module x_flexure_pair() {
@@ -174,9 +164,10 @@ module outside_box() union() {
         // Hollow it out
         translate([box_wall,box_wall,-1])
             cube([outer_wall_x-2*box_wall,outer_wall_y-2*box_wall,structure_height*2]);
-        // Chop out a hole for the X beam
-        translate([outer_wall_x/2,(outer_wall_y-horizontal_beam_width)/2-flexure_clearance,-0.01])
-            cube([outer_wall_x,horizontal_beam_width+2*flexure_clearance,horizontal_beam_height+flexure_clearance]);
+        // Chop out a hole for the X beam and the sloping connection to the inner wall
+        bh=horizontal_beam_height*2.3+flexure_clearance;
+        translate([outer_wall_x,outer_wall_y/2,0])
+            cube([outer_wall_x,horizontal_beam_width+2*flexure_clearance,bh*2],center=true);
         // And a hole for the Axis Driver attachment plate
         translate([outer_wall_x,outer_wall_y/2-metriccano_unit-flexure_clearance,-0.01])
             cube([100,(metriccano_unit+flexure_clearance)*2,metriccano_unit]);
@@ -233,7 +224,7 @@ module centre_platform() {
         }
         // Centre pillar. We use beam_flexure_side as it is a known robust vertical support.
         translate([0,0,structure_height/2]) {
-            cube([beam_flexure_side,centre_platform_y,structure_height],center=true);
+            cube([beam_flexure_side,centre_platform_y-flexure_length,structure_height],center=true);
             // Couple of end pillars
             translate([beam_flexure_side/2-centre_platform_x/2,0,0]) cube([beam_flexure_side,centre_platform_y-flexure_length,structure_height],center=true);
             translate([-beam_flexure_side/2+centre_platform_x/2,0,0]) cube([beam_flexure_side,centre_platform_y-flexure_length,structure_height],center=true);
@@ -243,8 +234,20 @@ module centre_platform() {
 
 // Bar that links the X axis framework to the Axis Driver
 module x_linkage() translate([x_linkage_x_at,outer_wall_y/2,0]) {
-    // Linkage bar
-    translate([0,-horizontal_beam_width/2,0]) cube([outer_wall_x-x_linkage_x_at+metriccano_unit*3,horizontal_beam_width,horizontal_beam_height]);
+    // Linkage bar, driven end (with fixing plate
+    translate([0,-horizontal_beam_width/2,0]) {
+        hull() {
+            // Create a sloping section that connects the inner wall to the X Beam
+            translate([0,0,x_beam_sloping_section+horizontal_beam_height])
+                cube([0.01,horizontal_beam_width,horizontal_beam_height]);
+            // This sits on top of the X beam
+            translate([x_beam_sloping_section,0,horizontal_beam_height])
+                cube([horizontal_beam_width,horizontal_beam_width,horizontal_beam_width]);
+        }
+        // The X Beam to which the Drive Plate attaches
+        translate([x_beam_sloping_section,0,0])
+            cube([outer_wall_x-x_linkage_x_at+metriccano_unit*3-x_beam_sloping_section,horizontal_beam_width,horizontal_beam_height]);
+    }
     // Plate for fixing to X Axis Driver
     translate([outer_wall_x-x_linkage_x_at+metriccano_unit*3,-metriccano_unit/2,metriccano_unit*1.5]) {
         rotate([0,-90,0]) metriccano_plate(2,2,squared=true);
@@ -265,7 +268,35 @@ module pika_flexure_assembly() {
         translate([table_flexure_length,0,0]) x_flexure_pair();
         translate([table_flexure_length,outer_frame_y,0]) 
             scale([1,-1,1]) x_flexure_pair();
+        // Panels to join the outer X flexures to prevent torque
+        translate([beam_thick-box_wall*1.5+flexure_length,outer_frame_y/2,structure_height/2])
+            cube([box_wall,outer_frame_y-2*outer_frame_stub-beam_flexure_side,structure_height],center=true);
+        translate([outer_wall_x-2*box_wall-flexure_length-beam_thick/2,outer_frame_y/2,structure_height/2]) {
+            // This has a hole in it to allow the X Beam through
+            difference() {
+                cube([box_wall,outer_frame_y-2*outer_frame_stub-beam_flexure_side,structure_height],center=true);
+                bh1=horizontal_beam_height*2.5+flexure_clearance;
+                translate([0,0,-structure_height/2])
+                    cube([outer_wall_x,horizontal_beam_width+2*flexure_clearance,bh1*2],center=true);
+            }
+        }
 
+        // Panels to join the inner X flexures to prevent torque
+        translate([table_flexure_length*1.5+beam_thick/2-box_wall/2,outer_frame_y/2,structure_height/2])
+            cube([box_wall,inner_wall_y,structure_height],center=true);
+        translate([outer_wall_x-table_flexure_length*2+box_wall/2,outer_frame_y/2,structure_height/2]) {
+            // This has a hole in it to allow the X Beam through
+            difference() {
+                cube([box_wall,inner_wall_y,structure_height],center=true);
+                        // Chop out a hole for the X beam and the sloping connection to the inner wall
+                bh2=x_beam_sloping_section+horizontal_beam_height*2+flexure_clearance;
+                translate([0,0,-structure_height/2])
+                    cube([outer_wall_x,horizontal_beam_width+2*flexure_clearance,bh2*2],center=true);
+            }
+            // Now stick a bit across the bottom of the hole for stability
+            translate([0,0,-structure_height/2+horizontal_beam_height/2])
+                cube([box_wall,inner_wall_y,horizontal_beam_height],center=true);
+        }
 
         // Make the outer hollow square bracing beam with staggered edges
         translate([(outer_wall_x-outer_frame_x)/2-box_wall,0,0]) {
@@ -279,18 +310,46 @@ module pika_flexure_assembly() {
                 translate([-outer_frame_x/2,outer_frame_stub,-1])
                     cube([outer_frame_x*2,outer_frame_y-2*outer_frame_stub,horizontal_beam_height*2]);
             }
-            // Kink back in towards the centre
+            // Kink back in towards the centre. Needs to be a bit narrower than usual so
+            // we can add a panel linking the X flexures
             translate([horizontal_beam_width,outer_frame_stub-horizontal_beam_width,0])
-                cube([horizontal_beam_width,outer_frame_y-2*outer_frame_stub+2*horizontal_beam_width,horizontal_beam_height]);
-            translate([outer_frame_x-2*horizontal_beam_width,outer_frame_stub-horizontal_beam_width,0])
-                cube([horizontal_beam_width,outer_frame_y-2*outer_frame_stub+2*horizontal_beam_width,horizontal_beam_height]);
+                cube([horizontal_beam_width-box_wall,outer_frame_y-2*outer_frame_stub+2*horizontal_beam_width,horizontal_beam_height]);
+            translate([outer_frame_x-2*horizontal_beam_width+box_wall,outer_frame_stub-horizontal_beam_width,0])
+                cube([horizontal_beam_width-box_wall,outer_frame_y-2*outer_frame_stub+2*horizontal_beam_width,horizontal_beam_height]);
         }
     }
 
     translate([inner_wall_at_x,inner_wall_at_y,0]) {
        inside_box();
-        translate([box_wall+flexure_clearance,box_wall,0]) y_flexure_pair();
-        translate([inner_wall_x-box_wall-flexure_clearance-beam_flexure_side,box_wall,0]) y_flexure_pair();
+        // Flexures closest to X=0 (left side)
+        translate([box_wall+flexure_clearance,box_wall,0]) {
+            y_flexure_pair();
+            // Join the outer flexures with a wall so they won't twist
+            translate([0,flexure_length+(beam_thick-box_wall)/2,0])
+                cube([inner_wall_x-2*flexure_length,box_wall,structure_height]);
+            translate([0,inner_wall_y-2*flexure_length-(beam_thick+box_wall)/2,0])
+                cube([inner_wall_x-2*flexure_length,box_wall,structure_height]);
+            // Join the inner flexures so they won't twist either
+            // We have to poke holes in this for the inner frame
+            difference() {
+                union() {
+                    translate([0,table_flexure_length*2-box_wall/2,0])
+                        cube([inner_wall_x-2*flexure_length,box_wall,structure_height]);
+                    translate([0,inner_wall_y-table_flexure_length*2-flexure_length-(beam_thick-box_wall)/2,0])
+                        cube([inner_wall_x-2*flexure_length,box_wall,structure_height]);
+                }
+                // The holes for the inner frame to pass
+                centre_frame_hole_width=horizontal_beam_width+beam_thick+flexure_clearance*2;
+                translate([-1,0,-1])
+                    cube([centre_frame_hole_width+2,inner_wall_y,horizontal_beam_height+flexure_clearance+2]);
+                translate([inner_wall_x-centre_frame_hole_width-horizontal_beam_width-flexure_clearance,0,-1])
+                    cube([centre_frame_hole_width+2,inner_wall_y,horizontal_beam_height+flexure_clearance+2]);
+            }
+        }
+        // Flexures away from X=0 (right side)
+        translate([inner_wall_x-box_wall-flexure_clearance-beam_flexure_side,box_wall,0])  {
+            y_flexure_pair();
+        }
         // Two beams linking the pairs of flexures
         translate([box_wall+flexure_clearance,table_flexure_length+box_wall,0])
             cube([inner_wall_x-2*box_wall-2*flexure_clearance,horizontal_beam_width,horizontal_beam_height]);
@@ -376,7 +435,7 @@ module microscope_mount() {
 }
 
 //Z  Axis Driver mount for attaching to the front of the Motor Pillar
-module z_driver_front_mount(l=120) {
+module z_driver_front_mount(l=110) {
     difference() {
         translate([0,0,l/2])
             cube([metriccano_unit,metriccano_unit,l],center=true);
@@ -394,7 +453,7 @@ module z_driver_front_mount(l=120) {
 }
 
 //Z  Axis Driver mount for attaching to the rear of the Motor Pillar
-module z_driver_rear_mount(l=90) {
+module z_driver_rear_mount(l=80) {
     difference() {
         translate([0,0,l/2])
             cube([metriccano_unit,metriccano_unit,l],center=true);
@@ -407,13 +466,16 @@ module z_driver_rear_mount(l=90) {
 }
 
 //NOTE: Z Tower is pre-positioned and rotated
+z_tower_height=115;
 module pika_z_tower() translate([outer_frame_x+1.5*metriccano_unit,metriccano_unit*12,0]) rotate([0,0,135]) union() {
-    translate([-metriccano_unit*2,0,0]) scale([-1,1,1]) z_driver_front_mount();
-    translate([metriccano_unit*2,0,0]) z_driver_front_mount();
-    translate([-metriccano_unit,-metriccano_unit*2,0]) z_driver_rear_mount();
-    translate([metriccano_unit,-metriccano_unit*2,0]) scale([-1,1,1]) z_driver_rear_mount();
+    translate([-metriccano_unit*2,0,0]) scale([-1,1,1]) z_driver_front_mount(z_tower_height);
+    translate([metriccano_unit*2,0,0]) z_driver_front_mount(z_tower_height);
+    translate([-metriccano_unit,-metriccano_unit*2,0])
+        z_driver_rear_mount(z_tower_height-3*metriccano_unit);
+    translate([metriccano_unit,-metriccano_unit*2,0]) scale([-1,1,1])
+        z_driver_rear_mount(z_tower_height-3*metriccano_unit);
     // Rigid box
-    box_ht=75;
+    box_ht=z_tower_height-4.5*metriccano_unit;
     translate([0,-metriccano_unit,box_ht/2]) difference() {
         cube([metriccano_unit*4,metriccano_unit*2.5,box_ht],center=true);
         translate([0,0,metriccano_unit/2])
@@ -486,7 +548,7 @@ if (show_dummy_drivers) {
     // X Driver
     %translate([outer_wall_x+metriccano_unit*2,metriccano_unit*(floor(outer_wall_y_holes/2)-1.2),metriccano_unit*3.5]) rotate([-90,0,-90]) axis_driver();
     // Z Driver
-    %translate([outer_wall_x/2+3*metriccano_unit,outer_wall_y/2+3*metriccano_unit,12*metriccano_unit]) rotate([0,0,45]) axis_driver();
+    %translate([outer_wall_x/2+3*metriccano_unit,outer_wall_y/2+3*metriccano_unit,11.5*metriccano_unit]) rotate([0,0,45]) axis_driver();
 }
 
 //translate([0,0,metriccano_unit/2]) 
