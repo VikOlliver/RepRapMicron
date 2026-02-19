@@ -23,6 +23,11 @@ flexure_width=5;      // Maximum desired flexing distance off centre
 flexure_length=4;
 flexure_height=1.2;   // Headroom given to a flexure
 
+// These are used to create suspended or insignificant strings, for stabilizing printed
+// parts or creating lines to stop 3D printer brim from invading.
+stringer_height=0.4;
+stringer_width=0.4;
+
 beam_thick=5;       // Thickness of a vertical structural beam
 beam_flexure_side=flexure_width+1;  // Width of a beam on the side contacting the flexure
 flexure_clearance=1.5;      // Any flexing part must miss by this much
@@ -89,7 +94,9 @@ module horizontal_flexure() {
 }
 
 // A pair of the flexures used on the integrated XY Table X axis.
-// These are staggered about X=0
+// These are staggered about X=0 and tied together with a diagonal "string" to stop them
+// from wobbling during printing
+
 module staggered_flexure_pair() {
         translate([0,(beam_flexure_side-flexure_width)/2,0]) horizontal_flexure();
         translate([flexure_length,0,0]) cube([beam_thick,beam_flexure_side,structure_height]);
@@ -103,9 +110,18 @@ module staggered_flexure_pair() {
         translate([-2*flexure_length-beam_thick,(beam_flexure_side-flexure_width)/2,structure_height-flexure_height-0.5])
             horizontal_flexure();
     }
+    // Stringer joining them together half way up
+    hull() {
+        translate([flexure_length+1,beam_flexure_side-1,structure_height/2])
+            cube([stringer_width,stringer_width,stringer_height],center=true);
+        translate([-flexure_length-1,beam_flexure_side+horizontal_beam_width+3*flexure_clearance+1,structure_height/2])
+            cube([stringer_width,stringer_width,stringer_height],center=true);
+    }
 }
 
 // A pair of the flexures used on the integrated XY Table Y axis
+// These are tied delicately together half way up to reduce wobble during printing.
+// This needs to be cut after printing.
 module table_flexure_pair() {
     translate([0,(beam_flexure_side-flexure_width)/2,structure_height-flexure_height-0.5]) horizontal_flexure();
     translate([flexure_length,0,0]) cube([beam_thick,beam_flexure_side,structure_height]);
@@ -119,6 +135,11 @@ module table_flexure_pair() {
     // Top flexure on far end
     translate([3*flexure_length+2*beam_thick+horizontal_beam_width,(beam_flexure_side-flexure_width)/2,structure_height-flexure_height-0.5])
         horizontal_flexure();
+    // Join the two with a couple of very thin beams.
+    translate([table_flexure_pair_length/2,stringer_width/2,structure_height/2])
+        cube([horizontal_beam_width+2*flexure_width,stringer_width,stringer_height],center=true);
+    translate([table_flexure_pair_length/2,beam_flexure_side-stringer_width/2,structure_height/2])
+        cube([horizontal_beam_width+2*flexure_width,stringer_width,stringer_height],center=true);
 }
 
 module x_flexure_pair() {
@@ -426,7 +447,7 @@ module complete_pika() union() {
     // Tower to attach Z Axis Driver
     pika_z_tower();
     // A thin strip that will prevent a printed brim from going inside the flexures
-    translate([outer_wall_x+metriccano_unit-0.3,outer_wall_y/2,0.2]) cube([0.6,50,0.4],center=true);
+    translate([outer_wall_x+metriccano_unit-0.3,outer_wall_y/2,0.2]) cube([stringer_width,50,stringer_height],center=true);
 }
 
 // The base prevents the bottoms of the flexures in the completed Pika assembly dragging on
