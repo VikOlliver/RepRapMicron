@@ -53,10 +53,11 @@ module  metriccano_screw_cavity(screw_len=metriccano_unit,inverted=false) {
        // hole as support. Stand off a bit so that it iwll separate cleanly.
         if (inverted) {
             translate([0,0.2]) rotate([0,0,360/16]) {
-                // Hollow cylinder
-                difference() {
-                    cylinder(h=screw_len,r=metriccano_screw_rad*1.2+0.3,$fn=8);
-                    cylinder(h=screw_len*3,r=metriccano_screw_rad*1.2,$fn=8,center=true);
+                // Hollow cylinder, extended downwards for a screwdriver shaft
+                extend_downwards=100;
+                translate([0,0,-extend_downwards]) difference() {
+                    cylinder(h=screw_len+extend_downwards,r=metriccano_screw_rad*1.2+0.3,$fn=8);
+                    cylinder(h=(screw_len+extend_downwards)*3,r=metriccano_screw_rad*1.2,$fn=8,center=true);
                 }
             }
         }
@@ -178,7 +179,7 @@ module metriccano_strip_flatend(h,squared=false,nutted=false,extend_end=0) {
 // Nearest end always squared, shifted slightly for a good boolean join.
 // h    number of holes length of slot (can be fractional)
 // extend_end Extends the flat, plain end on the -X
-module metriccano_slot_flatend(h,squared=false,extend_end=0) {
+module metriccano_slot_flatend(h,squared=false,nutted=false,extend_end=0) {
     difference() {
         hull() {
             translate([(h-1)*metriccano_hole_spacing,0,0]) round_square(squared);
@@ -193,7 +194,7 @@ module metriccano_slot_flatend(h,squared=false,extend_end=0) {
 }
 
 // A straight strip of Metriccano with a vertical slot along it allowing adjustment
-// h    length of slot in merticcano units - can be fractional
+// h    length of slot in metriccano units - can be fractional
 module metriccano_slot_strip(h=0,squared=false,extend_end=0) {
     difference() {
         hull() {
@@ -207,9 +208,13 @@ module metriccano_slot_strip(h=0,squared=false,extend_end=0) {
     }
 }
 
-module metriccano_l_plate(holes,nutted=false) union() {
-    metriccano_strip(holes,nutted);
-    rotate([0,0,90]) metriccano_strip(holes,nutted);
+module metriccano_l_plate(holes,squared=false,nutted=false) union() {
+    // Bore out the first hole because if someone nuts it the two nut cavities will overlap
+    difference() {
+        metriccano_strip(holes,squared,nutted);
+        cylinder(h=metriccano_plate_height*3,r=metriccano_unit/2-1,center=true);
+    }
+    rotate([0,0,90]) metriccano_strip(holes,squared,nutted);
 }
 
 // Not intended as an end part. It's a strip with a wide flat edge down one side. Useful for adding tabs
