@@ -516,23 +516,33 @@ module complete_pika() union() {
 // the ground. 
 // It has a notch in it that allows the X Beam to move without catching on the base.
 // It also has to support the Z Tower to reduce vibration. 
-module pika_base() difference() {
-    // Create a slice of Z Tower and attach it to the frame.
-    union() {
-        scale([1,1,metriccano_plate_height])
-            intersection() {
-                pika_z_tower();
-                // Slice off a 1mm piece of the entire bottom of the Z Tower
-                cube([999,999,2],center=true);
-            }
-         frame_flange();
-    }
-    // Chop out a hole for the X beam
-    translate([outer_wall_x/2,(outer_wall_y-horizontal_beam_width)/2-flexure_clearance,metriccano_plate_height-1])
-        cube([outer_wall_x,horizontal_beam_width+2*flexure_clearance,2]);
+module pika_base() union() {
+    difference() {
+        // Create a slice of Z Tower and attach it to the frame.
+        union() {
+            scale([1,1,metriccano_plate_height])
+                intersection() {
+                    pika_z_tower();
+                    // Slice off a 1mm piece of the entire bottom of the Z Tower
+                    cube([999,999,2],center=true);
+                }
+             frame_flange();
+        }
+        // Chop out a hole for the X beam
+        translate([outer_wall_x/2,(outer_wall_y-horizontal_beam_width)/2-flexure_clearance,metriccano_plate_height-1])
+            cube([outer_wall_x,horizontal_beam_width+2*flexure_clearance,2]);
+        }
+    // Corner feet
+    translate([metriccano_unit*2,metriccano_unit*2,0]) metriccano_l_plate(2,nutted=true);
+    translate([metriccano_unit*4,metriccano_unit*4,0]) metriccano_l_plate(2,nutted=true);
+    translate([metriccano_unit*6,metriccano_unit*6,0]) metriccano_l_plate(2,nutted=true);
+    // Z Tower foot
+    translate([metriccano_unit*5.5,metriccano_unit*2,0]) metriccano_strip(6,nutted=true);
+
+
 }
 
-show_dummy_drivers=true;
+show_dummy_drivers=false;
 // Dummy Axis Drivers for model positioning (there is a 2mm offset of Metriccano holes in the
 // model. My bad. Doesn't matter when you're actually printing one but too lazy to fix today.
 module axis_driver() {
