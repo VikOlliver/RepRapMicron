@@ -219,7 +219,7 @@ module centre_platform() {
                 stage_mount();
         // 45 degree prism with the flat on top . Should be easy-ish to print suspended
         translate([0,0,structure_height]) hull() {
-            cube([centre_platform_x,centre_platform_y,0.01],center=true);
+            translate([0,0,-1]) cube([centre_platform_x,centre_platform_y,2],center=true);
             translate([0,0,-centre_platform_y*sqrt(2)/2]) cube([centre_platform_x,0.01,0.01],center=true);
         }
         // Centre pillar. We use beam_flexure_side as it is a known robust vertical support.
@@ -466,7 +466,7 @@ module z_driver_rear_mount(l=80) {
 }
 
 //NOTE: Z Tower is pre-positioned and rotated
-z_tower_height=115;
+z_tower_height=105;
 module pika_z_tower() translate([outer_frame_x+1.5*metriccano_unit,metriccano_unit*12,0]) rotate([0,0,135]) union() {
     translate([-metriccano_unit*2,0,0]) scale([-1,1,1]) z_driver_front_mount(z_tower_height);
     translate([metriccano_unit*2,0,0]) z_driver_front_mount(z_tower_height);
@@ -505,7 +505,7 @@ module complete_pika() union() {
     translate([outer_wall_x+metriccano_unit/2,outer_wall_y-3.5*metriccano_unit,0])
         rotate([0,0,90]) driver_rear_mount();
     // Microscope mount
-    translate([metriccano_unit,0,0]) rotate([0,0,-90]) microscope_mount();
+    translate([metriccano_unit*1.5,0,0]) rotate([0,0,-90]) microscope_mount();
     // Tower to attach Z Axis Driver
     pika_z_tower();
     // A thin strip that will prevent a printed brim from going inside the flexures
@@ -548,7 +548,7 @@ if (show_dummy_drivers) {
     // X Driver
     %translate([outer_wall_x+metriccano_unit*2,metriccano_unit*(floor(outer_wall_y_holes/2)-1.2),metriccano_unit*3.5]) rotate([-90,0,-90]) axis_driver();
     // Z Driver
-    %translate([outer_wall_x/2+3*metriccano_unit,outer_wall_y/2+3*metriccano_unit,11.5*metriccano_unit]) rotate([0,0,45]) axis_driver();
+    %translate([outer_wall_x/2+3*metriccano_unit,outer_wall_y/2+3*metriccano_unit,10.5*metriccano_unit]) rotate([0,0,45]) axis_driver();
 }
 
 //translate([0,0,metriccano_unit/2]) 
