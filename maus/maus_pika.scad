@@ -10,7 +10,10 @@
 // If X size <120 it overhangs the sides of the bar and interferes with the Y flexures.
 //
 // NOTE: Use Axis Drivers with mb_length_in_holes set to 2
-
+//
+// TODO
+// The nut slots on the centre Stage support are too hard to put the nuts into for mere
+// mortals. They need to be way more accessible. Draw nut in from underneath?
 
 include <../library/m3_parts.scad>
 include <../library/metriccano.scad>
@@ -75,7 +78,7 @@ led_wire_rad=3.2/2;      // Gap for UV LED wires
 led_strip_width=8;        // Dimensions of UV LED strip
 led_strip_length=20;
 led_strip_height=1;
-st_plate_height=5;      // Maximum thickness of stage
+st_plate_height=6;      // Maximum thickness of stage
 st_base_thick=st_plate_height-max(m3_screw_head_height,magnet_z,led_wire_rad);        // Minimum thickness of stage base. Allow for a wire channel
 stage_holes_x=4;        // Number of holes in the stage
 stage_holes_y=6.5;
@@ -582,10 +585,16 @@ module light_well() {
 module magnet_slot() {
     magnet_nub_width=0.8;
     difference() {
+        // A magnet-shaped thing
         cube([magnet_x,magnet_y,magnet_z+0.01],center=true);
-        translate([0,magnet_y/2,0]) rotate([0,0,45])
+        // Whack 4 notches in it, which become points that hold the magnet steady
+        translate([magnet_x/4,magnet_y/2,0]) rotate([0,0,45])
             cube([magnet_nub_width,magnet_nub_width,magnet_z+0.01],center=true);
-        translate([0,-magnet_y/2,0]) rotate([0,0,45])
+        translate([magnet_x/4,-magnet_y/2,0]) rotate([0,0,45])
+            cube([magnet_nub_width,magnet_nub_width,magnet_z+0.01],center=true);
+        translate([-magnet_x/4,magnet_y/2,0]) rotate([0,0,45])
+            cube([magnet_nub_width,magnet_nub_width,magnet_z+0.01],center=true);
+        translate([-magnet_x/4,-magnet_y/2,0]) rotate([0,0,45])
             cube([magnet_nub_width,magnet_nub_width,magnet_z+0.01],center=true);
     }
 }
@@ -603,7 +612,6 @@ module stage_top() {
                     cylinder(h=st_plate_height,r=metriccano_unit/2);
                 translate([-stage_size_x/2,stage_size_y/2,st_plate_height/2])
                     cube([metriccano_unit,metriccano_unit,st_plate_height],center=true);
-                    //cylinder(h=st_plate_height,r=metriccano_unit/2);
                 translate([stage_size_x/2,stage_size_y/2,st_plate_height/2])
                     cube([metriccano_unit,metriccano_unit,st_plate_height],center=true);
             }
@@ -627,7 +635,7 @@ module stage_top() {
         solder_cavity_len=7;
         solder_cavity_height=2.6;
         translate([0,-light_well_size/2-solder_cavity_len,st_plate_height])
-            cube([solder_cavity_len,led_strip_width,solder_cavity_height],center=true);
+            cube([led_strip_width,solder_cavity_len,solder_cavity_height*2],center=true);
 
         // Holes for screw heads, all of which are inverted and symmetric
         translate([0,0,st_plate_height-st_base_thick]) rotate([0,180,0]) {
@@ -670,7 +678,7 @@ module y_stage_flexure() {
     translate([0,frame_thick*1.5+ysf_flexure_length+flexure_clearance*2,frame_thick/2+ysf_thick+flexure_clearance])
         cube([4*ysf_max_flex,frame_thick,frame_thick],center=true);
     // Plate for fixing to Y Axis Driver
-    y_fix_plate_disp=metriccano_unit/2;
+    y_fix_plate_disp=st_plate_height;
     translate([metriccano_unit/2,ysf_beam_length-metriccano_unit/2,metriccano_unit*1.5]) {
         translate([0,0,y_fix_plate_disp]) rotate([0,-90,90]) metriccano_plate(2,2,squared=true);
         // Fillet under fixing plate
@@ -716,4 +724,4 @@ pika_xy_table();
 //pika_base();
 // Uncomment this translate/rotate to see how the Stage fits on the XY Table
 //translate([outer_wall_x/2,outer_wall_y/2,structure_height+metriccano_unit+st_plate_height]) rotate([0,180,0])
-translate([0,0,st_plate_height]) flexured_stage();
+//translate([0,0,st_plate_height]) flexured_stage();
