@@ -630,14 +630,15 @@ module stage_top() {
             cube([solder_cavity_len,led_strip_width,solder_cavity_height],center=true);
 
         // Holes for screw heads, all of which are inverted and symmetric
-        rotate([0,180,0]) {
-            translate([metriccano_unit*1.5,metriccano_unit*1.5,st_base_thick]) 
-                metriccano_screw_cavity();
-            translate([-metriccano_unit*1.5,metriccano_unit*1.5,st_base_thick]) metriccano_screw_cavity();
-            translate([metriccano_unit*1.5,-metriccano_unit*1.5,st_base_thick])
-                metriccano_screw_cavity();
-            translate([-metriccano_unit*1.5,-metriccano_unit*1.5,st_base_thick])
-                metriccano_screw_cavity();
+        translate([0,0,st_plate_height-st_base_thick]) rotate([0,180,0]) {
+            translate([metriccano_unit*1.5,metriccano_unit*1.5,0]) 
+                metriccano_screw_cavity(inverted=true);
+            translate([-metriccano_unit*1.5,metriccano_unit*1.5,0])
+                metriccano_screw_cavity(inverted=true);
+            translate([metriccano_unit*1.5,-metriccano_unit*1.5,0])
+                metriccano_screw_cavity(inverted=true);
+            translate([-metriccano_unit*1.5,-metriccano_unit*1.5,0])
+                metriccano_screw_cavity(inverted=true);
         }
     }
 }
@@ -711,8 +712,8 @@ if (show_dummy_drivers) {
 }
 
 //translate([0,0,metriccano_unit/2]) 
-//pika_xy_table();
-pika_base();
+pika_xy_table();
+//pika_base();
 // Uncomment this translate/rotate to see how the Stage fits on the XY Table
-//translate([outer_wall_x/2,outer_wall_y/2,structure_height+metriccano_unit]) rotate([0,180,0])
-//flexured_stage();
+//translate([outer_wall_x/2,outer_wall_y/2,structure_height+metriccano_unit+st_plate_height]) rotate([0,180,0])
+translate([0,0,st_plate_height]) flexured_stage();
