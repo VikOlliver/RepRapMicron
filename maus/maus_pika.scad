@@ -373,7 +373,9 @@ module pika_flexure_assembly() {
 }
 
 // Tapered Axis Driver mount for near the driving end that should be printable without support
-module generic_mount(driver_front_mount_width_mu=1) {
+// The width of the support is defined in Metriccano units.
+// The "drop" is used to lower the microscope support
+module generic_mount(driver_front_mount_width_mu=1,drop=0) {
     union() {
         // Raise the top mounting point to the top of the axes structure
         translate([0,0,metriccano_unit*5]) hull() {
@@ -384,7 +386,7 @@ module generic_mount(driver_front_mount_width_mu=1) {
         // Create a rigid backing
         cube([metriccano_unit/2,driver_front_mount_width_mu*metriccano_unit,metriccano_unit*5]);
         // A base for anchoring the lower edge of the Axis Driver
-        cube([metriccano_unit*2,driver_front_mount_width_mu*metriccano_unit,metriccano_unit*2]);    
+        cube([metriccano_unit*2,driver_front_mount_width_mu*metriccano_unit,metriccano_unit*2-drop]);    
     }
 }
 
@@ -402,7 +404,7 @@ module driver_front_mount() {
             rotate([0,-90,0])metriccano_nut_slot();
         // Bottom
         translate([metriccano_unit,metriccano_unit/2,metriccano_unit*1.5])
-            rotate([0,-90,0])metriccano_nut_slot();
+            rotate([0,-90,0])metriccano_nut_slot(15);  // shorten nut slot cavity so it doesn't hit the top bracket
     }
 }
 
@@ -421,9 +423,10 @@ module driver_rear_mount(l=structure_height) {
 
 // Mounting point for microscope supports
 module microscope_mount() {
+    drop=10;
     difference() {
-        // Body of the mounting block
-        generic_mount(2);
+        // Body of the mounting block. Lower it to give stability to microscope stand
+        generic_mount(2,drop);
         // Couple of screw holes going all the way through
         translate([metriccano_unit*1.5,metriccano_unit/2,0])
             metriccano_screw_hole(3*structure_height);
@@ -433,8 +436,8 @@ module microscope_mount() {
         translate([metriccano_unit*1.5,0,0]) {
             translate([0,metriccano_unit/2,structure_height-6]) metriccano_nut_slot();
             translate([0,metriccano_unit*1.5,structure_height-6]) metriccano_nut_slot();
-            translate([0,metriccano_unit/2,12]) metriccano_nut_slot();
-            translate([0,metriccano_unit*1.5,12]) metriccano_nut_slot();
+            translate([0,metriccano_unit/2,13-drop]) metriccano_nut_slot();
+            translate([0,metriccano_unit*1.5,13-drop]) metriccano_nut_slot();
         }
     }
 }
@@ -510,7 +513,7 @@ module pika_xy_table() union() {
     translate([outer_wall_x+metriccano_unit/2,outer_wall_y-3.5*metriccano_unit,0])
         rotate([0,0,90]) driver_rear_mount();
     // Microscope mount
-    translate([metriccano_unit*1.5,0,0]) rotate([0,0,-90]) microscope_mount();
+    translate([metriccano_unit*3,0,0]) rotate([0,0,-90]) microscope_mount();
     // Tower to attach Z Axis Driver
     pika_z_tower();
     // A thin strip that will prevent a printed brim from going inside the flexures
