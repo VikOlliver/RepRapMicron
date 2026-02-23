@@ -14,6 +14,11 @@
 // TODO
 // The nut slots on the centre Stage support are too hard to put the nuts into for mere
 // mortals. They need to be way more accessible. Draw nut in from underneath?
+// Move Z Tower away a few mm.
+// Diagonal bracing on base
+// Redo microscope support brackets for easiert screw access and 1mm more standoff
+// Bottom microscope bracket (not in this file) needs to be mirrored for PIKA.
+// Perhaps add a structural ridge around the outer frame, 15mm from the top edge?
 
 include <../library/m3_parts.scad>
 include <../library/metriccano.scad>
@@ -73,7 +78,7 @@ light_well_size=metriccano_unit/2+0.5;
 // This plate fits on top of the stage and has cutouts for magnets in it
 magnet_x=30;
 magnet_y=10;
-magnet_z=3.2;
+magnet_z=3.5;
 led_wire_rad=3.2/2;      // Gap for UV LED wires
 led_strip_width=8;        // Dimensions of UV LED strip
 led_strip_length=20;
