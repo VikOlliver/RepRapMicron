@@ -68,19 +68,21 @@ muckedup_box_x=0;
 // Size of the square light well
 light_well_size=metriccano_unit/2+0.5;
 // This plate fits on top of the stage and has cutouts for magnets in it
-magnet_x=10;
-magnet_y=30;
+magnet_x=30;
+magnet_y=10;
 magnet_z=3;
 led_wire_rad=3.2/2;      // Gap for UV LED wires
 led_strip_width=8;        // Dimensions of UV LED strip
 led_strip_length=20;
 led_strip_height=1;
-st_base_thick=1;
-stage_holes_x=6;        // Number of holes in the stage
-stage_holes_y=4;
+st_plate_height=5;      // Maximum thickness of stage
+st_base_thick=st_plate_height-max(m3_screw_head_height,magnet_z,led_wire_rad);        // Minimum thickness of stage base. Allow for a wire channel
+stage_holes_x=4;        // Number of holes in the stage
+stage_holes_y=6.5;
 // Work out stage dimensions to make maths easier
 stage_size_x=(stage_holes_x-1)*metriccano_unit;
 stage_size_y=(stage_holes_y-1)*metriccano_unit;
+ysf_beam_length=outer_wall_y-stage_size_y/2-metriccano_unit*3;     // Y Stage Flexure beam length
 
 
 // 0.6mm thick text, 5mm tall, vertical, flat on XY plane
@@ -486,7 +488,7 @@ module pika_z_tower() translate([outer_frame_x+1.5*metriccano_unit,metriccano_un
     translate([metriccano_unit*2.5,-1.5*metriccano_unit,0]) metriccano_strip_flatend(1);
 }
 
-module complete_pika() union() {
+module pika_xy_table() union() {
     pika_flexure_assembly();
     // X Axis Driver front mount
     translate([outer_wall_x,metriccano_unit*1,0]) driver_front_mount();
@@ -539,7 +541,154 @@ module pika_base() union() {
     // Z Tower foot
     translate([metriccano_unit*5.5,metriccano_unit*2,0]) metriccano_strip(6,nutted=true);
 
+}
 
+// Length of the crossbeam at the end of the main beam.
+ysf_max_flex=8;     // Maximum distance we are ever expecting the Y flexure beam to flex
+ysf_flexure_width=0.8;  // Width of the flexures used on the Y Beam
+ysf_minor_crossbeam=frame_thick+2*ysf_max_flex+2*ysf_flexure_width;
+// Thickness of the X Stage Flexure assembly (needs to be same height as stage
+ysf_thick=metriccano_plate_height;
+ysf_flexure_length=ysf_beam_length-25;
+// Flexure used in x_stage_flexures
+module ysf_flexure() {
+    translate([-ysf_flexure_width/2,0,0]) cube([ysf_flexure_width,ysf_flexure_length,ysf_thick]);
+}
+
+// A pair of flexures with a crossbar
+module ysf_flexure_pair() {
+    translate([-ysf_max_flex/2-ysf_flexure_width/2,0,0]) ysf_flexure();
+    translate([ysf_max_flex/2+ysf_flexure_width/2,0,0]) ysf_flexure();
+    // Crossbar is taller to allow clearance on the Bar
+    translate([-(ysf_max_flex+2*ysf_flexure_width)/2,ysf_flexure_length,0]) cube([ysf_max_flex+2*ysf_flexure_width,frame_thick,ysf_thick+flexure_clearance]);
+}
+
+// The dimensions of the well that lets UV light up from under the stage
+module light_well() {
+    hull() {
+        translate([light_well_size,light_well_size,0])
+            cylinder(h=metriccano_unit*3,r=metriccano_screw_rad,$fn=20,center=true);
+        translate([-light_well_size,light_well_size,0])
+            cylinder(h=metriccano_unit*3,r=metriccano_screw_rad,$fn=20,center=true);
+        translate([light_well_size,-light_well_size,0])
+            cylinder(h=metriccano_unit*3,r=metriccano_screw_rad,$fn=20,center=true);
+        translate([-light_well_size,-light_well_size,0])
+            cylinder(h=metriccano_unit*3,r=metriccano_screw_rad,$fn=20,center=true);
+    }
+}
+
+// The shape of the magnet cavity in the slide top. Has tiny protrusions in the ends that can be
+// mashed to grip the magnet firmly
+module magnet_slot() {
+    magnet_nub_width=0.8;
+    difference() {
+        cube([magnet_x,magnet_y,magnet_z+0.01],center=true);
+        translate([0,magnet_y/2,0]) rotate([0,0,45])
+            cube([magnet_nub_width,magnet_nub_width,magnet_z+0.01],center=true);
+        translate([0,-magnet_y/2,0]) rotate([0,0,45])
+            cube([magnet_nub_width,magnet_nub_width,magnet_z+0.01],center=true);
+    }
+}
+
+// The top section of the stage. Has recesses for grounding pillar and slide mount magnets
+module stage_top() {
+    difference() {
+        // Scale the plate to be the same thickness as a magnet plus a screw head
+        union() {
+            // A pseudo metriccano plate
+            hull() {
+                translate([-stage_size_x/2,-stage_size_y/2,0])
+                    cylinder(h=st_plate_height,r=metriccano_unit/2);
+                translate([stage_size_x/2,-stage_size_y/2,0])
+                    cylinder(h=st_plate_height,r=metriccano_unit/2);
+                translate([-stage_size_x/2,stage_size_y/2,st_plate_height/2])
+                    cube([metriccano_unit,metriccano_unit,st_plate_height],center=true);
+                    //cylinder(h=st_plate_height,r=metriccano_unit/2);
+                translate([stage_size_x/2,stage_size_y/2,st_plate_height/2])
+                    cube([metriccano_unit,metriccano_unit,st_plate_height],center=true);
+            }
+            // Version stamp
+            translate([stage_size_x/2+metriccano_unit*0.5,0,st_plate_height/2]) rotate([0,90,0]) rotate([180,180,90])
+                scale(0.8) version_text();
+        }
+        // Chop out the light well
+        light_well();
+        // Chop out magnet slots. Insetting from ends by 3mm allows the touchplate on a slide to get to the centre of the stage.
+        translate([0,stage_size_y/2-metriccano_screw_rad*2,magnet_z/2]) magnet_slot();
+        translate([0,metriccano_screw_rad*2-stage_size_y/2,magnet_z/2]) magnet_slot();
+
+        // Hollow out a cavity for the UV LED under the light well
+        translate([0,0,st_plate_height])
+            cube([led_strip_width,led_strip_length,led_strip_height*2],center=true);
+        // Cavity for LED wires
+        translate([0,-stage_size_y/2,st_plate_height-led_wire_rad*0.35]) rotate([-90,0,0]) rotate([0,0,180/8]) 
+            cylinder(h=stage_size_y,r=led_wire_rad,$fn=8,center=true);
+        // Cavity for solder joints onto UV LED strip, bending wires to terminals, etc.
+        solder_cavity_len=7;
+        solder_cavity_height=2.6;
+        translate([0,-light_well_size/2-solder_cavity_len,st_plate_height])
+            cube([solder_cavity_len,led_strip_width,solder_cavity_height],center=true);
+
+        // Holes for screw heads, all of which are inverted and symmetric
+        rotate([0,180,0]) {
+            translate([metriccano_unit*1.5,metriccano_unit*1.5,st_base_thick]) 
+                metriccano_screw_cavity();
+            translate([-metriccano_unit*1.5,metriccano_unit*1.5,st_base_thick]) metriccano_screw_cavity();
+            translate([metriccano_unit*1.5,-metriccano_unit*1.5,st_base_thick])
+                metriccano_screw_cavity();
+            translate([-metriccano_unit*1.5,-metriccano_unit*1.5,st_base_thick])
+                metriccano_screw_cavity();
+        }
+    }
+}
+
+// Y Stage Flexure Assembly
+// Joins the Y Axis Driver to the Stage.
+module y_stage_flexure() {
+    // Central bar, with Axis Driver attachment.
+    translate([0,2*flexure_clearance,0]) {
+        // Bar
+        translate([-frame_thick/2,0,0])
+            cube([frame_thick,ysf_beam_length-metriccano_unit,ysf_thick]);
+        // Minor crossbeam and flexures
+        translate([-ysf_minor_crossbeam/2,0,0]) cube([ysf_minor_crossbeam,frame_thick,ysf_thick]);
+        translate([ysf_minor_crossbeam/2+ysf_max_flex/2,frame_thick,0]) ysf_flexure_pair();
+        translate([-ysf_minor_crossbeam/2-ysf_max_flex/2,frame_thick,0]) ysf_flexure_pair();
+    }
+    // Standoff blocks that attach to the Stage
+    translate([ysf_minor_crossbeam/2+ysf_max_flex,-1,0]) {
+        cube([frame_thick,frame_thick+2*flexure_clearance+1,ysf_thick]);
+    }
+    translate([-ysf_minor_crossbeam/2-ysf_max_flex-frame_thick,-1,0]) {
+        cube([frame_thick,frame_thick+2*flexure_clearance+1,ysf_thick]);
+    }
+    // Beam that braces the two lower beams against the Stage
+    translate([0,-0.5,ysf_thick/2]) 
+        cube([(ysf_minor_crossbeam+flexure_clearance)*2,frame_thick,ysf_thick],center=true);
+    // Beam that passes over the main bar, joining the two flexure pairs
+    translate([0,frame_thick*1.5+ysf_flexure_length+flexure_clearance*2,frame_thick/2+ysf_thick+flexure_clearance])
+        cube([4*ysf_max_flex,frame_thick,frame_thick],center=true);
+    // Plate for fixing to Y Axis Driver
+    y_fix_plate_disp=metriccano_unit/2;
+    translate([metriccano_unit/2,ysf_beam_length-metriccano_unit/2,metriccano_unit*1.5]) {
+        translate([0,0,y_fix_plate_disp]) rotate([0,-90,90]) metriccano_plate(2,2,squared=true);
+        // Fillet under fixing plate
+        translate([0,0,0]) hull() {
+            translate([-metriccano_unit*1.5,-metriccano_unit/2,+y_fix_plate_disp-metriccano_unit/2])
+                cube([metriccano_unit*2,metriccano_plate_height,1]);
+            translate([-metriccano_unit*3/4,-metriccano_unit/2,-metriccano_unit-frame_thick])
+                cube([frame_thick,metriccano_plate_height,0.01]);
+        }
+    }
+
+   }
+
+// A stage with an Y axis flexure (length fl) stuck out the end
+module flexured_stage() translate([0,0,-st_plate_height]) {
+    stage_top();
+    // Shift the flexure and anchor en masse
+    translate([0,stage_size_y/2+metriccano_unit/2,0])
+        y_stage_flexure();
 }
 
 show_dummy_drivers=false;
@@ -562,5 +711,8 @@ if (show_dummy_drivers) {
 }
 
 //translate([0,0,metriccano_unit/2]) 
-complete_pika();
-//pika_base();
+//pika_xy_table();
+pika_base();
+// Uncomment this translate/rotate to see how the Stage fits on the XY Table
+//translate([outer_wall_x/2,outer_wall_y/2,structure_height+metriccano_unit]) rotate([0,180,0])
+//flexured_stage();
