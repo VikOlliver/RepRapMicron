@@ -73,7 +73,7 @@ light_well_size=metriccano_unit/2+0.5;
 // This plate fits on top of the stage and has cutouts for magnets in it
 magnet_x=30;
 magnet_y=10;
-magnet_z=3;
+magnet_z=3.2;
 led_wire_rad=3.2/2;      // Gap for UV LED wires
 led_strip_width=8;        // Dimensions of UV LED strip
 led_strip_length=20;
