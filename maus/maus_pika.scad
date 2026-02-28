@@ -14,11 +14,7 @@
 // TODO
 // The nut slots on the centre Stage support are too hard to put the nuts into for mere
 // mortals. They need to be way more accessible. Draw nut in from underneath?
-// Move Z Tower away a few mm.
-// Diagonal bracing on base
-// Redo microscope support brackets for easiert screw access and 1mm more standoff
 // Bottom microscope bracket (not in this file) needs to be mirrored for PIKA.
-// Perhaps add a structural ridge around the outer frame, 15mm from the top edge?
 
 include <../library/m3_parts.scad>
 include <../library/metriccano.scad>
@@ -155,12 +151,22 @@ module y_flexure_pair() {
 
 // Frame to stiffen outer wall and attach base to.
 module frame_flange() union() {
-    translate([-metriccano_unit/2,-metriccano_unit/2,0]) metriccano_strip(outer_wall_x_holes+2);
+    translate([-metriccano_unit/2,-metriccano_unit/2,0]) scale([1,1,2]) metriccano_strip(outer_wall_x_holes+2);
     translate([-metriccano_unit/2,-metriccano_unit/2,0]) rotate([0,0,90])
-        metriccano_strip(outer_wall_y_holes+2);
-    translate([-metriccano_unit/2,outer_wall_y+metriccano_unit/2,0]) metriccano_strip(outer_wall_x_holes+2);
+        scale([1,1,2]) metriccano_strip(outer_wall_y_holes+2);
+    translate([-metriccano_unit/2,outer_wall_y+metriccano_unit/2,0]) scale([1,1,2]) metriccano_strip(outer_wall_x_holes+2);
     translate([outer_wall_x+metriccano_unit/2,-metriccano_unit/2,0]) rotate([0,0,90])
-        metriccano_strip(outer_wall_y_holes+2);
+        scale([1,1,2]) metriccano_strip(outer_wall_y_holes+2);
+}
+
+// Reinforcing strip with tapered bottom to ensure it can print without overhangs
+module outside_reinforcing_strip(l) {
+    hull() {
+        translate([0,-0.01,structure_height-metriccano_unit-15])
+            cube([l,0.01,metriccano_unit*1.5]);
+        translate([-metriccano_unit/2,-metriccano_unit/2,structure_height-metriccano_unit/2-15])
+            cube([l+metriccano_unit,0.01,metriccano_unit]);
+    }
 }
 
 // The outside box to which all the mounting hardware is attached, which has a hole
@@ -170,6 +176,11 @@ module outside_box() union() {
         union() {
             cube([outer_wall_x,outer_wall_y,structure_height]);
             frame_flange();
+            // Reinfrocement for filmsy edges
+            outside_reinforcing_strip(outer_wall_x);
+             scale([-1,1,1]) rotate([0,0,90])outside_reinforcing_strip(outer_wall_y);
+            translate([outer_wall_x,0,0]) rotate([0,0,90])outside_reinforcing_strip(outer_wall_y);
+            translate([0,outer_wall_y,0]) scale([1,-1,1]) outside_reinforcing_strip(outer_wall_x);
         }
         // Hollow it out
         translate([box_wall,box_wall,-1])
@@ -374,7 +385,7 @@ module pika_flexure_assembly() {
     }
     centre_platform();
     x_linkage();
-    translate([outer_wall_x/2,0,structure_height-5]) rotate([90,0,0]) version_text();
+    translate([outer_wall_x/2+5,0,structure_height-5]) rotate([90,0,0]) version_text();
 }
 
 // Tapered Axis Driver mount for near the driving end that should be printable without support
@@ -447,11 +458,20 @@ module microscope_mount() {
     }
 }
 
+z_tower_corner_offset=10;  // Stand the Z Tower off from the XY frame corner by this much
+
 //Z  Axis Driver mount for attaching to the front of the Motor Pillar
 module z_driver_front_mount(l=110) {
     difference() {
-        translate([0,0,l/2])
-            cube([metriccano_unit,metriccano_unit,l],center=true);
+        union() {
+            // These supports extend way into the frame and are cut off square later
+            translate([0,0,l/2])
+                // Part that the Axis Driver screws to
+                cube([metriccano_unit,metriccano_unit,l],center=true);
+            translate([0,outer_frame_y/2,structure_height/2])
+                // Beam linking to frame
+                cube([metriccano_unit,metriccano_unit+outer_frame_y,structure_height],center=true);
+        }
         translate([0,0,l-metriccano_unit])
             metriccano_nut_slot();
         // Two screw holes, first one in the top
@@ -480,9 +500,13 @@ module z_driver_rear_mount(l=80) {
 
 //NOTE: Z Tower is pre-positioned and rotated
 z_tower_height=105;
-module pika_z_tower() translate([outer_frame_x+1.5*metriccano_unit,metriccano_unit*12,0]) rotate([0,0,135]) union() {
+module pika_z_tower() translate([outer_frame_x+1.5*metriccano_unit+z_tower_corner_offset,metriccano_unit*12+z_tower_corner_offset,0]) rotate([0,0,135]) union() {
+    // The bits that prop up the highest point of the Z Axis Driver
     translate([-metriccano_unit*2,0,0]) scale([-1,1,1]) z_driver_front_mount(z_tower_height);
     translate([metriccano_unit*2,0,0]) z_driver_front_mount(z_tower_height);
+    // A beam to connect and reinforce the corner of the frame
+    translate([0,outer_wall_y/2,structure_height/2])
+        cube([metriccano_unit,outer_wall_y,structure_height],center=true);
     translate([-metriccano_unit,-metriccano_unit*2,0])
         z_driver_rear_mount(z_tower_height-3*metriccano_unit);
     translate([metriccano_unit,-metriccano_unit*2,0]) scale([-1,1,1])
@@ -519,8 +543,12 @@ module pika_xy_table() union() {
         rotate([0,0,90]) driver_rear_mount();
     // Microscope mount
     translate([metriccano_unit*3,0,0]) rotate([0,0,-90]) microscope_mount();
-    // Tower to attach Z Axis Driver
-    pika_z_tower();
+    // Tower to attach Z Axis Driver. Cut off excess beam
+    difference() {
+        pika_z_tower();
+        // This si the same size as the outer perimeter of the flexure structure
+        translate([0,0,-1]) cube([outer_wall_x,outer_wall_y,structure_height+2]);
+    }
     // A thin strip that will prevent a printed brim from going inside the flexures
     translate([outer_wall_x+metriccano_unit-0.3,outer_wall_y/2,0.2]) cube([stringer_width,50,stringer_height],center=true);
 }
@@ -708,7 +736,7 @@ module flexured_stage() translate([0,0,-st_plate_height]) {
         y_stage_flexure();
 }
 
-show_dummy_drivers=false;
+show_dummy_drivers=true;
 // Dummy Axis Drivers for model positioning (there is a 2mm offset of Metriccano holes in the
 // model. My bad. Doesn't matter when you're actually printing one but too lazy to fix today.
 module axis_driver() {
