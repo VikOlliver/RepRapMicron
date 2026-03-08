@@ -3,7 +3,6 @@
 // It is a Very Good Idea(TM) to keep the dimensions in Metriccano (10mm) units.
 // Printed on Prusa Mk4, 0.2mm layers, 20% infill, 2 v shells, 5 h shells
 
-// If we can stagger the flexures on the outer (X) frame, we can make it smaller in X.
 // Size constraints:
 // Largely constrained by the attachment point for the Stage, located in the middle.
 // If Y size is <120 it overhangs the bar at the top of the Y flexures and won't print.
@@ -205,42 +204,50 @@ module inside_box() {
     }
 }
 
+centre_platform_x=inner_wall_x-2*box_wall-2*flexure_clearance;
+centre_platform_y=inner_wall_y-2*box_wall-2*table_flexure_pair_length;
+centre_platform_thick=2;
 // Mounting point for the stage, centred on (0,0)
 module stage_mount() {
     difference() {
         // Central cubic form
         translate([0,0,metriccano_unit/2])
-            cube([metriccano_unit*4,metriccano_unit*4,metriccano_unit],center=true);
+            cube([metriccano_unit*4,metriccano_unit*4,metriccano_unit+centre_platform_thick],center=true);
         // Knock off lower corners to make it print when overhanging
-        translate([0,metriccano_unit*2,0]) rotate([45,0,0])
+        translate([0,metriccano_unit*2,-centre_platform_thick/2]) rotate([45,0,0])
             cube([metriccano_unit*4+1,metriccano_unit,metriccano_unit],center=true);
-        translate([0,-metriccano_unit*2,0]) rotate([45,0,0])
+        translate([0,-metriccano_unit*2,-centre_platform_thick/2]) rotate([45,0,0])
             cube([metriccano_unit*4+1,metriccano_unit,metriccano_unit],center=true);
-        // Screw and nut cavities
-    for(i=[0:3]) {
-            translate([metriccano_unit*(i-1.5),-metriccano_unit*1.5,0]) {
-                metriccano_screw_hole();
-                translate([0,0,metriccano_unit/2-2]) rotate([0,0,-90]) metriccano_nut_slot();
-            }
-            translate([metriccano_unit*(i-1.5),+metriccano_unit*1.5,0]) {
-                metriccano_screw_hole();
-                translate([0,0,metriccano_unit/2-2]) rotate([0,0,90]) metriccano_nut_slot();
-            }
+        // Screw and nut cavities. Nut slots are very loose to avoid user damaging flexures.
+        translate([metriccano_unit*1.5,-metriccano_unit*1.5,centre_platform_thick/2]) {
+            metriccano_screw_hole();
+            translate([0,0,metriccano_unit/2]) rotate([0,0,45]) scale([1,1,1.1]) metriccano_nut_slot(captive=false);
+        }
+        translate([metriccano_unit*-1.5,-metriccano_unit*1.5,centre_platform_thick/2]) {
+            metriccano_screw_hole();
+            translate([0,0,metriccano_unit/2]) rotate([0,0,135]) scale([1,1,1.1]) metriccano_nut_slot(captive=false);
+        }
+        translate([metriccano_unit*1.5,metriccano_unit*1.5,centre_platform_thick/2]) {
+            metriccano_screw_hole();
+            translate([0,0,metriccano_unit/2]) rotate([0,0,-45]) scale([1,1,1.1]) metriccano_nut_slot(captive=false);
+        }
+        translate([metriccano_unit*-1.5,metriccano_unit*1.5,centre_platform_thick/2]) {
+            metriccano_screw_hole();
+            translate([0,0,metriccano_unit/2]) rotate([0,0,-135]) scale([1,1,1.1]) metriccano_nut_slot(captive=false);
         }
     }
 }
 
-centre_platform_x=inner_wall_x-2*box_wall-2*flexure_clearance;
-centre_platform_y=inner_wall_y-2*box_wall-2*table_flexure_pair_length;
 // The pillar that rises up through the middle and holds the stage (or anchor bracket for it)
 module centre_platform() {
         translate([outer_wall_x/2,outer_wall_y/2,0]) {
         // The bit the actual Stage will attach to
-        translate([0,0,,structure_height])
+        translate([0,0,,structure_height-centre_platform_thick])
                 stage_mount();
         // 45 degree prism with the flat on top . Should be easy-ish to print suspended
         translate([0,0,structure_height]) hull() {
-            translate([0,0,-1]) cube([centre_platform_x,centre_platform_y,2],center=true);
+            translate([0,0,-1])
+                cube([centre_platform_x,centre_platform_y,centre_platform_thick],center=true);
             translate([0,0,-centre_platform_y*sqrt(2)/2]) cube([centre_platform_x,0.01,0.01],center=true);
         }
         // Centre pillar. We use beam_flexure_side as it is a known robust vertical support.
@@ -499,7 +506,7 @@ module z_driver_rear_mount(l=80) {
 }
 
 //NOTE: Z Tower is pre-positioned and rotated
-z_tower_height=105;
+z_tower_height=107;
 module pika_z_tower() translate([outer_frame_x+1.5*metriccano_unit+z_tower_corner_offset,metriccano_unit*12+z_tower_corner_offset,0]) rotate([0,0,135]) union() {
     // The bits that prop up the highest point of the Z Axis Driver
     translate([-metriccano_unit*2,0,0]) scale([-1,1,1]) z_driver_front_mount(z_tower_height);
@@ -752,8 +759,36 @@ if (show_dummy_drivers) {
     // X Driver
     %translate([outer_wall_x+metriccano_unit*2,metriccano_unit*(floor(outer_wall_y_holes/2)-1.2),metriccano_unit*3.5]) rotate([-90,0,-90]) axis_driver();
     // Z Driver
-    %translate([outer_wall_x/2+3*metriccano_unit,outer_wall_y/2+3*metriccano_unit,10.5*metriccano_unit]) rotate([0,0,45]) axis_driver();
+    %translate([outer_wall_x/2+3*metriccano_unit+z_tower_corner_offset-2,outer_wall_y/2+3*metriccano_unit+z_tower_corner_offset-1,z_tower_height]) rotate([0,0,45]) axis_driver();
 }
+
+pole_clip_width=3;
+pole_stand_rad=16/2;             // 16mm pole
+pole_stand_arm_length=6;     // Length of stand arm in metriccano units.
+
+// Holder for a 16mm pole to mount a microscope on
+module pole_top_arm() difference() {
+    // Body of stand with a metriccano rod sticking out
+    union () {
+        cylinder(h=metriccano_unit,r=pole_stand_rad+pole_clip_width,$fn=64);
+        translate([0,metriccano_unit/2-pole_stand_rad,0]) scale([1,1,2]) metriccano_slot_strip(pole_stand_arm_length);
+    }
+    // Hole in the middle for post
+    cylinder(h=metriccano_unit*3,r=pole_stand_rad,center=true,$fn=64);
+    // A split to give the grip a bit of spring
+    translate([0,pole_stand_rad,0]) cube([1,(pole_stand_rad+pole_clip_width)*2,metriccano_unit*3],center=true);
+}
+
+// Much the same as top arm but has a bit across the bottom to stop the pole falling out
+module pole_bottom_arm() union() {
+    pole_top_arm();
+    // Semi-circular slice on side away from split
+    difference() {
+        cylinder(h=2,r=pole_stand_rad+pole_clip_width);
+        translate([0,pole_stand_rad,0]) cube([(pole_stand_rad+pole_clip_width)*2,(pole_stand_rad+pole_clip_width)*2,20],center=true);
+    }
+}
+
 
 //translate([0,0,metriccano_unit/2]) 
 pika_xy_table();
@@ -761,3 +796,5 @@ pika_xy_table();
 // Uncomment this translate/rotate to see how the Stage fits on the XY Table
 //translate([outer_wall_x/2,outer_wall_y/2,structure_height+metriccano_unit+st_plate_height]) rotate([0,180,0])
 //translate([0,0,st_plate_height]) flexured_stage();
+//pole_top_arm();
+//translate([0,25,0]) pole_bottom_arm();
