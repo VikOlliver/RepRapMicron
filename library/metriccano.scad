@@ -98,15 +98,18 @@ module metriccano_nut_cavity_tapered(captive=false,inverted=false) union() {
 }
 
 
-// Nut  slot for Metriccano nut with bumps to hold nut in place
-module metriccano_nut_slot(l=100) {
+// Nut  slot for Metriccano nut with bumps to hold nut in place.
+// Optional pips to hold nut captive.
+module metriccano_nut_slot(l=100,captive=true) {
     difference() {
         // Long slot
         translate([-metriccano_nut_max_width/2-0.5,-metriccano_nut_min_width/2,0])
             cube([metriccano_nut_max_width+l,metriccano_nut_min_width,metriccano_nut_height]);
         // Small knobs to retain nut
-        translate([0.2,metriccano_nut_min_width/2,metriccano_nut_height/2]) sphere(0.6);
-        translate([0.2,-metriccano_nut_min_width/2,metriccano_nut_height/2]) sphere(0.6);
+        if (captive) {
+            translate([0.2,metriccano_nut_min_width/2,metriccano_nut_height/2]) sphere(0.6);
+            translate([0.2,-metriccano_nut_min_width/2,metriccano_nut_height/2]) sphere(0.6);
+        }
     }
 }
 
