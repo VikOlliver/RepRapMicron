@@ -9,17 +9,12 @@
 // If X size <120 it overhangs the sides of the bar and interferes with the Y flexures.
 //
 // NOTE: Use Axis Drivers with mb_length_in_holes set to 2
-//
-// TODO
-// Integrate corners with base (and print Base upside down)
-// Put recesses in the lower frame for Base screw heads
-// Base does not need to be 10mm thick!
 
 include <../library/m3_parts.scad>
 include <../library/metriccano.scad>
 //include <../library/nema17lib.scad> Maybe use motors, even for direct drive, but  later...
 
-version_string="PIKA V0.00";
+version_string="PIKA V0.01";
 
 flexure_thick=0.8;  // Width of a flexure beam, that's the very thin direction
 flexure_width=5;      // Maximum desired flexing distance off centre
@@ -148,15 +143,33 @@ module y_flexure_pair() {
         translate([beam_flexure_side,inner_wall_y-table_flexure_pair_length-2*box_wall,0]) rotate([0,0,90]) table_flexure_pair();
 }
 
-// Frame to stiffen outer wall and attach base to.
-module frame_flange() union() {
-    translate([-metriccano_unit/2,-metriccano_unit/2,0]) scale([1,1,2]) metriccano_strip(outer_wall_x_holes+2);
+// Frame to stiffen outer wall and attach base to. Corner holes are solid
+// Keep in sync with Base flange (below)
+module frame_flange(z_scale=2) union() {
+    translate([-metriccano_unit/2,-metriccano_unit/2,0]) scale([1,1,z_scale])
+        metriccano_strip(outer_wall_x_holes+2);
     translate([-metriccano_unit/2,-metriccano_unit/2,0]) rotate([0,0,90])
-        scale([1,1,2]) metriccano_strip(outer_wall_y_holes+2);
-    translate([-metriccano_unit/2,outer_wall_y+metriccano_unit/2,0]) scale([1,1,2]) metriccano_strip(outer_wall_x_holes+2);
+        scale([1,1,z_scale]) metriccano_strip(outer_wall_y_holes+2);
+    translate([-metriccano_unit/2,outer_wall_y+metriccano_unit/2,0]) scale([1,1,z_scale]) metriccano_strip(outer_wall_x_holes+2);
     translate([outer_wall_x+metriccano_unit/2,-metriccano_unit/2,0]) rotate([0,0,90])
-        scale([1,1,2]) metriccano_strip(outer_wall_y_holes+2);
+        scale([1,1,z_scale]) metriccano_strip(outer_wall_y_holes+2);
+    // Fill in the corner holes
+    scale([1,1,z_scale]) {
+        translate([-metriccano_unit/2,-metriccano_unit/2,0])
+            cylinder(h=metriccano_plate_height,r=metriccano_unit/4);
+        translate([metriccano_unit*(outer_wall_x_holes+0.5),-metriccano_unit/2,0])
+            cylinder(h=metriccano_plate_height,r=metriccano_unit/4);
+        translate([-metriccano_unit/2,metriccano_unit*(outer_wall_y_holes+0.5),0])
+            cylinder(h=metriccano_plate_height,r=metriccano_unit/4);
+    }
+
 }
+
+// Matching but thinner flange for the base
+module base_flange() union() {
+    frame_flange(1);
+}
+
 
 // Reinforcing strip with tapered bottom to ensure it can print without overhangs
 module outside_reinforcing_strip(l) {
@@ -190,7 +203,18 @@ module outside_box() union() {
             cube([outer_wall_x,horizontal_beam_width+2*flexure_clearance,bh*2],center=true);
         // And a hole for the Axis Driver attachment plate
         translate([outer_wall_x,outer_wall_y/2-metriccano_unit-flexure_clearance,-0.01])
-            cube([100,(metriccano_unit+flexure_clearance)*2,metriccano_unit]);
+            cube([100,(metriccano_unit+flexure_clearance)*2,metriccano_unit+0.02]);
+        // Recess  pairs of screw holes in the corners
+        translate([-metriccano_unit/2,-metriccano_unit/2,metriccano_unit-metriccano_screw_head_height]) {
+            translate([metriccano_unit,0,0]) metriccano_screw_cavity(0);
+            translate([0,metriccano_unit,0]) metriccano_screw_cavity(0);
+            translate([outer_wall_x_holes*metriccano_unit,0,0]) metriccano_screw_cavity(0);
+            translate([(outer_wall_x_holes+1)*metriccano_unit,metriccano_unit,0])
+                metriccano_screw_cavity(0);
+            translate([0,outer_wall_y_holes*metriccano_unit,0]) metriccano_screw_cavity(0);
+            translate([metriccano_unit,(outer_wall_y_holes+1)*metriccano_unit,0])
+                metriccano_screw_cavity(0);
+        }
     }
 }
 
@@ -242,7 +266,7 @@ module stage_mount() {
 module centre_platform() {
         translate([outer_wall_x/2,outer_wall_y/2,0]) {
         // The bit the actual Stage will attach to
-        translate([0,0,,structure_height-centre_platform_thick])
+        translate([0,0,structure_height-centre_platform_thick])
                 stage_mount();
         // 45 degree prism with the flat on top . Should be easy-ish to print suspended
         translate([0,0,structure_height]) hull() {
@@ -346,7 +370,6 @@ module pika_flexure_assembly() {
                 cube([horizontal_beam_width-box_wall,outer_frame_y-2*outer_frame_stub+2*horizontal_beam_width,horizontal_beam_height]);
         }
     }
-
     translate([inner_wall_at_x,inner_wall_at_y,0]) {
        inside_box();
         // Flexures closest to X=0 (left side)
@@ -525,9 +548,19 @@ module pika_z_tower() translate([outer_frame_x+1.5*metriccano_unit+z_tower_corne
         translate([0,0,metriccano_unit/2])
             cube([metriccano_unit*3,metriccano_unit*2,box_ht],center=true);
     }
-    // Lugs
-    translate([-metriccano_unit*2.5,-1.5*metriccano_unit,0]) rotate([0,0,180]) metriccano_strip_flatend(1);
-    translate([metriccano_unit*2.5,-1.5*metriccano_unit,0]) metriccano_strip_flatend(1);
+    // Lugs. Double height to match the flange. Recess screw holes.
+    difference() {
+        hull() {
+            translate([-metriccano_unit*2.5,-1.5*metriccano_unit,0])
+                cylinder(h=metriccano_unit,r=metriccano_unit/2);
+            translate([metriccano_unit*2.5,-1.5*metriccano_unit,0])
+                cylinder(h=metriccano_unit,r=metriccano_unit/2);
+        }
+        translate([-metriccano_unit*2.5,-1.5*metriccano_unit,metriccano_unit-metriccano_screw_head_height])
+            metriccano_screw_cavity();
+        translate([metriccano_unit*2.5,-1.5*metriccano_unit,metriccano_unit-metriccano_screw_head_height])
+            metriccano_screw_cavity();
+    }
 }
 
 module pika_xy_table() union() {
@@ -560,6 +593,32 @@ module pika_xy_table() union() {
     translate([outer_wall_x+metriccano_unit-0.3,outer_wall_y/2,0.2]) cube([stringer_width,50,stringer_height],center=true);
 }
 
+// Corner foot with deep nut recess. Note: points downwards...
+module base_foot() translate([0,0,-metriccano_plate_height]) {
+    difference() {
+        union() {
+            // L-shape
+            hull() {
+                cylinder(h=metriccano_plate_height,r=metriccano_unit/2);
+                translate([metriccano_unit,0,0])
+                    cylinder(h=metriccano_plate_height,r=metriccano_unit/2);
+            }
+            hull() {
+                cylinder(h=metriccano_plate_height,r=metriccano_unit/2);
+                translate([0,metriccano_unit,0])
+                    cylinder(h=metriccano_plate_height,r=metriccano_unit/2);
+            }
+        }
+        // Very deep nut holes.
+        translate([0,0,metriccano_plate_height]) {
+            translate([metriccano_unit,0,0])
+                rotate([180,0,0]) metriccano_nut_cavity_tapered(captive=true);
+            translate([0,metriccano_unit,0])
+                rotate([180,0,0]) metriccano_nut_cavity_tapered(captive=true);
+        }
+    }
+}
+
 // The base prevents the bottoms of the flexures in the completed Pika assembly dragging on
 // the ground. 
 // It has a notch in it that allows the X Beam to move without catching on the base.
@@ -568,20 +627,43 @@ module pika_base() union() {
     difference() {
         // Create a slice of Z Tower and attach it to the frame.
         union() {
-            scale([1,1,metriccano_unit])
+            scale([1,1,metriccano_unit/2])
                 intersection() {
                     pika_z_tower();
                     // Slice off a 1mm piece of the entire bottom of the Z Tower
                     cube([999,999,2],center=true);
                 }
-             frame_flange();
+             base_flange();
         }
-        // Chop out a hole for the X beam
-        translate([outer_wall_x/2,(outer_wall_y-horizontal_beam_width)/2-flexure_clearance,metriccano_plate_height*2-1])
+        // Chop out a hole for the X beam. Fairly generous as it may droop when cut upside down.
+        translate([outer_wall_x/2,(outer_wall_y-horizontal_beam_width)/2-flexure_clearance,metriccano_plate_height-1.5])
             cube([outer_wall_x,horizontal_beam_width+2*flexure_clearance,2]);
         // Clear the iner space
         translate([0,0,-1]) cube([outer_wall_x,outer_wall_y,structure_height]);
-        }
+    }
+    // Corner feet
+    translate([-metriccano_unit/2,-metriccano_unit/2,0]) base_foot();
+    translate([-metriccano_unit/2,metriccano_unit*(outer_wall_y_holes+0.5),0])
+        rotate([0,0,-90]) base_foot();
+    translate([metriccano_unit*(outer_wall_x_holes+0.5),-metriccano_unit/2,0])
+        rotate([0,0,90]) base_foot();
+    // Bar under the bottom of the Z tower
+        // Lugs
+        translate([outer_frame_x+1.5*metriccano_unit+z_tower_corner_offset,metriccano_unit*12+z_tower_corner_offset,-5]) rotate([0,0,135]) {
+            difference() {
+                hull() {
+                    translate([-metriccano_unit*2.5,-1.5*metriccano_unit,0])
+                        cylinder(h=metriccano_plate_height,r=metriccano_unit/2);
+                    translate([metriccano_unit*2.5,-1.5*metriccano_unit,0])
+                        cylinder(h=metriccano_plate_height,r=metriccano_unit/2);
+                }
+                // Very deep nut holes.
+                translate([-metriccano_unit*2.5,-1.5*metriccano_unit,metriccano_plate_height])
+                    rotate([180,0,0]) metriccano_nut_cavity_tapered(captive=true);
+                translate([metriccano_unit*2.5,-1.5*metriccano_unit,metriccano_plate_height])
+                    rotate([180,0,0]) metriccano_nut_cavity_tapered(captive=true);
+         }
+     }
 }
 
 // Length of the crossbeam at the end of the main beam.
@@ -676,7 +758,7 @@ module stage_top() {
             cube([led_strip_width,solder_cavity_len,solder_cavity_height*2],center=true);
 
         // Holes for screw heads, all of which are inverted and symmetric
-        translate([0,0,st_plate_height-st_base_thick]) rotate([0,180,0]) {
+        translate([0,0,metriccano_screw_head_height]) rotate([0,180,0]) {
             translate([metriccano_unit*1.5,metriccano_unit*1.5,0]) 
                 metriccano_screw_cavity(inverted=true);
             translate([-metriccano_unit*1.5,metriccano_unit*1.5,0])
@@ -716,7 +798,7 @@ module y_stage_flexure() {
     translate([0,frame_thick*1.5+ysf_flexure_length+flexure_clearance*2,frame_thick/2+ysf_thick+flexure_clearance])
         cube([4*ysf_max_flex,frame_thick,frame_thick],center=true);
     // Plate for fixing to Y Axis Driver
-    y_fix_plate_disp=st_plate_height;
+    y_fix_plate_disp=st_plate_height-centre_platform_thick/2;
     translate([metriccano_unit/2,ysf_beam_length-metriccano_unit/2,metriccano_unit*1.5]) {
         translate([0,0,y_fix_plate_disp]) rotate([0,-90,90]) metriccano_plate(2,2,squared=true);
         // Fillet under fixing plate
@@ -736,25 +818,6 @@ module flexured_stage() translate([0,0,-st_plate_height]) {
     // Shift the flexure and anchor en masse
     translate([0,stage_size_y/2+metriccano_unit/2,0])
         y_stage_flexure();
-}
-
-show_dummy_drivers=true;
-// Dummy Axis Drivers for model positioning (there is a 2mm offset of Metriccano holes in the
-// model. My bad. Doesn't matter when you're actually printing one but too lazy to fix today.
-module axis_driver() {
-    if (show_dummy_drivers) {
-        import("frame_trio.stl");
-        translate([metriccano_unit*9.3,0,-metriccano_unit*4.5]) rotate([0,0,180]) import("motor_pillar_pika.stl");
-    }
-}
-
-if (show_dummy_drivers) {
-    // Y Driver
-    %translate([metriccano_unit*4.8,outer_wall_y+metriccano_unit*2,metriccano_unit*3.5]) rotate([-90,180,0]) axis_driver();
-    // X Driver
-    %translate([outer_wall_x+metriccano_unit*2,metriccano_unit*(floor(outer_wall_y_holes/2)-1.2),metriccano_unit*3.5]) rotate([-90,0,-90]) axis_driver();
-    // Z Driver
-    %translate([outer_wall_x/2+3*metriccano_unit+z_tower_corner_offset-2,outer_wall_y/2+3*metriccano_unit+z_tower_corner_offset-1,z_tower_height]) rotate([0,0,45]) axis_driver();
 }
 
 pole_clip_width=3;
@@ -784,25 +847,43 @@ module pole_bottom_arm() union() {
     }
 }
 
+show_dummy_drivers=false;
+// Dummy Axis Drivers for model positioning (there is a 2mm offset of Metriccano holes in the
+// model. My bad. Doesn't matter when you're actually printing one but too lazy to fix today.
+module axis_driver() {
+    if (show_dummy_drivers) {
+        import("frame_trio.stl");
+        translate([metriccano_unit*9.3,0,-metriccano_unit*4.5]) rotate([0,0,180]) import("motor_pillar_pika.stl");
+    }
+}
 
-// True prints the XY Table, false prints all the other bits.
-if (true) {
-    // Stage frame and ancillary parts 
-    // This manoeuves the frame into the right position for the base
-    //translate([0,0,metriccano_unit/2]) 
-    pika_xy_table();
-} else {
-    // Base, Stage, and mountign parts
+if (show_dummy_drivers) {
+    // Y Driver
+    %translate([metriccano_unit*4.8,outer_wall_y+metriccano_unit*2,metriccano_unit*4]) rotate([-90,180,0]) axis_driver();
+    // X Driver
+    %translate([outer_wall_x+metriccano_unit*2,metriccano_unit*(floor(outer_wall_y_holes/2)-1.2),metriccano_unit*4]) rotate([-90,0,-90]) axis_driver();
+    // Z Driver
+    %translate([outer_wall_x/2+3*metriccano_unit+z_tower_corner_offset-2,outer_wall_y/2+3*metriccano_unit+z_tower_corner_offset-1,z_tower_height+metriccano_unit/2]) rotate([0,0,45]) axis_driver();
+}
+
+// 1 prints the XY Table, 2 prints all the other bits.
+sheet_number=1;
+if (sheet_number==0) {
+    // Assembled for viewing
+    translate([0,0,metriccano_unit/2]) 
+        pika_xy_table();
     pika_base();
+    translate([outer_wall_x/2,outer_wall_y/2,structure_height+metriccano_unit*1.5-centre_platform_thick/2]) rotate([0,180,0]) flexured_stage();
+}else if (sheet_number==1) {
+    // Stage frame
+    pika_xy_table();
+} else if (sheet_number==2) {
+    // Base, Stage, and mounting parts
+    // Flip the base over so the feet stick up in the air
+    rotate([180,0,90]) pika_base();
    // Uncomment this translate/rotate to see how the Stage fits on the XY Table
    //translate([outer_wall_x/2,outer_wall_y/2,structure_height+metriccano_unit+st_plate_height]) rotate([0,180,0])
     translate([35,40,st_plate_height]) rotate([0,0,-40]) flexured_stage();
-    // Corner feet
-    translate([metriccano_unit*9,metriccano_unit*4,0]) metriccano_l_plate(2,nutted=true);
-    translate([metriccano_unit*2,metriccano_unit*8,0]) metriccano_l_plate(2,nutted=true);
-    translate([metriccano_unit*4,metriccano_unit*10,0]) metriccano_l_plate(2,nutted=true);
-    // Z Tower foot
-    translate([metriccano_unit*5.5,metriccano_unit*2,0]) metriccano_strip(6,nutted=true);
     translate([metriccano_unit*10.8,metriccano_unit*6,0]) rotate([0,0,90]) pole_top_arm();
     translate([metriccano_unit*1.2,metriccano_unit*10.5,0]) rotate([0,0,-90]) pole_bottom_arm();
 }
