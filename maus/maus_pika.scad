@@ -465,7 +465,7 @@ module microscope_mount() {
     }
 }
 
-z_tower_corner_offset=10;  // Stand the Z Tower off from the XY frame corner by this much
+z_tower_corner_offset=0;  // Stand the Z Tower off from the XY frame corner by this much
 
 //Z  Axis Driver mount for attaching to the front of the Motor Pillar
 module z_driver_front_mount(l=110) {
@@ -553,7 +553,7 @@ module pika_xy_table() union() {
     // Tower to attach Z Axis Driver. Cut off excess beam
     difference() {
         pika_z_tower();
-        // This si the same size as the outer perimeter of the flexure structure
+        // This is the same size as the outer perimeter of the flexure structure
         translate([0,0,-1]) cube([outer_wall_x,outer_wall_y,structure_height+2]);
     }
     // A thin strip that will prevent a printed brim from going inside the flexures
@@ -568,7 +568,7 @@ module pika_base() union() {
     difference() {
         // Create a slice of Z Tower and attach it to the frame.
         union() {
-            scale([1,1,metriccano_plate_height])
+            scale([1,1,metriccano_unit])
                 intersection() {
                     pika_z_tower();
                     // Slice off a 1mm piece of the entire bottom of the Z Tower
@@ -577,16 +577,11 @@ module pika_base() union() {
              frame_flange();
         }
         // Chop out a hole for the X beam
-        translate([outer_wall_x/2,(outer_wall_y-horizontal_beam_width)/2-flexure_clearance,metriccano_plate_height-1])
+        translate([outer_wall_x/2,(outer_wall_y-horizontal_beam_width)/2-flexure_clearance,metriccano_plate_height*2-1])
             cube([outer_wall_x,horizontal_beam_width+2*flexure_clearance,2]);
+        // Clear the iner space
+        translate([0,0,-1]) cube([outer_wall_x,outer_wall_y,structure_height]);
         }
-    // Corner feet
-    translate([metriccano_unit*2,metriccano_unit*2,0]) metriccano_l_plate(2,nutted=true);
-    translate([metriccano_unit*4,metriccano_unit*4,0]) metriccano_l_plate(2,nutted=true);
-    translate([metriccano_unit*6,metriccano_unit*6,0]) metriccano_l_plate(2,nutted=true);
-    // Z Tower foot
-    translate([metriccano_unit*5.5,metriccano_unit*2,0]) metriccano_strip(6,nutted=true);
-
 }
 
 // Length of the crossbeam at the end of the main beam.
@@ -790,11 +785,24 @@ module pole_bottom_arm() union() {
 }
 
 
-//translate([0,0,metriccano_unit/2]) 
-pika_xy_table();
-//pika_base();
-// Uncomment this translate/rotate to see how the Stage fits on the XY Table
-//translate([outer_wall_x/2,outer_wall_y/2,structure_height+metriccano_unit+st_plate_height]) rotate([0,180,0])
-//translate([0,0,st_plate_height]) flexured_stage();
-//pole_top_arm();
-//translate([0,25,0]) pole_bottom_arm();
+// True prints the XY Table, false prints all the other bits.
+if (true) {
+    // Stage frame and ancillary parts 
+    // This manoeuves the frame into the right position for the base
+    //translate([0,0,metriccano_unit/2]) 
+    pika_xy_table();
+} else {
+    // Base, Stage, and mountign parts
+    pika_base();
+   // Uncomment this translate/rotate to see how the Stage fits on the XY Table
+   //translate([outer_wall_x/2,outer_wall_y/2,structure_height+metriccano_unit+st_plate_height]) rotate([0,180,0])
+    translate([35,40,st_plate_height]) rotate([0,0,-40]) flexured_stage();
+    // Corner feet
+    translate([metriccano_unit*9,metriccano_unit*4,0]) metriccano_l_plate(2,nutted=true);
+    translate([metriccano_unit*2,metriccano_unit*8,0]) metriccano_l_plate(2,nutted=true);
+    translate([metriccano_unit*4,metriccano_unit*10,0]) metriccano_l_plate(2,nutted=true);
+    // Z Tower foot
+    translate([metriccano_unit*5.5,metriccano_unit*2,0]) metriccano_strip(6,nutted=true);
+    translate([metriccano_unit*10.8,metriccano_unit*6,0]) rotate([0,0,90]) pole_top_arm();
+    translate([metriccano_unit*1.2,metriccano_unit*10.5,0]) rotate([0,0,-90]) pole_bottom_arm();
+}
