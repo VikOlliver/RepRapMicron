@@ -11,9 +11,9 @@
 // NOTE: Use Axis Drivers with mb_length_in_holes set to 2
 //
 // TODO
-// The nut slots on the centre Stage support are too hard to put the nuts into for mere
-// mortals. They need to be way more accessible. Draw nut in from underneath?
-// Bottom microscope bracket (not in this file) needs to be mirrored for PIKA.
+// Integrate corners with base (and print Base upside down)
+// Put recesses in the lower frame for Base screw heads
+// Base does not need to be 10mm thick!
 
 include <../library/m3_parts.scad>
 include <../library/metriccano.scad>
