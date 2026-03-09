@@ -27,7 +27,7 @@ metriccano_strip_width=metriccano_unit;
 // Yes, this is repeating an M3 library but in theory you can change this to M4 etc.
 metriccano_screw_rad=3.2/2; // M3 screw hole radius
 metriccano_screw_head_rad=5.9/2;    // Radius of the average M3 posi screw head
-metriccano_screw_head_height=2.1;   // Height of a screw head
+metriccano_screw_head_height=2.9;   // Height of a screw head (including cap screws!)
 metriccano_nut_max_width=6.6;     // Nut from point to point
 metriccano_nut_height=2.5;
 metriccano_nut_min_width=5.8;  // Nut from flat to flat
@@ -45,7 +45,7 @@ module  metriccano_screw_cavity(screw_len=metriccano_unit,inverted=false) {
         // The screw hole and head assembly
         union() {
             rotate([180,0,360/16]) cylinder(h=screw_len,r=metriccano_screw_rad*1.2,$fn=8);
-            // Rotate to make hole sflats parallel to axes. Tiny shift to fix booleans
+            // Rotate to make hole's flats parallel to axes. Tiny shift to fix booleans
             rotate([0,0,360/16]) translate([0,0,-0.001])
                 cylinder(h=10,r=metriccano_screw_head_rad*1.2,$fn=8);
         }
@@ -69,9 +69,9 @@ module  metriccano_screw_cavity(screw_len=metriccano_unit,inverted=false) {
 // Making it captive adds little bumps inside that make it hard to insert and remove the nut
 module metriccano_nut_cavity_tapered(captive=false,inverted=false) union() {
     difference() {
-        // Cavity for m3 nut. Slight protrusion for clean booleans.
+        // Cavity for m3 nut. Protrusion for clean booleans and deep holes.
         translate([0,0,-0.01])
-            cylinder(h=metriccano_nut_height+0.02,r1=metriccano_nut_max_width/2,r2=metriccano_nut_max_width/2-0.05,$fn=6);
+            cylinder(h=metriccano_nut_height*2+0.02,r1=metriccano_nut_max_width/2,r2=metriccano_nut_max_width/2-0.05,$fn=6);
 
         if (captive) {
             divot_rad=0.5;
