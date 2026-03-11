@@ -80,6 +80,8 @@ stage_holes_y=6.5;
 // Work out stage dimensions to make maths easier
 stage_size_x=(stage_holes_x-1)*metriccano_unit;
 stage_size_y=(stage_holes_y-1)*metriccano_unit;
+stage_spring_height=2;      // Compressed height of springs used for bed levelling
+
 ysf_beam_length=outer_wall_y-stage_size_y/2-metriccano_unit*3;     // Y Stage Flexure beam length
 
 
@@ -488,7 +490,7 @@ module microscope_mount() {
     }
 }
 
-z_tower_corner_offset=0;  // Stand the Z Tower off from the XY frame corner by this much
+z_tower_corner_offset=3;  // Stand the Z Tower off from the XY frame corner by this much
 
 //Z  Axis Driver mount for attaching to the front of the Motor Pillar
 module z_driver_front_mount(l=110) {
@@ -772,6 +774,21 @@ module stage_top() {
 }
 
 // Y Stage Flexure Assembly
+// Mounting plate used for attachment to axis driver
+module y_flexure_plate()  {
+    translate([0,-metriccano_plate_height/2,metriccano_unit]) difference() {
+        // Plate with 2 elongated holes in it
+        cube([metriccano_unit*2,metriccano_plate_height,metriccano_unit*2],center=true);
+        translate([-metriccano_unit/2,0,metriccano_unit/2]) rotate([90,0,0]) hull() {
+            translate([0,0.5,0]) metriccano_screw_hole();
+            translate([0,-0.5,0]) metriccano_screw_hole();
+        }
+        translate([metriccano_unit/2,0,metriccano_unit/2]) rotate([90,0,0]) hull() {
+            translate([0,0.5,0]) metriccano_screw_hole();
+            translate([0,-0.5,0]) metriccano_screw_hole();
+        }
+    }
+}
 // Joins the Y Axis Driver to the Stage.
 module y_stage_flexure() {
     // Central bar, with Axis Driver attachment.
@@ -798,19 +815,19 @@ module y_stage_flexure() {
     translate([0,frame_thick*1.5+ysf_flexure_length+flexure_clearance*2,frame_thick/2+ysf_thick+flexure_clearance])
         cube([4*ysf_max_flex,frame_thick,frame_thick],center=true);
     // Plate for fixing to Y Axis Driver
-    y_fix_plate_disp=st_plate_height-centre_platform_thick/2;
+    y_fix_plate_disp=st_plate_height-centre_platform_thick/2+stage_spring_height;
+    translate([0,ysf_beam_length-metriccano_unit/2,y_fix_plate_disp+metriccano_unit])
+        y_flexure_plate();
     translate([metriccano_unit/2,ysf_beam_length-metriccano_unit/2,metriccano_unit*1.5]) {
-        translate([0,0,y_fix_plate_disp]) rotate([0,-90,90]) metriccano_plate(2,2,squared=true);
         // Fillet under fixing plate
-        translate([0,0,0]) hull() {
-            translate([-metriccano_unit*1.5,-metriccano_unit/2,+y_fix_plate_disp-metriccano_unit/2])
+        hull() {
+            translate([-metriccano_unit*1.5,-metriccano_unit/2,y_fix_plate_disp-metriccano_unit/2])
                 cube([metriccano_unit*2,metriccano_plate_height,1]);
             translate([-metriccano_unit*3/4,-metriccano_unit/2,-metriccano_unit-frame_thick])
                 cube([frame_thick,metriccano_plate_height,0.01]);
         }
     }
-
-   }
+}
 
 // A stage with an Y axis flexure (length fl) stuck out the end
 module flexured_stage() translate([0,0,-st_plate_height]) {
@@ -829,7 +846,7 @@ module pole_top_arm() difference() {
     // Body of stand with a metriccano rod sticking out
     union () {
         cylinder(h=metriccano_unit,r=pole_stand_rad+pole_clip_width,$fn=64);
-        translate([0,metriccano_unit/2-pole_stand_rad,0]) scale([1,1,2]) metriccano_slot_strip(pole_stand_arm_length);
+        translate([0,metriccano_unit-pole_stand_rad,0]) scale([1,1,2]) metriccano_slot_strip(pole_stand_arm_length);
     }
     // Hole in the middle for post
     cylinder(h=metriccano_unit*3,r=pole_stand_rad,center=true,$fn=64);
@@ -873,7 +890,7 @@ if (sheet_number==0) {
     translate([0,0,metriccano_unit/2]) 
         pika_xy_table();
     pika_base();
-    translate([outer_wall_x/2,outer_wall_y/2,structure_height+metriccano_unit*1.5-centre_platform_thick/2]) rotate([0,180,0]) flexured_stage();
+    translate([outer_wall_x/2,outer_wall_y/2,structure_height+metriccano_unit*1.5-centre_platform_thick/2+stage_spring_height]) rotate([0,180,0]) flexured_stage();
 }else if (sheet_number==1) {
     // Stage frame
     pika_xy_table();
@@ -883,7 +900,7 @@ if (sheet_number==0) {
     translate([0,0,metriccano_plate_height]) rotate([180,0,90]) pika_base();
    // Uncomment this translate/rotate to see how the Stage fits on the XY Table
    //translate([outer_wall_x/2,outer_wall_y/2,structure_height+metriccano_unit+st_plate_height]) rotate([0,180,0])
-    translate([35,40,st_plate_height]) rotate([0,0,-40]) flexured_stage();
-    translate([metriccano_unit*10.8,metriccano_unit*6,0]) rotate([0,0,90]) pole_top_arm();
+    translate([40,40,st_plate_height]) rotate([0,0,-40]) flexured_stage();
+    translate([metriccano_unit*10.8,metriccano_unit*2,0]) rotate([0,0,90]) pole_top_arm();
     translate([metriccano_unit*1.2,metriccano_unit*10.5,0]) rotate([0,0,-90]) pole_bottom_arm();
 }
