@@ -13,6 +13,7 @@ flex_link_width=max_gap+flex_tube_spring_width;
 wall=2;     // Minimal rigid wall
 outer_radius=6;
 spring_height=7;
+shaft_radius=2.5;       // Some printers may need to slightly oversize the shaft hole
 
 // Basically a tube with spring_width walls
 module flex_tube(radius,height=flex_tube_height) translate([0,0,height/2]) difference() {
@@ -56,7 +57,7 @@ module flexure_linear_coupling() union() {
     // Central NEMA shaft hole
     difference() {
         cylinder(h=spring_height,r=4.5);
-        cylinder(h=100,r=2.5,center=true,$fn=32);
+        cylinder(h=100,r=shaft_radius,center=true,$fn=32);
     }
 
     // Nut holding bit
