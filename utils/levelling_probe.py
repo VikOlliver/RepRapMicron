@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """
 RepRapMicron safe first-run bed probing utility
-- Forces current position as (0,0,Z_SAFE) without moving
+- Forces current position as (0,0,SAFE_Z) without moving
 - Probes corners of an n×n square
 - Reports relative heights and identifies high/low corners
 - Returns to (0,0,SAFE_Z) at end
@@ -37,7 +37,7 @@ time.sleep(0.1)
 while ser.in_waiting:
     ser.readline()
 
-# force current position as (0,0,Z_SAFE) without moving
+# force current position as (0,0,SAFE_Z) without moving
 ser.write(f"G10 L20 P1 X0 Y0 Z{SAFE_Z}\n".encode())
 time.sleep(0.1)
 
@@ -81,7 +81,7 @@ print(f"\nHighest corner: {high}")
 print(f"Lowest corner : {low}")
 print(f"Total variation: {heights[high]-heights[low]:.3f} µm")
 
-# move back to (0,0,Z_SAFE)
+# move back to (0,0,SAFE_Z)
 ser.write(f"G0 X0 Y0 Z{SAFE_Z}\n".encode())
 print(f"\nReturned to (0,0,{SAFE_Z}) for next run\n")
 
