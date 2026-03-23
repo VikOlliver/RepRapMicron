@@ -4,7 +4,7 @@ RepRapMicron safe first-run bed probing utility
 - Forces current position as (0,0,Z_SAFE) without moving
 - Probes corners of an n×n square
 - Reports relative heights and identifies high/low corners
-- Returns to (0,0,Z_SAFE) at end
+- Returns to (0,0,SAFE_Z) at end
 """
 
 import serial
