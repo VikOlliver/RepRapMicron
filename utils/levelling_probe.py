@@ -13,7 +13,7 @@ import re
 
 PORT = "/dev/ttyACM0"   # replace with your serial port
 BAUD = 115200
-N = 1000                  # square size in microns
+N = 2000                  # square size in microns
 SAFE_Z = 100             # safe Z height above bed
 PROBE_FEED = 1000        # probe feedrate in µm/min
 
@@ -49,6 +49,7 @@ def probe():
     z = None
     while z is None:
         if ser.in_waiting:
+            # Read serial input until we get the probe location result
             line = ser.readline().decode().strip()
             if "PRB:" in line:
                 m = re.search(r'PRB:[^,]+,[^,]+,([^:]+)', line)
@@ -82,5 +83,5 @@ print(f"Total variation: {heights[high]-heights[low]:.3f} µm")
 
 # move back to (0,0,Z_SAFE)
 ser.write(f"G0 X0 Y0 Z{SAFE_Z}\n".encode())
-print("\nReturned to (0,0,Z_SAFE) for next run")
+print(f"\nReturned to (0,0,{SAFE_Z}) for next run\n")
 
