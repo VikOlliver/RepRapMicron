@@ -7,7 +7,7 @@ include <../library/nema17lib.scad>
 
 flex_tube_height=13;
 flex_tube_spring_width=0.6;
-flex_linkage_thick=1.0;     // Short bits that join the curved flexures. Need to be robust.
+flex_linkage_thick=1.2;     // Short bits that join the curved flexures. Need to be robust.
 max_gap=1.2;
 flex_link_width=max_gap+flex_tube_spring_width;
 wall=2;     // Minimal rigid wall
