@@ -482,7 +482,7 @@ if (false) {
     }
         //Two strips of holes joined in an L-shaped beam
         translate([155,5,0]) metriccano_l_beam(6);
-        translate([155,20,0]) metriccano_l_beam(6);
+        translate([155,22,0]) metriccano_l_beam(6);
         // Triangular plate, equilateral
         translate([160,35,0]) metriccano_triangular_plate();
         // Triangular plate, right angle
