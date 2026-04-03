@@ -95,6 +95,52 @@ ser.write(f"G10 L20 P1 X0 Y0 Z{SAFE_Z}\n".encode())
 time.sleep(0.1)
 
 # ---------------------------------------------------------------------
+#   Ensure probe is not already in contact before starting.
+# ---------------------------------------------------------------------
+
+def check_probe_not_triggered():
+    ser.write(b"G91\n")  # relative mode
+    # Do a tiny probe. This will fail instantly with ALARM if it is already contacting
+    ser.write(f"G38.2 Z-1 F{PROBE_FEED}\n".encode())
+    ser.write(b"G90\n")
+
+    saw_prb = False
+    saw_alarm = False
+
+    start_time = time.time()
+
+    while time.time() - start_time < 2:
+        if ser.in_waiting:
+            line = ser.readline().decode(errors="ignore").strip()
+
+            if "PRB:" in line:
+                saw_prb = True
+
+            elif "ALARM:" in line:
+                saw_alarm = True
+
+    # Clear alarm state if triggered (which it should be one way or another)
+    if saw_alarm:
+        ser.write(b"$X\n")
+        time.sleep(0.1)
+        while ser.in_waiting:
+            ser.readline()
+
+    # If we saw a PRB, then a probe happened.
+    # A PRB would not execute if the probe were already in contact, because
+    # that would instantly cause an ALARM
+    if not saw_prb:
+        print("\nERROR: Probe is already in contact at start!")
+        print("Ensure probe is clear of the surface and try again.\n")
+
+        # retract safely
+        ser.write(f"G91\nG0 Z{SAFE_Z}\nG90\n".encode())
+        time.sleep(0.2)
+
+        ser.close()
+        exit(1)
+
+# ---------------------------------------------------------------------
 # Probe function
 # ---------------------------------------------------------------------
 
@@ -135,7 +181,14 @@ def probe_average():
 
 heights = {}
 
-print("\n--- Probing corners ---")
+# force current position as (0,0,SAFE_Z) without moving
+ser.write(f"G10 L20 P1 X0 Y0 Z{SAFE_Z}\n".encode())
+time.sleep(0.1)
+
+# Check probe state in case it is already touching
+check_probe_not_triggered()
+
+print(f"\n--- Probing corners ({N}x{N})---\n")
 
 for name, (x, y) in points.items():
     ser.write(f"G0 X{x} Y{y}\n".encode())
