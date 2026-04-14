@@ -1,8 +1,14 @@
 // pika_xy.scad - RepRapMicron Print In-place Kinematic Axes
 // (C) 2026 vik@diamondage.co.nz Released under the GPLV3 or later.
+// 
+// 0 prints a visualisation, 1 prints the XY Table, 2 prints all the other bits.
+sheet_number=0;
+// Set to true to show visualisations of the Axis Drivers if sheet_number==0
+show_dummy_drivers=true;
+
 // It is a Very Good Idea(TM) to keep the dimensions in Metriccano (10mm) units.
 // Printed on Prusa Mk4, 0.2mm layers, 20% infill, 2 v shells, 5 h shells
-
+//
 // Size constraints:
 // Largely constrained by the attachment point for the Stage, located in the middle.
 // If Y size is <120 it overhangs the bar at the top of the Y flexures and won't print.
@@ -63,6 +69,15 @@ x_beam_sloping_section=(outer_wall_x-outer_frame_x)/2+horizontal_beam_width+flex
 // Dimensions of the central box that suspends the Y axis
 muckedup_box_x=0;
 
+// Dimensions of centre platform
+centre_platform_x=inner_wall_x-2*box_wall-2*flexure_clearance;
+centre_platform_y=inner_wall_y-2*box_wall-2*table_flexure_pair_length;
+centre_platform_thick=2;
+centre_platform_top_x_width=metriccano_unit*5;
+centre_platform_base_x_width=metriccano_unit*4;
+centre_platform_overhang=centre_platform_top_x_width-centre_platform_base_x_width;
+stage_screw_x_offset=centre_platform_top_x_width/2-7.5;
+
 // Size of the square light well
 light_well_size=metriccano_unit/2+0.5;
 // This plate fits on top of the stage and has cutouts for magnets in it
@@ -78,7 +93,7 @@ st_base_thick=st_plate_height-max(m3_screw_head_height,magnet_z,led_wire_rad);  
 stage_holes_x=4;        // Number of holes in the stage
 stage_holes_y=6.5;
 // Work out stage dimensions to make maths easier
-stage_size_x=(stage_holes_x-1)*metriccano_unit;
+stage_size_x=stage_screw_x_offset*2+metriccano_unit;//(stage_holes_x-1)*metriccano_unit;
 stage_size_y=(stage_holes_y-1)*metriccano_unit;
 stage_spring_height=2;      // Compressed height of springs used for bed levelling
 
@@ -238,30 +253,33 @@ module inside_box() {
     }
 }
 
-centre_platform_x=inner_wall_x-2*box_wall-2*flexure_clearance;
-centre_platform_y=inner_wall_y-2*box_wall-2*table_flexure_pair_length;
-centre_platform_thick=2;
 // Mounting point for the stage, centred on (0,0)
 module stage_mount() {
     difference() {
-        // Central cubic form
-        translate([0,0,metriccano_unit/2])
-            cube([metriccano_unit*4,metriccano_unit*4,metriccano_unit+centre_platform_thick],center=true);
+        // Central cubic form with tapered top
+        translate([0,0,metriccano_unit/2]) hull() {
+                cube([centre_platform_base_x_width,metriccano_unit*4,metriccano_unit+centre_platform_thick],center=true);
+            translate([0,0,metriccano_unit/2]) hull() {
+                cube([centre_platform_top_x_width,metriccano_unit*4,centre_platform_thick],center=true);
+                translate([0,0,-centre_platform_overhang])
+                    cube([centre_platform_base_x_width,centre_platform_y,0.01],center=true);
+            }
+        }
         // Knock off lower corners to make it print when overhanging
         translate([0,metriccano_unit*2,-centre_platform_thick/2]) rotate([45,0,0])
-            cube([metriccano_unit*4+1,metriccano_unit,metriccano_unit],center=true);
+            cube([metriccano_unit*10+1,metriccano_unit,metriccano_unit],center=true);
         translate([0,-metriccano_unit*2,-centre_platform_thick/2]) rotate([45,0,0])
-            cube([metriccano_unit*4+1,metriccano_unit,metriccano_unit],center=true);
+            cube([metriccano_unit*10+1,metriccano_unit,metriccano_unit],center=true);
         // Screw and nut cavities. Nut slots are very loose to avoid user damaging flexures.
-        translate([metriccano_unit*1.5,0,centre_platform_thick/2]) {
+        translate([stage_screw_x_offset,0,centre_platform_thick/2]) {
             metriccano_screw_hole();
             translate([0,0,metriccano_unit/2]) rotate([0,0,0]) scale([1,1,1.1]) metriccano_nut_slot(captive=false);
         }
-        translate([metriccano_unit*-1.5,-metriccano_unit*1.5,centre_platform_thick/2]) {
+        translate([-stage_screw_x_offset,-metriccano_unit*1.5,centre_platform_thick/2]) {
             metriccano_screw_hole();
             translate([0,0,metriccano_unit/2]) rotate([0,0,135]) scale([1,1,1.1]) metriccano_nut_slot(captive=false);
         }
-        translate([metriccano_unit*-1.5,metriccano_unit*1.5,centre_platform_thick/2]) {
+        translate([-stage_screw_x_offset,metriccano_unit*1.5,centre_platform_thick/2]) {
             metriccano_screw_hole();
             translate([0,0,metriccano_unit/2]) rotate([0,0,-135]) scale([1,1,1.1]) metriccano_nut_slot(captive=false);
         }
@@ -896,11 +914,10 @@ module flexured_stage() translate([0,0,-st_plate_height]) {
 }
 
 
-show_dummy_drivers=true;
 // Dummy Axis Drivers for model positioning (there is a 2mm offset of Metriccano holes in the
 // model. My bad. Doesn't matter when you're actually printing one but too lazy to fix today.
 module axis_driver() {
-    if (show_dummy_drivers) {
+    if (show_dummy_drivers && (sheet_number==0)) {
         import("frame_trio.stl");
         translate([metriccano_unit*9.3,0,-metriccano_unit*4.5]) rotate([0,0,180]) import("motor_pillar_pika.stl");
     }
@@ -915,8 +932,6 @@ if (show_dummy_drivers) {
     %translate([outer_wall_x/2+3*metriccano_unit+z_tower_corner_offset-2,outer_wall_y/2+3*metriccano_unit+z_tower_corner_offset-1,z_tower_height+metriccano_unit/2]) rotate([0,0,45]) axis_driver();
 }
 
-// 1 prints the XY Table, 2 prints all the other bits.
-sheet_number=0;
 if (sheet_number==0) {
     // Assembled for viewing
     translate([0,0,metriccano_unit/2]) 
@@ -932,5 +947,5 @@ if (sheet_number==0) {
     translate([0,0,metriccano_plate_height]) rotate([180,0,90]) pika_base();
    // Uncomment this translate/rotate to see how the Stage fits on the XY Table
    //translate([outer_wall_x/2,outer_wall_y/2,structure_height+metriccano_unit+st_plate_height]) rotate([0,180,0])
-    translate([40,40,st_plate_height]) rotate([0,0,-40]) flexured_stage();
+    translate([45,42,st_plate_height]) rotate([0,0,-40]) flexured_stage();
 }
