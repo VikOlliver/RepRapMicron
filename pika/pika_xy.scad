@@ -19,8 +19,7 @@ show_dummy_drivers=true;
 include <../library/m3_parts.scad>
 include <../library/metriccano.scad>
 //include <../library/nema17lib.scad> Maybe use motors, even for direct drive, but  later...
-
-version_string="PIKA V0.02";
+include <pika_version.scad>
 
 flexure_thick=0.8;  // Width of a flexure beam, that's the very thin direction
 flexure_width=5;      // Maximum desired flexing distance off centre
@@ -98,14 +97,6 @@ stage_size_y=(stage_holes_y-1)*metriccano_unit;
 stage_spring_height=2;      // Compressed height of springs used for bed levelling
 
 ysf_beam_length=outer_wall_y-stage_size_y/2-metriccano_unit*3;     // Y Stage Flexure beam length
-
-
-// 0.6mm thick text, 5mm tall, vertical, flat on XY plane
-module version_text() {
-    translate([0,0,-0.3]) linear_extrude(0.6) {
-        text(version_string, size = 4, halign = "center", valign = "center", $fn = 16);
-    }
-}
 
 // Flexure used to join beams on the integrated XY Table
 module horizontal_flexure() {
