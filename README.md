@@ -12,7 +12,7 @@ The PIKA version is now the focus of development, and departs from MAUS in that 
 
 The project has achieved the fourth Alpha release. This repository holds files that can reasonably be expected to be functional and useful to potential developers/experimenters.
 
-If you're looking for pre-built STL files for MAUS, they're [here](https://www.printables.com/model/1286343-reprapmicron-micron-accurate-3d-printer). PIKA still needs to be built from source.
+If you're looking for pre-built STL files for MAUS, they're [here](https://www.printables.com/model/1286343-reprapmicron-micron-accurate-3d-printer). PIKA is [here](https://www.printables.com/model/1692745-reprapmicron-pika-micron-resolution-3d-printer). Note that Printables is not automatically kept in sync with the source or instructions.
 
 ## Roadmap
 
