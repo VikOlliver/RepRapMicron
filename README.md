@@ -8,9 +8,11 @@ As of V0.05 pixels can be placed or engraved on a 10μm grid in 2D without diffi
 
 The meaty part is in the "maus" directory, where the OpenSCAD models for a rapidly reconfigurable 3D printed prototype can be found. Design is trending towards specialised parts, but all are intended to fit a 10mm grid and attach with M3 fasteners.
 
-The project has achieved the third Alpha release. This repository holds files that can reasonably be expected to be functional and useful to potential developers/experimenters.
+The PIKA version is now the focus of development, and departs from MAUS in that it is specifically a μRepRap design, rather than a kit of parts for constructing μRepRaps.
 
-If you're looking for pre-built STL files, they're [here](https://www.printables.com/model/1286343-reprapmicron-micron-accurate-3d-printer).
+The project has achieved the fourth Alpha release. This repository holds files that can reasonably be expected to be functional and useful to potential developers/experimenters.
+
+If you're looking for pre-built STL files for MAUS, they're [here](https://www.printables.com/model/1286343-reprapmicron-micron-accurate-3d-printer). PIKA still needs to be built from source.
 
 ## Roadmap
 
@@ -23,9 +25,14 @@ If you're looking for pre-built STL files, they're [here](https://www.printables
 
 
 ## Directory Structure
+
+### gcode_segmentation
+Python code to take GCODE from a 3D printer slicing program such as PrusaSlicer, and break it into GCODE for a series of points that can be invidivually deposited with the probe. There is provision for a routine to "re-ink" the probe tip after a predetermined number of points are deposited.
+
 ### library
 A Selection of useful OpenSCAD libraries used in generating "Metriccano" modular components (10mm grid, metric fasteners), screw holes, motor mounts etc.
-### Maus
+
+### maus
 **M**icron **A**ccurate **U**niversal **S**ystem - OpenSCAD model files for micron precision axis components based on flexures.
 
 The maus directory contains standard axis drivers, XY complementary flexure Table, Z Tower, and probe parts that need screwing down to a solid surface. It can be assembled on a Metriccano baseboard supplied for lasercutting as metriccano_baseboad.svg, or a 12 x 14 hole piece of 10mm pitch perf board.
@@ -34,10 +41,10 @@ As of V0.05 a pantograph-like driver with parallelogram flexures - maus_parallel
 
 Assembly documentation for a functional release is on the Github Wiki, with configuration and usage instructions next up. Bill Of Materials available for V0.03 .
 
-## gcode_segmentation
-Python code to take GCODE from a 3D printer slicing program such as PrusaSlicer, and break it into GCODE for a series of points that can be invidivually deposited with the probe. There is provision for a routine to "re-ink" the probe tip after a predetermined number of points are deposited.
+### pika
+**P**rint **I**n-place **K**inematic **A**ssembly - OpenSCAD model files for a flexure-based axis system. The XY Table mechanism is print-in-place, making it more rigid and easier to assemble.
 
-## png_to_gcode
+### png_to_gcode
 Python code that reads a PNG bitmap and emits GCODE that will probe a corresponding point on the GCODE-controlled hardware. Pitch, brightness level and so forth can be provided on the command line. Intended for using RepRapMicron in dip-pen mode with bitmap files, but probably has other uses.
 
 ### oldGRBLdelta
@@ -52,14 +59,18 @@ The main repository of knowledge is the wiki on the [main project page](https://
 GPL V3 or later
 
 ## Project status
-### V0.05
+### PIKA V0.02
+
+Fourth release candidate. Now the focus of development. Build process has been documented, other documentation relies on its compatibility with MAUS.
+
+### MAUS V0.05
 
 Third Alpha release candidate, most functional device. Currently the head but short on documentation and long on improvements in progress.
 
-### V0.04
+### MAUS V0.04
 
 The prefereble build if documentation is required. V0.04 documentation is currently a list of fixups for V0.03 docs.
 
-### V0.03
+### MAUS V0.03
 
 First ever Alpha release. Tested build with a few known flaws and full build documentation on wiki.
