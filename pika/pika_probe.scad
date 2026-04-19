@@ -1,4 +1,4 @@
-// maus_probe.scad - Probe head components for Maus 3D Printer
+// pika_probe.scad - Probe head components for PIKA 3D Printer
 // (c)2024 vik@diamondage.co.nz, released under the terms of the GPL V3 or later
 
 include <../library/m3_parts.scad>
