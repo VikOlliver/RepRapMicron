@@ -1,7 +1,7 @@
 // nut_tool.scad - Utensil for pushing nuts into nut slots on the PIKA 3D Printer
 // (c)2026 vik@diamondage.co.nz, released under the terms of the GPL V3 or later
 
-include <../library/m3_parts.scad>
+include <m3_parts.scad>
 
 tolerance=0.2;      // Adjust for your printer
 handle_length=30;
