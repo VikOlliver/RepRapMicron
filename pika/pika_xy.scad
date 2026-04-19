@@ -98,6 +98,12 @@ stage_spring_height=2;      // Compressed height of springs used for bed levelli
 
 ysf_beam_length=outer_wall_y-stage_size_y/2-metriccano_unit*3;     // Y Stage Flexure beam length
 
+// A pointer for use in diagrams
+module arrow() color([1,0,0]) {
+    cylinder(h=8,r1=0,r2=2,$fn=24);
+    translate([0,0,8]) cylinder(h=18,r=1,$fn=20);
+}
+
 // Flexure used to join beams on the integrated XY Table
 module horizontal_flexure() {
     translate([0,0,flexure_height-flexure_thick]) cube([flexure_length,flexure_width,flexure_thick]);
@@ -451,7 +457,8 @@ module generic_mount(driver_front_mount_width_mu=1,drop=0) {
     }
 }
 
-module driver_front_mount() {
+// flip_mount puts the lower hole on the side
+module driver_front_mount(flip_nut=false) {
     difference() {
         generic_mount();
         // Holes for Axis Driver attachment screws and nuts.
@@ -464,8 +471,13 @@ module driver_front_mount() {
         translate([metriccano_unit,metriccano_unit/2,metriccano_unit*5.5])
             rotate([0,-90,0])metriccano_nut_slot();
         // Bottom
-        translate([metriccano_unit,metriccano_unit/2,metriccano_unit*1.5])
-            rotate([0,-90,0])metriccano_nut_slot(15);  // shorten nut slot cavity so it doesn't hit the top bracket
+        translate([metriccano_unit*1.4,metriccano_unit/2,metriccano_unit*1.5])
+            // Rotate nut slot cavity to come out the left or right side
+            if (flip_nut) {
+                rotate([-90,0,0]) rotate([0,-90,0]) metriccano_nut_slot(15);
+            } else {
+                rotate([90,0,0]) rotate([0,-90,0]) metriccano_nut_slot(15);
+            }
     }
 }
 
@@ -634,7 +646,7 @@ module pika_xy_table() union() {
             // X Axis Driver front mount
             translate([outer_wall_x,metriccano_unit*1,0]) driver_front_mount();
             // Y Axis Driver front mount
-            translate([metriccano_unit*2,outer_wall_y,0]) rotate([0,0,90]) driver_front_mount();
+            translate([metriccano_unit*2,outer_wall_y,0]) rotate([0,0,90]) driver_front_mount(flip_nut=true);
             // X Axis Driver rear mount (closer to motor)
             translate([outer_wall_x-3*metriccano_unit,-metriccano_unit/2,0])
                 driver_rear_mount();
