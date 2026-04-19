@@ -14,8 +14,11 @@ Historical note: The original RepRap proof-of-concept 3D printing mechanism was 
 ## M3 Parts
 A model library of defined M3 cavity elements and measurements. If your printer prints things a bit too irregularly, or extremely precisely, and the holes don't fit your screws/nuts/bolts, then adjust the sizing here.
 
+## nut_tool
+A utensil for inserting M3/Metriccano nuts into nut slots.
+
 ## NEMA17lib
 Dimensions of a NEMA17 motor, for obvious reasons
 
-# Flexbeam
+## Flexbeam
 A library for creating round-ended beams with vertical flexures on them. Not actually used at present, but it was handy for roughing out concepts and finding out just how wrong one can be...
