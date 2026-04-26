@@ -210,6 +210,32 @@ module probe_assembly_jig() {
     }
 }
 
+// Platform to attach to the Z Axis Driver that can be used for etching probes.
+// Has notches to make it easier to grip with croc leads.
+dipper_len=65;
+dipper_width=5;
+dipper_thick=3;
+dipper_notch=1;
+
+module probe_dipper() {
+    // Tab for anchoring to Axis Driver
+    translate([-metriccano_plate_height/2,metriccano_unit,metriccano_unit/2]) rotate([0,90,0]) 
+    difference() {
+        scale([1,1,1.5])
+            metriccano_tab_module(1);
+        translate([0,0,metriccano_plate_height+0.01]) m3_nut_cavity();
+        translate([0,0,-0.02]) m3_nut_cavity();
+    }
+    // Strip with notches in it
+    translate([dipper_len/6,-dipper_thick/2,dipper_width/2]) difference() {
+        cube([dipper_len,dipper_thick,dipper_width],center=true);
+        // A bunch of notches down the length. Space at twice notch size
+        for (i=[0:dipper_len/dipper_notch/2])
+            translate([i*dipper_notch*2-dipper_len/2,-dipper_thick/2,0])
+                rotate([0,0,45]) cube([dipper_notch,dipper_notch,dipper_width*3],center=true);
+    }
+}
+
 // Probe tip and holder parts, slide holding parts.
 if (true) {
     translate([50,25,0]) probe_tip_arm();
@@ -217,4 +243,5 @@ if (true) {
     translate([10,10,0]) probe_beam();
     translate([35,10,0]) probe_shuttle();
     translate([30,40,0]) probe_assembly_jig();
+    translate([25,55,0]) probe_dipper();
 }
