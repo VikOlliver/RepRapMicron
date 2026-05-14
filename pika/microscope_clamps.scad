@@ -87,8 +87,10 @@ module clamping_pole_hinge() {
 }
 
 clamp_shaft_len=40;
-// A clamp to grab the USB microscope at the narrow end. Takes the radius of the microscope
-module microscope_clamp(mrad=31.5/2) {
+// A clamp to grab the USB microscope at the narrow end. Takes the diameter of the microscope
+module microscope_clamp(mdia=32) {
+    // You can add clearance to mdia here if your printer needs it.
+    mrad=(mdia)/2;    // Use reduced radius to ensure tight grip
     difference() {
         // Build a magnifying glass-like holder for the microscope
         union() {
@@ -100,6 +102,9 @@ module microscope_clamp(mrad=31.5/2) {
             }
             // Version stamp
             translate([mrad+clamp_shaft_len/2,0,pole_arm_hinge_rad*2]) version_text();
+            // Dimensions
+           translate([mrad+10,-pole_arm_hinge_rad,pole_arm_hinge_rad]) rotate([90,0,0]) linear_extrude(0.2)
+                text(str(mdia,"mm dia."), size = 3, halign = "left", valign = "center", $fn = 16);
         }
         // Poke a screw hole and nut slot in the handle end.
         translate([clamp_shaft_len+mrad-8,0,pole_arm_hinge_rad]) rotate([0,90,0])  {
@@ -118,9 +123,9 @@ for (i=[0:1]) translate ([0,i*-20,0]) {
     translate([80,60,0]) m3_thumbscrew_knob(7);
 }
 translate([0,20,0]) {
-    translate([125,65,0]) clamping_pole_hinge();
-    translate([125,65,0]) microscope_clamp();
+    translate([125,67,0]) clamping_pole_hinge();
+    translate([125,67,0]) microscope_clamp(33);
     translate([120,34,0]) clamping_pole_arm();
     translate([155,4,0])  clamping_pole_hinge();
-    translate([155,4,0]) rotate([0,0,180]) microscope_clamp(37/2);
+    translate([155,4,0]) rotate([0,0,180]) microscope_clamp(36);
 }
