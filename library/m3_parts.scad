@@ -57,12 +57,30 @@ module m3_nut_slot(l=100) {
 
 // Cavity for an M3 screw and screw head of specified length.
 // Points down. Uses octagons so that it can be printed horizontally
-module  m3_screw_cavity(screw_len) {
-    rotate([180,0,360/16]) cylinder(h=screw_len,r=m3_screw_rad*1.2,$fn=8);
-    // Rotate to make hole sflats parallel to axes. Tiny shift to fix booleans
-    rotate([0,0,360/16]) translate([0,0,-0.001])
-        cylinder(h=10,r=m3_screw_head_rad*1.2,$fn=8);
+module  m3_screw_cavity(screw_len,inverted=false) {
+    difference() {
+        // The screw hole and head assembly
+        union() {
+            rotate([180,0,360/16]) cylinder(h=screw_len,r=m3_screw_rad*1.2,$fn=8);
+            // Rotate to make hole's flats parallel to axes. Tiny shift to fix booleans
+            rotate([0,0,360/16]) translate([0,0,-0.001])
+                cylinder(h=10,r=m3_screw_head_rad*1.2,$fn=8);
+        }
+        // If it's inverted, put a hollow cylinder in the head cavity lined up with the screw
+       // hole as support. Stand off a bit so that it iwll separate cleanly.
+        if (inverted) {
+            translate([0,0.2]) rotate([0,0,360/16]) {
+                // Hollow cylinder, extended downwards for a screwdriver shaft
+                extend_downwards=100;
+                translate([0,0,-extend_downwards]) difference() {
+                    cylinder(h=screw_len+extend_downwards,r=m3_screw_rad*1.2+0.3,$fn=8);
+                    cylinder(h=(screw_len+extend_downwards)*3,r=m3_screw_rad*1.2,$fn=8,center=true);
+                }
+            }
+        }
+    }
 }
+
 
 // Octagonal hole for screw, no head, centred, length extends up and down
 module  m3_screw_hole(screw_len) {
@@ -82,7 +100,11 @@ module m3_thumbscrew_knob(rad=m3_thumbscrew_rad) {
                 translate([rad,0,m3_thumbscrew_height/2])
                     cube([1,1,m3_thumbscrew_height],center=true);
             cylinder(h=m3_thumbscrew_height,r=rad);
+            translate([0,0,m3_thumbscrew_height])
+                cylinder(m3_nut_height,r1=rad,r2=m3_nut_max_width/2+1);
         }
-        translate([0,0,m3_thumbscrew_height-m3_screw_head_height]) m3_screw_cavity(m3_thumbscrew_height);
+        translate([0,0,m3_thumbscrew_height]) m3_nut_cavity();
+        translate([0,0,m3_screw_head_height]) rotate([180,0,0])
+            m3_screw_cavity(m3_thumbscrew_height+m3_nut_height+1,inverted=true);
     }
 }
