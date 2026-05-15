@@ -4,6 +4,8 @@ include <../library/metriccano.scad>
 include <./pika_version.scad>
 
 boss_square=15;         // Beefy square section
+boss_w=boss_square;
+boss_h=14;                  // There was a problem with screws, the boss camps need to be slightly smaller vertically.
 clamping_pole_arm_length=55;
 pole_clip_width=3;
 pole_stand_rad=16/2;             // 16mm pole
@@ -16,9 +18,9 @@ module bolted_clamp(int_rad,thick) {
     difference() {
         union() {
             // Clamp round body
-            cylinder(h=boss_square,r=int_rad+thick,$fn=64);
+            cylinder(h=boss_h,r=int_rad+thick,$fn=64);
             // Clamp clip
-            translate([-bolt_shift,0,boss_square/2]) cube(boss_square,center=true);
+            translate([-bolt_shift,0,boss_h/2]) cube([boss_w,boss_w,boss_h],center=true);
         }
         // Poke hole in ring
         cylinder(h=boss_square*3,r=int_rad,center=true,$fn=64);
@@ -39,12 +41,12 @@ module clamping_pole_arm() difference() {
         // The clamp body
         bolted_clamp(pole_stand_rad,pole_clip_width);
         // The arm body
-        translate([clamping_pole_arm_length/2,0,boss_square/2])
-            cube([clamping_pole_arm_length,boss_square,boss_square],center=true);
+        translate([clamping_pole_arm_length/2,0,boss_h/2])
+            cube([clamping_pole_arm_length,boss_w,boss_h],center=true);
         // Rounded arm end
-        translate([clamping_pole_arm_length,0,0]) cylinder(h=boss_square,r=boss_square/2,$fn=64);
+        translate([clamping_pole_arm_length,0,0]) cylinder(h=boss_h,r=boss_w/2,$fn=64);
         // Version stamp
-        translate([pole_stand_rad+clamping_pole_arm_length/2,-boss_square/2,boss_square/2])
+        translate([pole_stand_rad+clamping_pole_arm_length/2,-boss_w/2,boss_h/2])
             rotate([90,0,0]) version_text();
     }
     // Hole in the middle for post
@@ -56,7 +58,7 @@ module clamping_pole_arm() difference() {
     }
 }
 
-pole_arm_hinge_rad=boss_square/2;
+pole_arm_hinge_rad=boss_h/2;
 pole_arm_hinge_height=12;   // Main height restriction here is the need to hide an M3 nut in the base.
 pole_clearance=0.3;
 // A hinge that can run up and down the clamping pole arm on an M3 screw. It's meant to rotate.
