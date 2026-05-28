@@ -6,7 +6,7 @@ include <./pika_version.scad>
 boss_square=15;         // Beefy square section
 boss_w=boss_square;
 boss_h=14;                  // There was a problem with screws, the boss camps need to be slightly smaller vertically.
-clamping_pole_arm_length=55;
+clamping_pole_arm_length=65;
 pole_clip_width=3;
 pole_stand_rad=16/2;             // 16mm pole
 pole_stand_arm_length=7;     // Length of stand arm in metriccano units.
@@ -116,7 +116,7 @@ module microscope_clamp(mdia=32) {
     }
 }
 
-translate([65,15,0]) rotate([0,0,180]) clamping_pole_arm();
+translate([75,15,0]) rotate([0,0,180]) clamping_pole_arm();
 for (i=[0:1]) translate ([0,i*-20,0]) {
     translate([20,60,0]) m3_thumbscrew_knob(7);
     translate([35,65,0]) m3_thumbscrew_knob(7);
@@ -124,10 +124,10 @@ for (i=[0:1]) translate ([0,i*-20,0]) {
     translate([65,65,0]) m3_thumbscrew_knob(7);
     translate([80,60,0]) m3_thumbscrew_knob(7);
 }
-translate([0,20,0]) {
+translate([5,20,0]) {
     translate([125,67,0]) clamping_pole_hinge();
     translate([125,67,0]) microscope_clamp(33);
-    translate([120,34,0]) clamping_pole_arm();
+    translate([115,34,0]) clamping_pole_arm();
     translate([155,4,0])  clamping_pole_hinge();
     translate([155,4,0]) rotate([0,0,180]) microscope_clamp(36);
 }
