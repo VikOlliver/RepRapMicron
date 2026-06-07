@@ -910,7 +910,7 @@ module y_stage_flexure() {
 }
 
 // A stage with an Y axis flexure (length fl) stuck out the end
-module flexured_stage() %translate([0,0,-st_plate_height]) {
+module flexured_stage() translate([0,0,-st_plate_height]) {
     stage_top();
     // Shift the flexure and anchor en masse
     translate([0,stage_size_y/2+metriccano_unit/2,0])
