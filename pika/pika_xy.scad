@@ -2,7 +2,7 @@
 // (C) 2026 vik@diamondage.co.nz Released under the GPLV3 or later.
 // 
 // 0 prints a visualisation, 1 prints the XY Table, 2 prints all the other bits.
-sheet_number=0;
+sheet_number=1;
 // Set to true to show visualisations of the Axis Drivers if sheet_number==0
 show_dummy_drivers=true;
 
@@ -841,12 +841,13 @@ module stage_top() {
             cube([led_strip_width,solder_cavity_len,solder_cavity_height*2],center=true);
 
         // Holes for screw heads, all of which are inverted and symmetric
+        // ???
         translate([0,0,metriccano_screw_head_height]) rotate([0,180,0]) {
-            translate([metriccano_unit*1.5,0,0]) 
+            translate([stage_screw_x_offset,0,0]) 
                 metriccano_screw_cavity(inverted=true);
-            translate([-metriccano_unit*1.5,metriccano_unit*1.5,0])
+            translate([-stage_screw_x_offset,metriccano_unit*1.5,0])
                 metriccano_screw_cavity(inverted=true);
-            translate([-metriccano_unit*1.5,-metriccano_unit*1.5,0])
+            translate([-stage_screw_x_offset,-metriccano_unit*1.5,0])
                 metriccano_screw_cavity(inverted=true);
         }
     }
@@ -909,7 +910,7 @@ module y_stage_flexure() {
 }
 
 // A stage with an Y axis flexure (length fl) stuck out the end
-module flexured_stage() translate([0,0,-st_plate_height]) {
+module flexured_stage() %translate([0,0,-st_plate_height]) {
     stage_top();
     // Shift the flexure and anchor en masse
     translate([0,stage_size_y/2+metriccano_unit/2,0])
