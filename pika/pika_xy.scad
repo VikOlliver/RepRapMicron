@@ -268,10 +268,12 @@ module stage_mount() {
         translate([0,-metriccano_unit*2,-centre_platform_thick/2]) rotate([45,0,0])
             cube([metriccano_unit*10+1,metriccano_unit,metriccano_unit],center=true);
         // Screw and nut cavities. Nut slots are very loose to avoid user damaging flexures.
-        translate([stage_screw_x_offset,0,centre_platform_thick/2]) {
-            metriccano_screw_hole();
+        // Right hand single hole needs to penetrate into the structure for adjustment.
+        translate([stage_screw_x_offset,0,centre_platform_thick/2+0.01]) {
+            metriccano_screw_hole(20);
             translate([0,0,metriccano_unit/2]) rotate([0,0,0]) scale([1,1,1.1]) metriccano_nut_slot(captive=false);
         }
+        // Left side screw pair
         translate([-stage_screw_x_offset,-metriccano_unit*1.5,centre_platform_thick/2]) {
             metriccano_screw_hole();
             translate([0,0,metriccano_unit/2]) rotate([0,0,135]) scale([1,1,1.1]) metriccano_nut_slot(captive=false);
@@ -448,7 +450,8 @@ module generic_mount(driver_front_mount_width_mu=1,drop=0) {
         translate([0,0,metriccano_unit*5]) hull() {
             // Form a Metriccano compliant beam with a 45 degree tapered underside, extending 2U
             cube([metriccano_unit*2,driver_front_mount_width_mu*metriccano_unit,metriccano_unit]);
-            translate([0,0,-metriccano_unit*2]) cube([0.01,driver_front_mount_width_mu*metriccano_unit,0.01]);
+            translate([0,0,-metriccano_unit*2])
+                cube([0.01,driver_front_mount_width_mu*metriccano_unit,0.01]);
         }
         // Create a rigid backing
         cube([metriccano_unit/2,driver_front_mount_width_mu*metriccano_unit,metriccano_unit*5]);
@@ -466,17 +469,17 @@ module driver_front_mount(flip_nut=false) {
             rotate([0,90,0]) metriccano_screw_hole(metriccano_unit*10);
         translate([metriccano_unit/2,metriccano_unit/2,metriccano_unit*5.5])
             rotate([0,90,0]) metriccano_screw_hole(metriccano_unit*10);
-        // Nut slots
+        // Nut slots. No need to make them captive
         // Top
         translate([metriccano_unit,metriccano_unit/2,metriccano_unit*5.5])
-            rotate([0,-90,0])metriccano_nut_slot();
+            rotate([0,-90,0])metriccano_nut_slot(captive=false);
         // Bottom
         translate([metriccano_unit*1.4,metriccano_unit/2,metriccano_unit*1.5])
             // Rotate nut slot cavity to come out the left or right side
             if (flip_nut) {
-                rotate([-90,0,0]) rotate([0,-90,0]) metriccano_nut_slot(15);
+                rotate([-90,0,0]) rotate([0,-90,0]) metriccano_nut_slot(15,captive=false);
             } else {
-                rotate([90,0,0]) rotate([0,-90,0]) metriccano_nut_slot(15);
+                rotate([90,0,0]) rotate([0,-90,0]) metriccano_nut_slot(15,captive=false);
             }
     }
 }
@@ -519,7 +522,7 @@ module z_driver_front_mount(l=110) {
         }
         // We use a 50mm screw down the pillar as a stiffener.
         translate([0,0,l-40])
-            metriccano_nut_slot();
+            metriccano_nut_slot(captive=false);
         // Screw holes in the top
         translate([0,0,l-24])
             metriccano_screw_hole(50);
