@@ -4,11 +4,11 @@
 
 The RepRapMicron Project, or μRepRap, is an extension of the Open Source RepRap 3D printer project that aims to bring micron-scale fabrication into very widespread adoption. The main project page is [here](https://reprap.org/wiki/RepRapMicron) and currently the assembly instructions are on the Github wiki. It uses hardware and software familiar to 3D printer developers (GCODE, GRBL, NEMA17 steppers etc.), and materials that are easily and inexpensively available.
 
-As of MAUS V0.05 pixels can be placed or engraved on a 10μm grid in 2D without difficulty. Repeatable positioning is better than 5μm, and a resin deposition system for <10μm droplets is functional if not complete. Current resin material is "Top Coat" Nail Art UV Gel.
+As of PIKA V0.02 pixels can be placed or engraved with repeatable micron precision in 2D without difficulty. Range of motion is approximatrly 8mm on X, Y, and Z axes. A resin deposition system for <4μm droplets is functional if not complete. Current resin material is "Top Coat" Nail Art UV Gel.
 
-The meaty part is in the "maus" directory, where the OpenSCAD models for a rapidly reconfigurable 3D printed prototype can be found. Design is trending towards specialised parts, but all are intended to fit a 10mm grid and attach with M3 fasteners.
+The meaty part is in the "pika" directory, where the OpenSCAD models for a rapidly 3D printed print-in-place flexure chassis and axis drivers can be found. Parts are intended to fit a 10mm grid and attach with M3 fasteners.
 
-The PIKA version is now the focus of development, and departs from MAUS in that it is specifically a μRepRap design, rather than a kit of parts for constructing μRepRaps. If you want to make the best practical machine rather than  a research platform, this is the preferred version.
+The PIKA version is now the focus of development, and departs from MAUS in that it is specifically a μRepRap design, rather than a kit of parts for constructing μRepRaps. If you want to make the best practical machine rather than a flexure research platform, PIKA is the preferred version.
 
 The project has achieved the fourth Alpha release. This repository holds files that can reasonably be expected to be functional and useful to potential developers/experimenters.
 
