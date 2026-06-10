@@ -42,13 +42,16 @@ As of V0.05 a pantograph-like driver with parallelogram flexures - maus_parallel
 Assembly documentation for a functional release is on the Github Wiki, with configuration and usage instructions next up. Bill Of Materials available for V0.03 .
 
 ### pika
-**P**rint **I**n-place **K**inematic **A**ssembly - OpenSCAD model files for a flexure-based axis system. The XY Table mechanism is print-in-place, making it more rigid and easier to assemble.
+**P**rint **I**n-place **K**inematic **A**ssembly - OpenSCAD model files for a flexure-based axis system. The XY Table mechanism is print-in-place, making it more rigid and easier to assemble. Axis Drivers are similar to MAUS but have a modifed motor bracket component.
 
 ### png_to_gcode
 Python code that reads a PNG bitmap and emits GCODE that will probe a corresponding point on the GCODE-controlled hardware. Pitch, brightness level and so forth can be provided on the command line. Intended for using RepRapMicron in dip-pen mode with bitmap files, but probably has other uses.
 
 ### oldGRBLdelta
 A python/Zelle Control Panel that drives a GRBL CNC using xyz steppers and uses them to control an OpenFlexure microscope delta stage.
+
+### utils
+Utilities for calibration and assembly.
 
 ## Contributing
 Please do join in. We need everything. Coders, makers, nanoscience experts, materials scientists, 3D printing experts, manual writers, graphics artists, dancers, the works. Well, maybe not the dancers.
