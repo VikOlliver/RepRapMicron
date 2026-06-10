@@ -6,7 +6,7 @@ The RepRapMicron Project, or μRepRap, is an extension of the Open Source RepRap
 
 As of PIKA V0.02 pixels can be placed or engraved with repeatable micron precision in 2D without difficulty. Range of motion is approximatrly 8mm on X, Y, and Z axes. A resin deposition system for <4μm droplets is functional if not complete. Current resin material is "Top Coat" Nail Art UV Gel.
 
-The meaty part is in the "pika" directory, where the OpenSCAD models for a rapidly 3D printed print-in-place flexure chassis and axis drivers can be found. Parts are intended to fit a 10mm grid and attach with M3 fasteners.
+The meaty part is in the "pika" directory, where the OpenSCAD models for a 3D printed print-in-place flexure chassis and axis drivers can be found. Parts are intended to fit a 10mm grid and attach with M3 fasteners.
 
 The PIKA version is now the focus of development, and departs from MAUS in that it is specifically a μRepRap design, rather than a kit of parts for constructing μRepRaps. If you want to make the best practical machine rather than a flexure research platform, PIKA is the preferred version.
 
