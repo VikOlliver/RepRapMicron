@@ -68,7 +68,7 @@ Fourth release candidate. Now the focus of development. Build process has been d
 
 ### MAUS V0.05
 
-Third Alpha release candidate, most functional device. Currently the head but short on documentation and long on improvements in progress.
+Third Alpha release candidate designed for flexure research. Essentially a modification to use PIKA-style linear Axis Drivers.
 
 ### MAUS V0.04
 
