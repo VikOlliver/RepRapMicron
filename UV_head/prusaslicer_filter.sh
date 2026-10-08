@@ -11,7 +11,7 @@ echo Creating ${NEW_FNAME} >> /tmp/x
 # Copy original file for debugging
 cp ${1} /tmp/org.gcode
 # Call the python filter and put the output in temporary file
-/home/vik/uRepRap/UV_test/fibre_process.py $1 > ${NEW_FNAME}
+/home/vik/uRepRap/UV_head/fibre_process.py $1 > ${NEW_FNAME}
 # For debigging - leave the Prusa file unchanged.
 #cp $1 ${NEW_FNAME}
 # Get rid of the original, and copy our hacked file over it
