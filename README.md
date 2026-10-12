@@ -4,7 +4,7 @@
 
 The RepRapMicron Project, or μRepRap, is an extension of the Open Source RepRap 3D printer project that aims to bring micron-scale fabrication into very widespread adoption. The main project page is [here](https://reprap.org/wiki/RepRapMicron) and currently the assembly instructions are on the Github wiki. It uses hardware and software familiar to 3D printer and CNC developers (GCODE, GRBL, NEMA17 steppers etc.), and materials that are easily and inexpensively available.
 
-As of PIKA V0.02 pixels can be placed or engraved with repeatable micron precision in 2D without difficulty. Range of motion is approximately 8mm on X, Y, and Z axes. A resin deposition system for <4μm droplets is functional if not complete. Current resin material is "Top Coat" Nail Art UV Gel.
+As of PIKA V0.02 pixels can be placed or engraved with repeatable micron precision in 2D without difficulty. Range of motion is approximately 8mm on X, Y, and Z axes. A resin deposition system for <4μm droplets is functional if not complete. Current resin material is "Top Coat" Nail Art UV Gel. Printing with an optical fibre in standard 3D printer resin using a UV LED is also supported.
 
 The meaty part is in the "pika" directory, where the OpenSCAD models for a 3D printed print-in-place flexure chassis and axis drivers can be found. Parts are intended to fit a 10mm grid and attach with M3 fasteners.
 
@@ -52,6 +52,9 @@ A python/Zelle Control Panel that drives a GRBL CNC using xyz steppers and uses 
 
 ### utils
 Utilities for calibration and assembly.
+
+### UV_head
+Software and models of 9/125 optical fibre adaptors to allow fibre optic printing in 3D standard printer resin. This prints items within a resin droplet with a resolution of approximately 9μm - or less if you can find a thinner fibre.
 
 ## Contributing
 Please do join in. We need everything. Coders, makers, nanoscience experts, materials scientists, 3D printing experts, manual writers, graphics artists, dancers, the works. Well, maybe not the dancers.
