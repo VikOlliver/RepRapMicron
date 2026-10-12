@@ -53,7 +53,7 @@ A python/Zelle Control Panel that drives a GRBL CNC using xyz steppers and uses 
 ### utils
 Utilities for calibration and assembly.
 
-### UV_head
+### UV_Head
 Software and models of 9/125 optical fibre adaptors to allow fibre optic printing in 3D standard printer resin. This prints items within a resin droplet with a resolution of approximately 9μm - or less if you can find a thinner fibre.
 
 ## Contributing
