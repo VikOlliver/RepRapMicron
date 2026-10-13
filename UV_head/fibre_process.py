@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# fibre_process.py - Revision 0.01
+# fibre_process.py - Revision 0.02
 #
 # A tool to process GCODE, strip out anything to do with extruder speed or things our
 # GRBL implementation does not understand. Any extruding causes the Coolant Mist (M7)
@@ -35,7 +35,7 @@ import sys
 import math
 
 # Configuration parameters
-FAST_Z = 8000  # Fastest speed we want to move Z axis
+FAST_Z = 15000  # Fastest speed we want to move Z axis
 SCALE_FACTOR=10
 
 # NOTE: Not implemented yet.
@@ -74,9 +74,11 @@ def reconstruct_gcode(command, params, comment_part):
     But it keeps the scaling and throws away any attempt to move A axis (extruder)
     """
     modified_parts = []
+    found_a = False
 
     for k, v in params.items():
         if k == "A":
+            found_a = True
             continue  # skip A-axis entirely
 
         if k == "F":
@@ -86,6 +88,12 @@ def reconstruct_gcode(command, params, comment_part):
 
     param_str = " ".join(modified_parts)
     line = f"{command} {param_str}".strip()
+
+    if found_a:
+        # There was an A parameter. If it's the only parameter, then this line has none
+        # Convert it into a comment to avoid stray "G1"s.
+        if params.items == 1:
+            line = ";"
 
     if comment_part:
         line += f" ;{comment_part}"
@@ -113,10 +121,6 @@ def process_gcode(input_stream, output_stream):
 
         # Strip out all "M" codes
         if line.startswith('M') == True:
-          continue
-
-        # Skip any attempts to move the A axis
-        if line.startswith('G1 A') == True:
           continue
 
         # Parse the next GCODE line (Scaling of 1 for now)A
