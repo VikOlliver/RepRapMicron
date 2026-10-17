@@ -6,8 +6,8 @@
 // rounded_beam(x1,y1,x2,y2);
 // As above, no flexure joints
 
-default_beam_height=8;
-beam_width=6;
+default_beam_height=6;
+beam_width=7;
 // The smallest flexure I'm going to make with this setup.
 minimal_flexure_length=beam_width*2;
 
@@ -36,8 +36,8 @@ module rounded_beam(pointx1,pointy1,pointx2,pointy2,beam_height=default_beam_hei
 
 // Puts a beam with rounded flexures between two points.
 // Note that the endpoint is within the radius of the endcap.
-flexure_length=2;
-flexure_width=0.8;
+flexure_length=4;
+flexure_width=2.5;
 
 // A cutout to make a flexure shape along the Y axis poisitioned in -X
 flexfn=30;  // Fineness of a flexure curve
@@ -78,9 +78,10 @@ module rounded_flexure_beam(pointx1,pointy1,pointx2,pointy2,double=true,beam_hei
             // This is the "beam" which starts at the rounded endpoint
             difference() {
                 cube([beam_width,distance(pointx1,pointy1,pointx2,pointy2),beam_height]);
-                translate([0,beam_width,0]) flexure_cutout_pair(beam_height);
+                // Whish I knew why +1...
+                translate([0,beam_width+1,0]) flexure_cutout_pair(beam_height);
                 if (double)
-                    translate([0,distance(pointx1,pointy1,pointx2,pointy2)-beam_width,0]) flexure_cutout_pair(beam_height);
+                    translate([0,distance(pointx1,pointy1,pointx2,pointy2)-beam_width+1,0]) flexure_cutout_pair(beam_height);
             }
         }
 }
