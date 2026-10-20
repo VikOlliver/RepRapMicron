@@ -37,6 +37,10 @@ import math
 # Configuration parameters
 FAST_Z = 15000  # Fastest speed we want to move Z axis
 SCALE_FACTOR=10
+# As Prusaslicer believes that a layer height cannot possibly be greater than
+# a line width, and we can do that quite nicely thank you, the Z axis can
+# be scaled by an additional factor and models pre-squished in Prusalslicer.
+Z_SCALE=1
 
 # NOTE: Not implemented yet.
 def parse_arguments():
@@ -83,6 +87,9 @@ def reconstruct_gcode(command, params, comment_part):
 
         if k == "F":
             v = min(FAST_Z, v)  # Clamp speed to max Z speed
+            
+        if k == "Z":
+            v = v*Z_SCALE       # Increase Z movements (we may be super-scaling Z)
 
         modified_parts.append(f"{k}{v:.5f}")
 
