@@ -425,15 +425,15 @@ module lower_nut_bar() {
         translate([nut_bar_length,0,0])
             metriccano_screw_hole(lower_nut_bar_arm_height*4);
         // Anchor nut holes
-        metriccano_nut_cavity_tapered(captive=true,inverted=true);
-        translate([nut_bar_length,0,0])
-            metriccano_nut_cavity_tapered(captive=true,inverted=true);
+        translate([0,0,metriccano_nut_height])
+            rotate([180,0,0]) metriccano_nut_cavity_tapered(captive=true,inverted=true);
+        translate([nut_bar_length,0,metriccano_nut_height])
+            rotate([180,0,0]) metriccano_nut_cavity_tapered(captive=true,inverted=true);
          // Captive nut
         translate([metriccano_unit*2,0,metriccano_plate_height-metriccano_nut_height])
             metriccano_nut_cavity_tapered(captive=true);
     }
 }
-
 
 //  Tension Band Booster. Used to stretch anti-backlash bands if needed.
 module tension_band_booster() {
