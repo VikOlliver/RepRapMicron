@@ -1,6 +1,6 @@
 // pika_version.scad - Version labelling for PIKA RepRapMicron
 
-version_string="PIKA V0.02";
+version_string="PIKA V0.03";
 
 // 0.6mm thick text, 5mm tall, vertical, flat on XY plane
 module version_text() {
