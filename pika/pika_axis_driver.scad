@@ -3,11 +3,7 @@
 // One PIKA Axis Diver. Three are needed for the complete PIKA mechanism
 // Uses a pantograph-like mechanism, paralleled up to provide stable
 // drive, anchor, and effector ends.
-//
-// 07-May-2026
-//
-// Branched from the MAUS axis driver. Now has PIKA sizings and versioning by default,
-// and experimental mounting points for a NEMA14 motor.
+// Fits NEMA17 and NEMA14 motors
 //
 // Note: It is a Very Good Idea(TM) to keep all the mounting and fixing points
 // close to 10mm centres. If necessary, tweak angles, ratios, and arm lengths to do this.
@@ -16,8 +12,6 @@ include <../library/m3_parts.scad>
 include <../library/nema17lib.scad>
 include <../library/metriccano.scad>
 include <pika_version.scad>
-
-mb_length_in_holes=2;       // Set this to 3 for MAUS
 
 flexure_width=4;
 flexure_length=2.5;
@@ -129,7 +123,7 @@ module pll_flexure_arm(x,y,reverse=false,extend_base=0)  {
     // First flexure, placed on 0,0
     flexure_tab();
     if (reverse) hull() {
-        // Join up the extension so that it is alwaus a solid baem.
+        // Join up the extension so that it is always a solid beam.
         translate([(extend_base+pll_beam_x+flexure_tab_length)/2,0,0]) pll_beam_end();
         translate([(pll_beam_x+flexure_tab_length)/2,0,0]) pll_beam_end(metriccano_unit/2);
     }
@@ -232,23 +226,38 @@ module anchor_pointed_out() union() {
     }
  }
  
- bb_hook_x=3;
- bb_hook_y=4;
+ bb_hook_x=metriccano_unit-2;
+ bb_hook_y=5;
  bb_hook_z=5;
+ bb_bevel=0.5;
+ bb_band_indent=2;
+ 
  // Wee hooks for attaching anit-backlash bands to flexures. Extends in -Y, face on 0
  module backlash_band_hook() {
-        // Body of hook
-        translate([0,-bb_hook_y/2,bb_hook_z/2]) difference() {
-            cube([bb_hook_x,bb_hook_y,bb_hook_z],center=true);
-            // Cutout for band. Place on bottom of hook block, slightly raised
-            translate([0,0.5,bb_hook_y*0.1-bb_hook_z/2]) {
-                // Double height for more band room...
-                rotate([0,90,0]) rotate([0,0,180/8])
-                    cylinder(h=bb_hook_x*3,r=bb_hook_y*0.5,$fn=8,center=true);
-                translate([0,0,bb_hook_y*0.25]) rotate([0,90,0]) rotate([0,0,180/8])
-                    cylinder(h=bb_hook_x*3,r=bb_hook_y*0.5,$fn=8,center=true);
-            }
-        }
+    // Body of hook
+    translate([bb_hook_x*0.3,-bb_hook_y/2,bb_hook_z/2]) difference() {
+        // Body
+        cube([bb_hook_x,bb_hook_y,bb_hook_z],center=true);
+        // Trim corners
+        translate([bb_hook_x/2,-bb_hook_y/2,0])
+            rotate([0,0,45]) cube([bb_bevel,bb_bevel,bb_hook_z*3],center=true);
+        translate([-bb_hook_x/2,-bb_hook_y/2,0])
+            rotate([0,0,45]) cube([bb_bevel,bb_bevel,bb_hook_z*3],center=true);
+        // Band indents
+        translate([bb_hook_x/2-bb_band_indent,-bb_hook_y/2,0])
+            cube([bb_band_indent,bb_band_indent,bb_hook_z*3],center=true);
+        translate([bb_band_indent-bb_hook_x/2,-bb_hook_y/2,0])
+            cube([bb_band_indent,bb_band_indent,bb_hook_z*3],center=true);
+        translate([bb_hook_x/2-bb_band_indent,bb_hook_y/2-bb_band_indent/2+0.01,0])
+            cube([bb_band_indent,bb_band_indent,bb_hook_z*3],center=true);
+        translate([bb_band_indent-bb_hook_x/2,bb_hook_y/2-bb_band_indent/2+0.01,0])
+            cube([bb_band_indent,bb_band_indent,bb_hook_z*3],center=true);
+        // Additional band clearance  on flexure side
+        translate([bb_hook_x/2-bb_band_indent/4,bb_hook_y/2,0])
+            cube([bb_band_indent*2,bb_band_indent,bb_hook_z*3],center=true);
+        translate([bb_band_indent/4-bb_hook_x/2,bb_hook_y/2,0])
+            cube([bb_band_indent*2,bb_band_indent,bb_hook_z*3],center=true);
+    }
  }
  
  // One on each side, screws to motor mount
@@ -260,8 +269,13 @@ module anchor_pointed_out() union() {
              translate([-metriccano_unit/2,-side_beam_width/2,0])
                 cube([side_beam_length,side_beam_width,side_beam_height]);
              // Lugs to fasten to motor bracket
-             translate([metriccano_unit*7,-metriccano_unit,0]) 
-                rotate([0,0,180]) metriccano_tab_module(3);
+             translate([metriccano_unit*8,-metriccano_unit,0]) {
+                rotate([0,0,180]) metriccano_tab_module(4);
+                 // Hole blocking
+                 cylinder(h=metriccano_plate_height,r=metriccano_screw_rad*1.5);
+                 translate([metriccano_unit*-3,0,0])
+                    cylinder(h=metriccano_plate_height,r=metriccano_screw_rad*1.5);
+             }
          }
          // Attachment position for Limit Switch bracket on end flat of beam
          translate([side_beam_length-metriccano_unit,0,side_beam_height/2]) {
@@ -269,7 +283,7 @@ module anchor_pointed_out() union() {
             translate([-metriccano_nut_height,0,0]) rotate([0,-90,0]) metriccano_nut_slot();
          }
          // Hole to mount Nut Bars, attach to XY Frame etc.
-         for (i=[0:8])
+         for (i=[0,6,7,8])
             translate([side_beam_length-metriccano_unit*(i+3),0,side_beam_height/2])
                 metriccano_screw_hole();
          // Attachment points for Z Flexure
@@ -284,9 +298,11 @@ module anchor_pointed_out() union() {
                 metriccano_screw_hole();
             }
          // Cutout to stop the anti-backlash band hook rubbing if it distorts under load
-         translate([pll_flexure_to_flexure-metriccano_unit*1.5-1.5,metriccano_unit-side_band_indent,0])
-                rotate([0,0,180/8])
-                    cylinder(h=metriccano_unit*3,r=metriccano_unit/2,$fn=8,center=true);
+         translate([pll_flexure_to_flexure-metriccano_unit*1.5-1.5,metriccano_unit-side_band_indent,0]) {
+                cube([metriccano_unit,metriccano_unit,metriccano_unit*3],center=true);
+                // Needs a bit of a chamfer on the edge closest to the open end
+                rotate([0,12,0]) cube([metriccano_unit,metriccano_unit,metriccano_unit*3],center=true);
+         }
     }
  }
 // Three parallelogram arms with platfroms between them.
@@ -332,7 +348,7 @@ module frame_trio() {
         translate([-flexure_tab_length-bb_hook_x/2,-pll_beam_y*1.5-pll_frame_spacing,0])
             backlash_band_hook();
         translate([-flexure_tab_length-bb_hook_x/2,pll_beam_y*1.5+pll_frame_spacing,0])
-            rotate([0,0,180]) backlash_band_hook();
+            scale([1,-1,1])  backlash_band_hook();
     }
     // Anchor at X=0
     translate([-flexure_tab_length/2,0,0]) anchor_pointed_out();
@@ -359,15 +375,18 @@ module nut_bar_body() {
     }
 }
 
+// Matches internal separation of Side Beams, less a little for the clearance and the width of a band.
+band_offset=metriccano_unit*1.5-1.5;
+
 // Groves to hold tension bands on top of nut bar (or a booster)
 module tension_band_grooves() {
-    translate([nut_bar_width,metriccano_unit*1.2,0]) rotate([0,45,0])
+    translate([nut_bar_width,band_offset,0]) rotate([0,45,0])
         cylinder(h=nut_bar_height*2,r=nut_bar_width*0.6,center=true,$fn=32);
-    translate([nut_bar_width,-metriccano_unit*1.2,0]) rotate([0,45,0])
+    translate([nut_bar_width,-band_offset,0]) rotate([0,45,0])
         cylinder(h=nut_bar_height*2,r=nut_bar_width*0.6,center=true,$fn=32);
-    translate([-nut_bar_width,metriccano_unit*1.2,0]) rotate([0,-45,0])
+    translate([-nut_bar_width,band_offset,0]) rotate([0,-45,0])
         cylinder(h=nut_bar_height*2,r=nut_bar_width*0.6,center=true,$fn=32);
-    translate([-nut_bar_width,-metriccano_unit*1.2,0]) rotate([0,-45,0])
+    translate([-nut_bar_width,-band_offset,0]) rotate([0,-45,0])
         cylinder(h=nut_bar_height*2,r=nut_bar_width*0.6,center=true,$fn=32);
 }
 
@@ -378,6 +397,25 @@ module nut_bar_pillar(length) {
         translate([0,nut_bar_width/2,0]) 
             cube([metriccano_unit,side_band_indent*2,length*3],center=true);
     }
+}
+
+// Hook used for mounting a tension band on the Upper Nut Bar
+module band_hook() {
+    intersection() {
+        // Aligned and slightly flattened hook
+        rotate([0,50,0]) rotate ([0,90,0]) scale([1,0.7,1])
+                    cylinder(h=nut_bar_height*1.4,r1=metriccano_unit/2,r2=1,$fn=32);
+        // It must fit in this box though
+        translate([0,0,(1-nut_bar_height)/2]) cube([99,99,nut_bar_height-1],center=true);
+    }
+}
+
+module band_hook_pair() {
+        //Two hooks on one side
+        translate([metriccano_unit*0.15,band_offset,metriccano_unit])
+            band_hook();
+        translate([metriccano_unit*0.15,-band_offset,metriccano_unit])
+            band_hook();
 }
 
 // Block across the top of the supports that holds the bearing. Bearing is an M3 nut drilled out to 3mm.
@@ -391,6 +429,12 @@ module upper_nut_bar() {
             // Support arms
                 translate([0,nut_bar_length/2,0]) scale([1,-1,1]) nut_bar_pillar(nut_bar_arm_height);
                 translate([0,-nut_bar_length/2,0]) nut_bar_pillar(nut_bar_arm_height);
+            // Hooks for bands
+            band_hook_pair();
+            // Flip it for two hooks on the other side
+            scale([-1,1,1]) {
+                band_hook_pair();
+            }
         }
             
         // Bearing hole
@@ -403,9 +447,6 @@ module upper_nut_bar() {
             scale([1,1,-1]) metriccano_screw_cavity(nut_bar_arm_height*4,inverted=true);
         translate([0,nut_bar_length/2,metriccano_screw_head_height])
             scale([1,1,-1]) metriccano_screw_cavity(nut_bar_arm_height*4,inverted=true);
-         
-        // Groves to hold tension bands
-        tension_band_grooves();
     }
 }
 
@@ -435,24 +476,27 @@ module lower_nut_bar() {
     }
 }
 
+
 //  Tension Band Booster. Used to stretch anti-backlash bands if needed.
 module tension_band_booster() {
     // Copy of the Nut bar beam with holes punched in for screw head access
     difference() {
-        nut_bar_body();
+        union() {
+            nut_bar_body();
+            // Hooks for bands
+            band_hook_pair();
+            // Flip it for two hooks on the other side
+            scale([-1,1,1]) {
+                band_hook_pair();
+            }
+        }
         // Screw access holes (this is not an insult)
         translate([0,-nut_bar_length/2,metriccano_screw_head_height]) scale([1,1,-1])
             cylinder(h=nut_bar_height*3,r=m3_screw_head_rad+0.5,center=true);
         translate([0,nut_bar_length/2,metriccano_screw_head_height]) scale([1,1,-1])
             cylinder(h=nut_bar_height*3,r=m3_screw_head_rad+0.5,center=true);
-        tension_band_grooves();
         // Clearance hole in case anyone finds a particularly long M3 screw
         cylinder(h=nut_bar_height*3,r=2,center=true,$fn=32);
-    }
-    // Use the tension band grooves to make locating lugs for the Tension Band Booster
-    translate([0,0,nut_bar_height-1]) intersection() {
-        nut_bar_body();
-        tension_band_grooves();
     }
 }
 
@@ -535,26 +579,23 @@ mb_height_in_holes=floor(mb_height/metriccano_unit);
 // A pair of these are  used to attach the motor pillar assembly to the frame rigidly.
 module motor_mount_side_attachment() {
     // Metriccano mounting strips
-    for (i=[0:mb_length_in_holes-1])
-            translate([metriccano_unit*(i+0.5),0,mb_height-metriccano_unit/2])
-                rotate([0,90,0]) metriccano_square_strip(mb_height_in_holes);
+    translate([metriccano_unit*0.5,0,mb_height-metriccano_unit/2])
+        rotate([0,90,0]) metriccano_square_strip(mb_height_in_holes);
+    translate([metriccano_unit*1.5,0,mb_height-metriccano_unit/2])
+        rotate([0,90,0]) metriccano_square_strip(mb_height_in_holes);
+    // We block off a lot of confusing holes at the top
+    translate([metriccano_unit/2,-metriccano_unit/2,mb_height-2*metriccano_unit])
+        cube([metriccano_unit*2,metriccano_unit,metriccano_unit*2]);
+    translate([metriccano_unit/2,-metriccano_unit/2,mb_height-3*metriccano_unit])
+        cube([metriccano_unit,metriccano_unit,metriccano_unit]);
     // Block making up space for non-metriccano unit gap.
     // Mostly there to print without support.
     translate ([metriccano_unit/2,-metriccano_unit/2,0]) difference() {
-        cube([metriccano_unit*mb_length_in_holes,metriccano_unit,5]);
-        for (i=[0:mb_length_in_holes-1])
+        cube([metriccano_unit*2,metriccano_unit,5]);
+        for (i=[0:1])
             translate([metriccano_unit*(i+0.5),metriccano_unit/2,0])
                 metriccano_screw_hole();
         }
-}
-
-// These holes should line up with the side attachments to allow through-holes
-// for fastening to the frame. Head in the -Z direction
-module motor_mount_side_holes() {
-    // Use one less hole so we don't drill into the base plate
-    for (i=[0:mb_height_in_holes-2])
-        translate([0,0,-metriccano_unit*i])
-            rotate([0,-90,0]) metriccano_screw_cavity(mb_length_in_holes*2*metriccano_unit);
 }
 
 // The assembled motor bracket, pillar, and attachment points.
@@ -604,11 +645,6 @@ module axis_motor_pillar_assy() {
         }
         // Screw holes for 50mm screws in pillars
         pillar_screw_holes(true);
-        // Screw holes for frame attachment
-        translate([metriccano_unit*2.25-metriccano_screw_head_height,metriccano_unit*2,mb_height-metriccano_unit/2])
-            motor_mount_side_holes();
-        translate([metriccano_unit*2.25-metriccano_screw_head_height,-metriccano_unit*2,mb_height-metriccano_unit/2])
-            motor_mount_side_holes();
     }
 }
 
@@ -761,7 +797,7 @@ module switch_support_bits() difference() {
 // Set to true to print the whole sheet
 if (true) {
     translate([210,20,0]) upper_nut_bar();
-    translate([190,20,0]) tension_band_booster();
+    translate([185,20,0]) tension_band_booster();
     translate([70,10,0]) lower_nut_bar();
     translate([70,33,0]) switch_support_bits();
     translate([25,105,0]) frame_trio();
