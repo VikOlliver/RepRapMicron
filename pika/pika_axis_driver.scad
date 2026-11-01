@@ -286,6 +286,9 @@ module anchor_pointed_out() union() {
          for (i=[0,6,7,8])
             translate([side_beam_length-metriccano_unit*(i+3),0,side_beam_height/2])
                 metriccano_screw_hole();
+        // Holes to allow access to rear stepper motor screws
+        translate([side_beam_length-metriccano_unit*3-nema17_screw_sep/2,1.5,side_beam_height/2])
+            metriccano_screw_hole();
          // Attachment points for Z Flexure
          translate([0,metriccano_unit/2,metriccano_unit/2])
             rotate([90,0,0]) {
@@ -365,7 +368,7 @@ module frame_trio() {
 nut_bar_length=metriccano_unit*4;
 nut_bar_width=10;
 nut_bar_height=11;  // 1mm of this is actually on top of the bearing block arms, so the block will be thinner
-nut_bar_arm_height=nut_bar_height+metriccano_unit;
+nut_bar_arm_height=nut_bar_height+metriccano_unit+m3_nut_height;
 
 // Basic shape of the beam that holds the top bearing nut
 module nut_bar_body() {
