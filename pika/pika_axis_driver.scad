@@ -283,21 +283,21 @@ module anchor_pointed_out() union() {
             translate([-metriccano_nut_height,0,0]) rotate([0,-90,0]) metriccano_nut_slot();
          }
          // Hole to mount Nut Bars, attach to XY Frame etc.
-         for (i=[0,6,7,8])
+         for (i=[0,5,6])
             translate([side_beam_length-metriccano_unit*(i+3),0,side_beam_height/2])
                 metriccano_screw_hole();
         // Holes to allow access to rear stepper motor screws
         translate([side_beam_length-metriccano_unit*3-nema17_screw_sep/2,1.5,side_beam_height/2])
             metriccano_screw_hole();
-         // Attachment points for Z Flexure
-         translate([0,metriccano_unit/2,metriccano_unit/2])
+         // Attachment nuts for Z Flexure
+         translate([0,metriccano_nut_height/2,metriccano_unit/2])
             rotate([90,0,0]) {
-                metriccano_nut_cavity_tapered(captive=true);
+                rotate([0,0,90]) metriccano_nut_slot(captive=true);
                 metriccano_screw_hole();
             }
-         translate([metriccano_unit,metriccano_unit/2,metriccano_unit/2])
+         translate([metriccano_unit,metriccano_nut_height/2,metriccano_unit/2])
             rotate([90,0,0]) {
-                metriccano_nut_cavity_tapered(captive=true);
+                rotate([0,0,90])  metriccano_nut_slot(captive=true);
                 metriccano_screw_hole();
             }
          // Cutout to stop the anti-backlash band hook rubbing if it distorts under load
@@ -368,7 +368,8 @@ module frame_trio() {
 nut_bar_length=metriccano_unit*4;
 nut_bar_width=10;
 nut_bar_height=11;  // 1mm of this is actually on top of the bearing block arms, so the block will be thinner
-nut_bar_arm_height=nut_bar_height+metriccano_unit+m3_nut_height;
+// In theory we don't need the -1. In practice, some screws will strip if we don't use it.
+nut_bar_arm_height=nut_bar_height+metriccano_unit+m3_nut_height-1;
 
 // Basic shape of the beam that holds the top bearing nut
 module nut_bar_body() {
