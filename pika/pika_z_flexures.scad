@@ -40,14 +40,22 @@ module generic_flexure(length,ht=z_flexure_height) {
     }
 }
 
-// If flipped, we flip the version text
+// If flipped, we flip the version/TOP text
 module zflex_outer_beam_frame(flipped=1){
     // Outer beam, attached to free end of Axis Driver
     translate([-metriccano_unit/2,-zflex_outer_beam_length/2,0])
         cube([zflex_beam_thick,zflex_outer_beam_length,z_flexure_height]);
     // Inner flexures
     translate([0,-zflex_outer_beam_length/2+flexure_width,0]) rotate([0,0,-90]) generic_flexure(zflex_flexure_length,z_flexure_height);
-    translate([0,zflex_outer_beam_length/2,0]) rotate([0,0,-90]) generic_flexure(zflex_flexure_length,z_flexure_height);
+    translate([0,zflex_outer_beam_length/2,0]) {
+        rotate([0,0,-90]) generic_flexure(zflex_flexure_length,z_flexure_height);
+        // Mark the top so user assembles it the right way up.
+        // If I did it, everyone else will do it...
+        translate([zflex_flexure_length/2,flexure_width,z_flexure_height/2])
+        rotate([90,0,180]) scale([flipped,1,1]) linear_extrude(0.3) {
+            text("TOP",size = 4, halign = "center", valign = "center", $fn = 16);
+        }
+    }
     // Outer beam, attached to inner flexures.
     // Needs to be translated out to allow clearance for inner beam
     translate([zflex_flexure_length,0,0]) {
