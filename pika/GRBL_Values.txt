@@ -1,8 +1,15 @@
 # These are the GRBL config values used in the RAMPS PIKA V0.03
 # Note: This is not a valid GCODE file.
-# Also you cannot just poke this at GRBL with cncjs-app!
-# Each instruction needs entering separately. Try using minicom with
-# a 1 second inter-line delay or something.
+# Also you cannot just poke this at GRBL with cncjs-app because
+# setting config values does not return "OK".
+# Each instruction needs entering separately. Try using a serial app with
+# a 1 second inter-line delay or delete /(*./ and  use this horrible bash script:
+# while IFS= read -r line; do
+#  echo $line
+#  printf '%s\n' "$line" > /dev/ttyACM0
+#  sleep 1
+# done < /tmp/x
+#
 $0=10 (Step pulse time, microseconds)
 $1=255 (Step idle delay, milliseconds)
 $2=4 (Step pulse invert, mask)
