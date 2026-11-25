@@ -13,8 +13,6 @@ show_dummy_drivers=true;
 // Largely constrained by the attachment point for the Stage, located in the middle.
 // If Y size is <120 it overhangs the bar at the top of the Y flexures and won't print.
 // If X size <120 it overhangs the sides of the bar and interferes with the Y flexures.
-//
-// NOTE: Use Axis Drivers with mb_length_in_holes set to 2
 
 include <../library/m3_parts.scad>
 include <../library/metriccano.scad>
@@ -320,8 +318,16 @@ module x_linkage() translate([x_linkage_x_at,outer_wall_y/2,0]) {
                 cube([horizontal_beam_width,horizontal_beam_width,horizontal_beam_width]);
         }
         // The X Beam to which the Drive Plate attaches
-        translate([x_beam_sloping_section,0,0])
-            cube([outer_wall_x-x_linkage_x_at+metriccano_unit*3-x_beam_sloping_section,horizontal_beam_width,horizontal_beam_height]);
+        translate([x_beam_sloping_section,0,0]) {
+                cube([outer_wall_x-x_linkage_x_at+metriccano_unit*3-x_beam_sloping_section,horizontal_beam_width,horizontal_beam_height]);
+        hull() {
+            translate([0,0,horizontal_beam_height]) cube([outer_wall_x-x_linkage_x_at+metriccano_unit*3-
+                        x_beam_sloping_section-metriccano_unit,horizontal_beam_width,3]);
+            translate([0,horizontal_beam_width/2,horizontal_beam_height+3]) 
+                    cube([outer_wall_x-x_linkage_x_at+metriccano_unit*3-
+                        x_beam_sloping_section-metriccano_unit-1,0.01,4]);
+            }
+        }
     }
     // Plate for fixing to X Axis Driver
     translate([outer_wall_x-x_linkage_x_at+metriccano_unit*3,-metriccano_unit/2,metriccano_unit*1.5]) {
@@ -844,8 +850,8 @@ module stage_top() {
             cube([led_strip_width,solder_cavity_len,solder_cavity_height*2],center=true);
 
         // Holes for screw heads, all of which are inverted and symmetric
-        // ???
-        translate([0,0,metriccano_screw_head_height]) rotate([0,180,0]) {
+        cap_screw_ht=3;
+        translate([0,0,cap_screw_ht]) rotate([0,180,0]) {
             translate([stage_screw_x_offset,0,0]) 
                 metriccano_screw_cavity(inverted=true);
             translate([-stage_screw_x_offset,metriccano_unit*1.5,0])
